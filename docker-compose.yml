@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:16
+    environment: {POSTGRES_USER: mtg, POSTGRES_PASSWORD: mtg, POSTGRES_DB: mtg}
+    volumes: [pgdata:/var/lib/postgresql/data]
+  api:
+    build: .
+    environment: &env
+      MTG_ENGINE_DATABASE_URL: postgresql+psycopg://mtg:mtg@db/mtg
+    ports: ["8000:8000"]
+    volumes: [./config:/app/config:ro, ./models:/app/models:ro]
+    depends_on: [db]
+  scheduler:
+    build: .
+    command: ["mtg-engine", "scheduler"]
+    environment: *env
+    volumes: [./config:/app/config:ro, ./models:/app/models:ro]
+    depends_on: [db]
+volumes:
+  pgdata:

@@ -1,0 +1,106 @@
+# mtg-engine configuration. Override the path with MTG_ENGINE_CONFIG=/path/to/file.yaml
+
+database_url: sqlite:///data/mtg_engine.db
+
+http:
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36"
+  timeout_seconds: 30
+  proxy: null              # e.g. http://user:pass@es-proxy:8080 (Wallapop returns 0 results to non-EU IPs)
+
+region:
+  country: ES
+  map_center: [40.2, -3.7]
+  map_zoom: 6
+  # Wallapop searches are radius-based: sweep these points to cover the country.
+  search_radius_km: 200
+  search_points:
+    - {name: Madrid, lat: 40.4168, lon: -3.7038}
+    - {name: Barcelona, lat: 41.3874, lon: 2.1686}
+    - {name: Valencia, lat: 39.4699, lon: -0.3763}
+    - {name: Sevilla, lat: 37.3891, lon: -5.9845}
+    - {name: Málaga, lat: 36.7213, lon: -4.4214}
+    - {name: Bilbao, lat: 43.2630, lon: -2.9350}
+    - {name: A Coruña, lat: 43.3623, lon: -8.4115}
+    - {name: Zaragoza, lat: 41.6488, lon: -0.8891}
+    - {name: Valladolid, lat: 41.6523, lon: -4.7245}
+    - {name: Badajoz, lat: 38.8794, lon: -6.9707}
+    - {name: Murcia, lat: 37.9922, lon: -1.1307}
+    - {name: Palma, lat: 39.5696, lon: 2.6502}
+    - {name: Las Palmas, lat: 28.1235, lon: -15.4363}
+    - {name: Santa Cruz de Tenerife, lat: 28.4636, lon: -16.2518}
+
+marketplaces:
+  wallapop:
+    enabled: true
+    max_pages: 5
+    delay_seconds: 2.0
+    use_search_points: true
+  milanuncios:
+    enabled: true
+    max_pages: 3
+    delay_seconds: 4.0
+    fetcher: httpx          # httpx | playwright (Milanuncios has anti-bot protection)
+    use_search_points: false
+
+games:
+  mtg:
+    enabled: true
+    queries:
+      - magic the gathering alpha
+      - magic the gathering beta
+      - mtg alpha
+      - mtg beta
+      - magic edicion limitada
+      - magic limited edition
+      - cartas magic 1993
+      - cartas magic antiguas
+      - black lotus
+      - power nine magic
+    targets:
+      - set_code: lea
+        label: Alpha
+        # UPPERCASE keywords match case-sensitively ("lea" is also a Spanish verb).
+        keywords: [alpha, alfa, LEA, "limited edition alpha", "edicion limitada alpha"]
+      - set_code: leb
+        label: Beta
+        keywords: [beta, LEB, "limited edition beta", "edicion limitada beta"]
+    # Sets synced for vision training/negatives but never reported as targets.
+    confuser_sets: [2ed, 3ed, ced, cei]
+    filters:
+      min_card_value_eur: 3          # ignore matched cards cheaper than this
+      min_listing_value_eur: 25      # a listing must be worth at least this to open a deal
+      max_listing_price_eur: null    # skip ads asking more than this
+      rarities: []                   # e.g. [rare, uncommon]; empty = all
+      type_contains: []              # e.g. [Creature, Artifact]; empty = all
+      exclude_basic_lands: false
+    red_flags: [proxy, proxys, replica, "réplica", fake, falsa, falso, playtest, "gold border",
+                "borde dorado", "collector's edition", "collectors edition", "coleccionista",
+                unlimited, revised, "edicion revisada", "4th edition", "cuarta edicion"]
+
+  pokemon:
+    enabled: false
+    queries: [pokemon base set primera edicion, pokemon 1st edition charizard]
+    targets:
+      - {set_code: base1, label: Base Set, keywords: [base set, "set base", "edicion basica"]}
+    confuser_sets: []
+    filters: {min_card_value_eur: 5, min_listing_value_eur: 30}
+    red_flags: [proxy, replica, fake, falsa, custom]
+
+pricing:
+  currency: EUR
+  usd_to_eur: 0.92
+  sources: [cardmarket_price_guide, scryfall]
+
+vision:
+  enabled: false
+  model_path: models/card_model.onnx
+  gallery_path: models/gallery.npz
+  min_similarity: 0.55
+  max_images_per_listing: 6
+
+deals:
+  auto_open_min_value_eur: 25
+  auto_open_min_ratio: 1.2         # value / asking price
+
+scheduler:
+  interval_minutes: 60

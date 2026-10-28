@@ -1,0 +1,34 @@
+"""Shared model + preprocessing for training, export and gallery building."""
+from __future__ import annotations
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+INPUT_H, INPUT_W = 320, 224  # portrait, ~card aspect (88:63)
+MEAN = (0.485, 0.456, 0.406)
+STD = (0.229, 0.224, 0.225)
+# Edition head classes. cei (Intl. Collectors' Ed.) shares CE's square corners -> "ced".
+EDITION_CLASSES = ["lea", "leb", "2ed", "3ed", "ced", "other"]
+SET_TO_EDITION = {"lea": "lea", "leb": "leb", "2ed": "2ed", "3ed": "3ed", "ced": "ced", "cei": "ced"}
+
+
+def edition_index(set_code: str) -> int:
+    return EDITION_CLASSES.index(SET_TO_EDITION.get(set_code, "other"))
+
+
+class CardNet(nn.Module):
+    """Backbone -> (L2-normalised identity embedding, edition logits)."""
+
+    def __init__(self, backbone: str = "tf_efficientnet_lite0", embed_dim: int = 512, pretrained: bool = True):
+        super().__init__()
+        import timm
+
+        self.backbone = timm.create_model(backbone, pretrained=pretrained, num_classes=0, global_pool="avg")
+        feat = self.backbone.num_features
+        self.embed = nn.Sequential(nn.Dropout(0.2), nn.Linear(feat, embed_dim), nn.BatchNorm1d(embed_dim))
+        self.edition = nn.Sequential(nn.Dropout(0.3), nn.Linear(feat, len(EDITION_CLASSES)))
+
+    def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+        f = self.backbone(x)
+        return F.normalize(self.embed(f), dim=1), self.edition(f)

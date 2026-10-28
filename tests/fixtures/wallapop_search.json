@@ -1,0 +1,12 @@
+{
+  "data": {"section": {"payload": {"items": [
+    {"id": "abc123", "user_id": "u1", "title": "Lightning Bolt alpha magic", "description": "4x Lightning Bolt alpha",
+     "price": {"amount": 300.0, "currency": "EUR"}, "web_slug": "lightning-bolt-alpha-magic-123",
+     "images": [{"urls": {"small": "https://cdn.example/s.jpg", "medium": "https://cdn.example/m.jpg", "big": "https://cdn.example/b.jpg"}}],
+     "location": {"latitude": 40.41, "longitude": -3.70, "postal_code": "28013", "city": "Madrid", "region": "Comunidad de Madrid", "country_code": "ES"},
+     "created_at": 1761600000000},
+    {"id": "def456", "title": "Cartas pokemon", "description": "", "price": {"amount": 10}, "web_slug": "cartas-pokemon-456",
+     "images": [], "location": {"city": "Sevilla"}}
+  ]}}},
+  "meta": {"next_page": "TOKEN2"}
+}

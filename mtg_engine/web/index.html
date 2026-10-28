@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MTG Engine</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">◆</span>
+      <div>
+        <h1>MTG Engine</h1>
+        <p class="sub" id="subtitle">Second-hand card scanner</p>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-view="findings" role="tab">Findings</button>
+      <button class="tab" data-view="deals" role="tab">Deals</button>
+      <button class="tab" data-view="events" role="tab">Agent events</button>
+    </nav>
+    <div class="actions">
+      <span class="muted small" id="last-scan">—</span>
+      <button id="scan-btn" class="btn primary">Run scan</button>
+    </div>
+  </header>
+
+  <section class="kpis" id="kpis" aria-label="Summary"></section>
+
+  <main>
+    <section class="view active" id="view-findings">
+      <form class="filters" id="filters">
+        <input type="search" name="q" placeholder="Search title, description, city…" aria-label="Search">
+        <select name="marketplace" aria-label="Marketplace"><option value="">All marketplaces</option></select>
+        <select name="edition" aria-label="Edition"><option value="">All editions</option></select>
+        <label class="inline">Min value €<input type="number" name="min_value" min="0" step="5" value=""></label>
+        <label class="inline">Min ratio<input type="number" name="min_ratio" min="0" step="0.1" value=""></label>
+        <select name="sort" aria-label="Sort">
+          <option value="value">Rank: total value</option>
+          <option value="ratio">Rank: value / price</option>
+          <option value="score">Rank: confidence-weighted</option>
+          <option value="newest">Newest first</option>
+        </select>
+        <label class="inline check"><input type="checkbox" name="review" checked> Include “needs review”</label>
+      </form>
+      <div class="split">
+        <div class="panel list-panel">
+          <div class="panel-head">
+            <h2>Ranked findings</h2><span class="muted small" id="result-count"></span>
+          </div>
+          <div id="listings" class="listings"></div>
+        </div>
+        <div class="panel map-panel">
+          <div class="panel-head">
+            <h2>Map</h2>
+            <span class="legend">
+              <span class="dot exact"></span>exact
+              <span class="dot approx"></span>province (approx.)
+              <span class="muted">· size & brightness = total value</span>
+            </span>
+          </div>
+          <div id="map" role="region" aria-label="Map of findings"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-deals">
+      <div class="panel"><div class="panel-head"><h2>Deal pipeline</h2><span class="muted small">Agents and humans move deals through these stages</span></div>
+        <div id="deals" class="kanban"></div></div>
+    </section>
+
+    <section class="view" id="view-events">
+      <div class="panel"><div class="panel-head"><h2>Outbox events</h2><span class="muted small">What downstream agents consume (GET /api/events?agent=…)</span></div>
+        <table class="table" id="events"><thead><tr><th>#</th><th>Type</th><th>Subject</th><th>Payload</th><th>Created</th><th>Claimed by</th></tr></thead><tbody></tbody></table></div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>
