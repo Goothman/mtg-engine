@@ -23,6 +23,8 @@ ROOT = Path(__file__).resolve().parents[2]
 FILES = {
     "F_COMMON": "ml/common.py",
     "F_TRAIN": "ml/train.py",
+    "F_AUGMENT": "ml/augment.py",
+    "F_SCENES": "ml/make_hard_scenes.py",
     "F_EXPORT": "ml/export.py",
     "F_DATASET": "ml/build_dataset.py",
     "F_FETCH": "ml/fetch_base_model.py",

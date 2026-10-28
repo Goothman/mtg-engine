@@ -37,47 +37,13 @@ from torch.utils.data import DataLoader, Dataset
 from common import EDITION_CLASSES, INPUT_H, INPUT_W, MEAN, STD, CardNet, edition_index
 
 # ---------------------------------------------------------------- augmentation
-
-
-def random_background(h: int, w: int, rng: random.Random) -> np.ndarray:
-    kind = rng.random()
-    if kind < 0.35:  # flat table / cloth
-        bg = np.full((h, w, 3), [rng.randint(0, 255) for _ in range(3)], np.uint8)
-    elif kind < 0.7:  # gradient
-        a, b = np.array([rng.randint(0, 255) for _ in range(3)]), np.array([rng.randint(0, 255) for _ in range(3)])
-        t = np.linspace(0, 1, h)[:, None, None]
-        bg = (a * (1 - t) + b * t).astype(np.uint8).repeat(w, axis=1)
-    else:  # noisy texture (wood/carpet-ish)
-        bg = cv2.resize(np.random.randint(0, 255, (h // 16 + 1, w // 16 + 1, 3), np.uint8), (w, h), interpolation=cv2.INTER_CUBIC)
-    return np.ascontiguousarray(bg)
-
-
-def composite(card: np.ndarray, rng: random.Random) -> np.ndarray:
-    """Place card on a background. Mostly tight (as after quad detection), sometimes loose."""
-    h, w = card.shape[:2]
-    scale = rng.uniform(0.9, 0.99) if rng.random() < 0.7 else rng.uniform(0.55, 0.9)
-    ch, cw = int(h * scale), int(w * scale)
-    canvas = random_background(h, w, rng)
-    y, x = rng.randint(0, h - ch), rng.randint(0, w - cw)
-    canvas[y : y + ch, x : x + cw] = cv2.resize(card, (cw, ch), interpolation=cv2.INTER_AREA)
-    return canvas
-
-
-def glare(img: np.ndarray, rng: random.Random) -> np.ndarray:
-    """Sleeve / toploader reflection: a soft white band."""
-    h, w = img.shape[:2]
-    mask = np.zeros((h, w), np.float32)
-    x0 = rng.randint(-w // 2, w)
-    pts = np.array([[x0, 0], [x0 + rng.randint(20, w // 2), 0], [x0 + rng.randint(-w // 3, w // 3), h], [x0 - rng.randint(20, w // 2), h]], np.int32)
-    cv2.fillPoly(mask, [pts], 1.0)
-    mask = cv2.GaussianBlur(mask, (0, 0), sigmaX=w / 12)[..., None] * rng.uniform(0.1, 0.4)
-    return (img * (1 - mask) + 255 * mask).astype(np.uint8)
+from augment import composite, cut_off, glare, overlap, random_background, specular  # noqa: E402,F401
 
 
 def build_aug() -> A.Compose:  # albumentations 1.4.x API
     return A.Compose([
         A.Perspective(scale=(0.02, 0.08), keep_size=True, p=0.7),
-        A.Affine(rotate=(-8, 8), shear=(-4, 4), scale=(0.95, 1.05), mode=cv2.BORDER_REPLICATE, p=0.6),
+        A.Affine(rotate=(-25, 25), shear=(-4, 4), scale=(0.9, 1.05), mode=cv2.BORDER_REPLICATE, p=0.6),
         A.OneOf([A.MotionBlur(blur_limit=7), A.GaussianBlur(blur_limit=(3, 7)), A.Defocus(radius=(1, 3))], p=0.5),
         A.Downscale(scale_min=0.3, scale_max=0.8, p=0.4),
         A.RandomBrightnessContrast(0.3, 0.3, p=0.8),
@@ -126,8 +92,16 @@ class CardDataset(Dataset):
                 np.random.seed(self.seed + i)
                 random.seed(self.seed + i)
             img = composite(img, rng)
+            if rng.random() < 0.3:  # scrambled piles: another card on top
+                img = overlap(img, self._load(rng.choice(self.rows)["path"]), rng)
+            elif rng.random() < 0.15:
+                img = cut_off(img, rng)
             if rng.random() < 0.3:
                 img = glare(img, rng)
+            if rng.random() < 0.25:
+                img = specular(img, rng)
+            if rng.random() < 0.1:  # upside down (the detector can't tell top from bottom)
+                img = cv2.rotate(img, cv2.ROTATE_180)
             img = self.aug(image=img)["image"]
         return to_tensor(img), self.ident[row["oracle_id"]], edition_index(row["set_code"])
 

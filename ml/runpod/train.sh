@@ -41,6 +41,8 @@ python ml/train.py --data "$WORK/dataset" --out "$WORK/run" --epochs "${EPOCHS:-
   --backbone "${BACKBONE:-tf_efficientnet_lite0}" --lr "${LR:-3e-4}" ${INIT_CKPT:+--init "$INIT_CKPT"}
 (cd ml && python export.py --ckpt "$WORK/run/best.pt" --data "$WORK/dataset" --out "$WORK/models")
 cp "$WORK/run/history.json" "$WORK/models/"
+# fixed synthetic hard photos (covered, piled, rotated, glare...) for before/after comparison
+(cd ml && python make_hard_scenes.py --data "$WORK/dataset" --out "$WORK/scenes" --per-condition 120)
 
 if [[ -n "${HF_TOKEN:-}" && -n "${HF_REPO:-}" ]]; then
   python - <<PY
