@@ -217,7 +217,12 @@ def main() -> None:
     if args.init:
         load_init(model, args.init)
     arc = SubCenterArcFaceLoss(num_classes=len(ident), embedding_size=args.embed_dim, sub_centers=3, margin=28.6, scale=64).to(device)
-    ce = nn.CrossEntropyLoss(label_smoothing=0.05)
+    # Inverse-frequency class weights: CED+CEI share one class (2x the images of LEA or LEB),
+    # and without weighting the head collapses black-bordered cards onto it (seen on a real run).
+    counts = torch.bincount(torch.tensor([edition_index(r["set_code"]) for r in rows]), minlength=len(EDITION_CLASSES)).float()
+    weights = torch.where(counts > 0, counts.sum() / (counts.clamp(min=1) * (counts > 0).sum()), torch.zeros_like(counts))
+    print("edition class counts", counts.tolist(), "weights", [round(w, 2) for w in weights.tolist()])
+    ce = nn.CrossEntropyLoss(weight=weights.to(device), label_smoothing=0.05)
     opt = torch.optim.AdamW([
         {"params": model.backbone.parameters(), "lr": args.lr},
         {"params": list(model.neck.parameters()) + list(model.edition.parameters()), "lr": args.lr * 5},
