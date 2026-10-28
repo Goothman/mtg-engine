@@ -5,11 +5,16 @@ and, depending on version, JSON-LD. We try those first and fall back to HTML car
 Milanuncios sits behind anti-bot protection: if plain HTTP gets blocked, set
 `marketplaces.milanuncios.fetcher: playwright` (pip install '.[browser]').
 Milanuncios gives no coordinates — only city/province — which the geo resolver maps.
+
+`fetcher: apify` runs an Apify actor instead (default zen-studio/milanuncios-scraper) through
+Apify's API, with the token in env APIFY_TOKEN. Its item format isn't documented here, so the
+parser accepts the usual field names and keeps the raw item for inspection.
 """
 from __future__ import annotations
 
 import json
 import logging
+import os
 import re
 import time
 from collections.abc import Iterator
@@ -165,6 +170,62 @@ def _playwright_proxy(url: str) -> dict:
     return out
 
 
+APIFY_RUN = "https://api.apify.com/v2/acts/{actor}/run-sync-get-dataset-items"
+
+
+def _first(d: dict, *keys: str) -> Any:
+    for k in keys:
+        v = d.get(k)
+        if v not in (None, "", [], {}):
+            return v
+    return None
+
+
+def parse_apify_item(item: dict) -> RawListing | None:
+    """One dataset item from the Milanuncios actor -> RawListing (tolerant of field names)."""
+    url = _first(item, "url", "link", "adUrl", "detailUrl") or ""
+    ext = _first(item, "id", "adId", "ad_id", "listingId")
+    if ext is None and url:
+        m = _ID_IN_URL.search(url)
+        ext = m.group(1) if m else None
+    if ext is None:
+        return None
+    loc = item.get("location") if isinstance(item.get("location"), dict) else {}
+    loc_text = item.get("location") if isinstance(item.get("location"), str) else None
+    city = _name(_first(loc, "city", "town", "municipality")) or _first(item, "city", "town")
+    province = _name(_first(loc, "province", "region", "state")) or _first(item, "province", "region")
+    if loc_text and not (city or province):  # "Ciudad (Provincia)" or "Ciudad, Provincia"
+        m = re.match(r"\s*(.*?)\s*[(,]\s*([^)]*)\)?\s*$", loc_text)
+        city, province = (m.group(1), m.group(2)) if m else (loc_text, None)
+    images = []
+    for img in _first(item, "images", "photos", "imageUrls", "pictures") or []:
+        src = img if isinstance(img, str) else _first(img, "url", "src", "imageUrl", "large", "original")
+        if src:
+            images.append(src if str(src).startswith("http") else urljoin(BASE, src))
+    if not images and _first(item, "image", "imageUrl", "thumbnail"):
+        images = [_first(item, "image", "imageUrl", "thumbnail")]
+    seller = _first(item, "seller", "user", "advertiser")
+    seller = seller if isinstance(seller, dict) else {"name": seller} if seller else {}
+    coords = _first(item, "coordinates", "geo") or {}
+    return RawListing(
+        marketplace="milanuncios",
+        external_id=str(ext),
+        url=urljoin(BASE, url) if url else f"{BASE}/anuncios/r{ext}.htm",
+        title=_first(item, "title", "name") or "",
+        description=_first(item, "description", "body", "text") or "",
+        price_eur=_num(_first(item, "price", "priceValue", "amount")),
+        city=city,
+        region=province,
+        postal_code=_first(loc, "zipCode", "postalCode", "zip") or _first(item, "zipCode", "postalCode"),
+        lat=_num(_first(coords, "lat", "latitude")) if isinstance(coords, dict) else None,
+        lon=_num(_first(coords, "lon", "lng", "longitude")) if isinstance(coords, dict) else None,
+        seller_id=str(_first(seller, "id", "userId")) if _first(seller, "id", "userId") else None,
+        seller_name=_first(seller, "name", "nickname", "username"),
+        images=images,
+        raw=item,
+    )
+
+
 class Milanuncios(Marketplace):
     name = "milanuncios"
 
@@ -199,7 +260,33 @@ class Milanuncios(Marketplace):
         resp.raise_for_status()
         return resp.text
 
+    def _search_apify(self, query: str) -> Iterator[RawListing]:
+        token = os.environ.get("APIFY_TOKEN")
+        if not token:
+            raise BlockedError("fetcher apify needs the APIFY_TOKEN environment variable")
+        if self._client is None:
+            self._client = make_client(self.settings, self.config.proxy)
+        actor = (self.config.apify_actor or "zen-studio/milanuncios-scraper").replace("/", "~")
+        resp = self._client.post(
+            APIFY_RUN.format(actor=actor),
+            headers={"Authorization": f"Bearer {token}"},
+            json={"text": query, "maxResults": self.config.max_results, "sort": "relevance", "isShippable": False},
+            timeout=330,  # the sync endpoint waits up to 300 s for the run
+        )
+        if resp.status_code in (401, 402, 403):
+            raise BlockedError(f"apify HTTP {resp.status_code}: {resp.text[:200]}")
+        resp.raise_for_status()
+        items = resp.json()
+        log.info("milanuncios (apify) q=%r -> %d items", query, len(items))
+        for item in items:
+            listing = parse_apify_item(item) if isinstance(item, dict) else None
+            if listing is not None:
+                yield listing
+
     def search(self, query: str, point: SearchPoint | None = None) -> Iterator[RawListing]:
+        if self.config.fetcher == "apify":
+            yield from self._search_apify(query)
+            return
         for page in range(1, self.config.max_pages + 1):
             params = {"s": query, "orden": "relevance", "fromSearch": 1, "pagina": page}
             ads = parse_search_page(self._fetch(params))

@@ -109,6 +109,11 @@ message for a human to approve; neither marketplace has a public messaging API.
 - **Verified live:** catalog sync from Scryfall and Cardmarket (1,809 printings, 1,803
   priced). Cards are valued at the median of Cardmarket's trend/avg/low/avg1/avg7/avg30,
   because any single field swings wildly for thinly traded Alpha/Beta cards.
+- **Milanuncios via Apify:** plain requests to Milanuncios are blocked by its anti-bot service, so
+  `marketplaces.milanuncios.fetcher: apify` runs the `zen-studio/milanuncios-scraper` actor through
+  Apify's API (billed to your Apify account; `max_results` per query). Put the token in the
+  `APIFY_TOKEN` environment variable, or the `APIFY_TOKEN` GitHub Actions secret for the scan
+  workflow. Without it Milanuncios is skipped.
 - **Marketplace access:** Wallapop's search API (`api.wallapop.com`) only answers EU/Spanish IPs,
   and Milanuncios is behind anti-bot protection. Set a Spanish proxy per marketplace with the
   env vars `MTG_ENGINE_PROXY_WALLAPOP` / `MTG_ENGINE_PROXY_MILANUNCIOS` (or `MTG_ENGINE_PROXY` for

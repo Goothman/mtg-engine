@@ -201,3 +201,20 @@ def test_recheck_rejects_untouched_deal(settings, db):
         s.flush()
         assert maybe_close_deal(s, s.get(Listing, "fake:d1")).stage == "rejected"
         assert maybe_close_deal(s, s.get(Listing, "fake:d2")) is None  # humans already involved
+
+
+@respx.mock
+def test_strong_claims_and_collectors_edition_are_not_hidden(settings, db):
+    """Real cases hidden by the first version of the photo rules: slabs and Beta read as CE."""
+    for name in ("slab", "beta_as_ce"):
+        respx.get(f"https://img.test/{name}.jpg").mock(return_value=httpx.Response(200, content=name.encode()))
+    rec = FakeRecognizer({
+        b"slab": [Recognition("b-lotus", 0.34, probs("leb", 0.55), None)],       # PSA slab: barely similar
+        b"beta_as_ce": [Recognition("b-bolt", 0.85, probs("ced", 0.85), None)],  # black border, read as CE
+    })
+    n, flags, _ = _analyse_one(settings, db, RawListing(
+        "fake", "s1", "u", "Black Lotus Alpha PSA 10", "", 50000.0, images=["https://img.test/slab.jpg"]), rec)
+    assert n == 1 and "photos_dont_match" not in flags
+    n, flags, _ = _analyse_one(settings, db, RawListing(
+        "fake", "s2", "u", "Lightning Bolt Beta", "", 300.0, images=["https://img.test/beta_as_ce.jpg"]), rec)
+    assert n == 1 and not any(f.startswith("vision:") for f in flags)

@@ -41,7 +41,11 @@ marketplaces:
     enabled: true
     max_pages: 3
     delay_seconds: 4.0
-    fetcher: httpx          # httpx | playwright (Milanuncios has anti-bot protection)
+    # httpx | playwright | apify. Plain requests are blocked by Milanuncios' anti-bot service;
+    # apify runs the zen-studio/milanuncios-scraper actor (token: env/secret APIFY_TOKEN; billed by Apify)
+    fetcher: apify
+    apify_actor: zen-studio/milanuncios-scraper
+    max_results: 100        # per query
     use_search_points: false
 
 games:
@@ -85,7 +89,7 @@ games:
       type_contains: []              # e.g. [Creature, Artifact]; empty = all
       exclude_basic_lands: false
     red_flags: [proxy, proxys, replica, "réplica", fake, falsa, falso, playtest, "gold border",
-                "borde dorado", "collector's edition", "collectors edition", "coleccionista",
+                "borde dorado", "coleccionista",
                 unlimited, revised, "edicion revisada", "4th edition", "cuarta edicion",
                 # other printings named explicitly (seen on real ads) - Alpha/Beta were English-only
                 "quinta edicion", "5th edition", "sexta edicion", "6th edition", "septima edicion",
@@ -99,7 +103,10 @@ games:
                     japones, japonesa, japoneses, japonesas, japanese, frances, francesa, franceses,
                     francesas, french, aleman, alemana, alemanes, alemanas, german, italiano, italiana,
                     italianos, italianas, italian, portugues, portuguesa, portugueses, portuguesas,
-                    portuguese, ruso, rusa, rusos, rusas, russian]
+                    portuguese, ruso, rusa, rusos, rusas, russian,
+                    # black-bordered reprints sold as such: never Alpha/Beta
+                    "collector's edition", "collectors edition", "collector edition", "edicion coleccionista",
+                    "international edition", "edicion internacional"]
 
   pokemon:
     enabled: false

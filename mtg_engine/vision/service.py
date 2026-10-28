@@ -64,13 +64,16 @@ WHITE_BORDER = ("2ed", "3ed")  # edition classes the model knows with white bord
 
 
 def apply_vision(session: Session, settings: Settings, listing: Listing, recognizer, *,
-                 text_evidence: bool = True, client: httpx.Client | None = None) -> list[str]:
+                 text_evidence: bool = True, strong_text_claim: bool = False,
+                 client: httpx.Client | None = None) -> list[str]:
     """Check the listing photos against the text matches and add cards seen only in photos.
 
     All photo readings are collected first, then:
-      * veto: a card confidently seen with a white border (or another non-target edition) in any
-        photo is not Alpha/Beta, whatever the text or other photos say;
-      * contradiction: photos were checked but nothing resembles an old card -> text matches demoted;
+      * veto: a card confidently seen with a white border in any photo is not Alpha/Beta, whatever
+        the text or other photos say. Collectors' Edition is black-bordered and in photos nearly
+        identical to Beta (only corners and back differ), so it never vetoes on its own;
+      * contradiction: photos were checked but nothing resembles an old card -> text matches demoted,
+        unless the text claim is strong (edition in the title, or a graded card in a slab);
       * support: a photo seeing the text-matched card in a target edition raises its confidence;
       * photo-only finds (no supporting text) need `photo_min_similarity` and a confident edition.
     Returns extra flags.
@@ -111,8 +114,6 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
         white = sum(r.edition_probs.get(e, 0.0) for e in WHITE_BORDER)
         if white >= vc.white_border_veto:
             vetoed.setdefault(card.name, "white_border")
-        elif p >= EDITION_CONFIDENT and edition not in targets and edition != "other":
-            vetoed.setdefault(card.name, edition)
     for name, why in vetoed.items():
         m = by_name.get(name)
         if m is not None and m.status == "auto":
@@ -123,7 +124,7 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
 
     # 2. contradiction: the photos show nothing like any card the model knows
     best = max((r.similarity for _, r in readings), default=0.0)
-    if text_evidence and best < vc.photo_contradiction_similarity:
+    if text_evidence and not strong_text_claim and best < vc.photo_contradiction_similarity:
         for m in listing.matches:
             if m.status == "auto" and m.source == "text":
                 m.confidence = round(m.confidence * 0.3, 3)

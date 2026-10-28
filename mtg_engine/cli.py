@@ -86,12 +86,13 @@ def scan(
 
 
 @app.command()
-def rematch(config: Optional[str] = ConfigOpt):
-    """Re-run matching and valuation on stored listings (after price/config changes)."""
+def rematch(max_minutes: Optional[float] = typer.Option(None, help="Stop after this long (resume on the next run)"),
+            config: Optional[str] = ConfigOpt):
+    """Re-run matching and valuation on stored listings (after price/config/model changes)."""
     from .pipeline import rematch_all
 
     settings, db = _ctx(config)
-    typer.echo(f"re-analysed {rematch_all(settings, db, _recognizer(settings))} listings")
+    typer.echo(f"re-analysed {rematch_all(settings, db, _recognizer(settings), max_minutes)} listings")
 
 
 @app.command("enrich-sellers")

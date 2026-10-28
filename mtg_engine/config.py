@@ -42,6 +42,9 @@ class MarketplaceConfig(BaseModel):
     # Per-marketplace proxy (e.g. a Spanish exit IP for Wallapop). Prefer setting it via the
     # env var MTG_ENGINE_PROXY_<NAME> (e.g. MTG_ENGINE_PROXY_WALLAPOP) to keep credentials out of git.
     proxy: str | None = None
+    # fetcher "apify": an Apify actor does the fetching (token in env APIFY_TOKEN, never in git)
+    apify_actor: str | None = None
+    max_results: int = 100  # per query, for actor-based fetchers
 
 
 class TargetSet(BaseModel):

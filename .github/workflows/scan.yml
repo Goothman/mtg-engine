@@ -51,9 +51,10 @@ jobs:
       - run: mtg-engine sync-catalog
       - name: Scan
         # bounded so a slow run still saves its progress and publishes what it found
-        timeout-minutes: 230
+        timeout-minutes: 120
         continue-on-error: true
         env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}   # Milanuncios via Apify; skipped if unset
           MODE: ${{ inputs.mode || 'all' }}
           MAX_QUERIES: ${{ inputs.max_queries }}
         run: |
@@ -66,7 +67,10 @@ jobs:
           mtg-engine scan "${args[@]}" | tee scan-stats.json
           [ -s scan-stats.json ] || echo '{"note": "scan stopped early"}' > scan-stats.json
       - name: Re-check all ads with the current rules (also verifies photos of text matches)
-        run: mtg-engine rematch
+        # a new model/detector re-reads every photo: bounded, continues on the next run
+        run: mtg-engine rematch --max-minutes 120
+        timeout-minutes: 140
+        continue-on-error: true
       - run: mtg-engine enrich-sellers
       - run: mtg-engine agents run
       - run: mtg-engine export-static

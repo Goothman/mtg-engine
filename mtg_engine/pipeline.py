@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import logging
+import re
 from datetime import timedelta
 
 import httpx
@@ -22,6 +23,7 @@ from .valuation import value_listing
 log = logging.getLogger(__name__)
 
 STALE_AFTER = timedelta(days=7)
+GRADED = re.compile(r"\b(psa|cgc|bgs|beckett|gradead[ao]s?|graded|slab)\b")
 IMPLAUSIBLE_RATIO = 25
 
 
@@ -89,7 +91,11 @@ def analyse(session: Session, settings: Settings, listing: Listing, matcher: Tex
     if recognizer is not None and listing.images and (text_evidence or listing.photo_scan) and not excluded:
         from .vision.service import apply_vision
 
-        flags += apply_vision(session, settings, listing, recognizer, text_evidence=text_evidence, client=image_client)
+        # The "photos don't match" check is only trusted when the edition claim is weak: not in
+        # the title (e.g. "Myr alfa" in a card list) and not a graded card (slabs photograph badly).
+        strong_claim = bool(matcher.match(listing.title, "").editions) or bool(GRADED.search(normalize(f"{listing.title} {listing.description}")))
+        flags += apply_vision(session, settings, listing, recognizer, text_evidence=text_evidence,
+                              strong_text_claim=strong_claim, client=image_client)
     listing.editions = result.editions
     if excluded:  # e.g. "coreano": not an English Alpha/Beta card, whatever the photos look like
         for m in listing.matches:
@@ -265,19 +271,50 @@ def enrich_sellers(settings: Settings, db: Database) -> int:
     return n
 
 
-def rematch_all(settings: Settings, db: Database, recognizer=None) -> int:
-    """Re-run matching/valuation on stored listings (after a price or config change)."""
-    n = 0
+def rematch_all(settings: Settings, db: Database, recognizer=None, max_minutes: float | None = None,
+                batch: int = 100) -> int:
+    """Re-run matching/valuation on stored listings (after a price, config or model change).
+
+    With vision, a new model or detector means re-downloading every photo, which may not fit in
+    one run: ads are processed by priority (text evidence first, then ads from photo queries,
+    newest first), committed in batches, and the run stops at `max_minutes`; the next run
+    redoes the rest (photos already re-read hit the cache and are fast).
+    """
+    import time
+
+    deadline = time.monotonic() + max_minutes * 60 if max_minutes else None
     with db.session() as s:
-        matchers: dict[str, TextMatcher] = {}
-        for listing in s.scalars(select(Listing).where(Listing.status == "active")):
-            if listing.game not in settings.games:
-                continue
-            m = matchers.get(listing.game) or matchers.setdefault(listing.game, build_matcher(s, settings, listing.game))
-            analyse(s, settings, listing, m, recognizer)
-            if listing.match_count:
-                maybe_open_deal(s, settings, listing)
-            else:
-                maybe_close_deal(s, listing)
-            n += 1
+        rows = s.execute(select(Listing.id, Listing.match_count, Listing.needs_review, Listing.editions,
+                                Listing.photo_scan, Listing.last_seen_at).where(Listing.status == "active")).all()
+    order = sorted(rows, key=lambda r: (not (r.match_count or r.needs_review or r.editions), not r.photo_scan,
+                                         -(r.last_seen_at.timestamp() if r.last_seen_at else 0)))
+    ids = [r.id for r in order]
+    n = 0
+    client = None
+    if recognizer is not None:
+        from .http import make_client
+
+        client = make_client(settings)
+    try:
+        for start in range(0, len(ids), batch):
+            if deadline and time.monotonic() > deadline:
+                log.warning("rematch stopped at the time limit after %d/%d ads; the next run continues", n, len(ids))
+                break
+            with db.session() as s:  # one commit per batch keeps progress
+                matchers: dict[str, TextMatcher] = {}
+                for listing in s.scalars(select(Listing).where(Listing.id.in_(ids[start : start + batch]))):
+                    if listing.game not in settings.games:
+                        continue
+                    m = matchers.get(listing.game) or matchers.setdefault(listing.game, build_matcher(s, settings, listing.game))
+                    analyse(s, settings, listing, m, recognizer, client)
+                    if listing.match_count:
+                        maybe_open_deal(s, settings, listing)
+                    else:
+                        maybe_close_deal(s, listing)
+                    n += 1
+            if n and n % 1000 < batch:
+                log.info("rematch: %d/%d ads", n, len(ids))
+    finally:
+        if client is not None:
+            client.close()
     return n

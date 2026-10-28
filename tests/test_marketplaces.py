@@ -86,3 +86,40 @@ def test_wallapop_real_capture():
     assert first.title == "Magic Alpha Island 7.5 NM" and first.price_eur == 70.0
     assert first.region == "Madrid" and first.lat and first.images
     assert all(parse_item(i).external_id for i in items)
+
+
+@respx.mock
+def test_milanuncios_apify_fetcher(settings, monkeypatch):
+    """Item format of zen-studio/milanuncios-scraper is assumed; the parser accepts common variants."""
+    from mtg_engine.marketplaces.milanuncios import Milanuncios
+
+    cfg = settings.marketplaces["milanuncios"].model_copy(update={"fetcher": "apify", "max_results": 5})
+    route = respx.post("https://api.apify.com/v2/acts/zen-studio~milanuncios-scraper/run-sync-get-dataset-items").mock(
+        return_value=httpx.Response(200, json=[
+            {"id": "512345678", "title": "Black Lotus beta", "description": "original", "price": "1.200 €",
+             "url": "/cartas-coleccionables/black-lotus-512345678.htm", "location": "Getafe (Madrid)",
+             "images": [{"url": "https://images.milanuncios.com/a.jpg"}], "seller": {"name": "Ana", "id": 77}},
+            {"url": "https://www.milanuncios.com/x/lote-magic-598765432.htm", "title": "Lote magic",
+             "location": {"city": "Sevilla", "province": "Sevilla"}, "photos": ["https://images.milanuncios.com/b.jpg"]},
+            {"title": "no id at all"},
+        ]))
+    monkeypatch.setenv("APIFY_TOKEN", "test-token")
+    m = Milanuncios(settings, cfg)
+    ads = list(m.search("magic beta"))
+    m.close()
+    assert route.calls.last.request.headers["Authorization"] == "Bearer test-token"
+    assert json.loads(route.calls.last.request.content) == {"text": "magic beta", "maxResults": 5, "sort": "relevance", "isShippable": False}
+    a, b = ads
+    assert (a.external_id, a.price_eur, a.city, a.region, a.seller_name, a.images) == (
+        "512345678", 1200.0, "Getafe", "Madrid", "Ana", ["https://images.milanuncios.com/a.jpg"])
+    assert a.url == "https://www.milanuncios.com/cartas-coleccionables/black-lotus-512345678.htm"
+    assert (b.external_id, b.city, b.images) == ("598765432", "Sevilla", ["https://images.milanuncios.com/b.jpg"])
+
+
+def test_milanuncios_apify_needs_token(settings, monkeypatch):
+    from mtg_engine.marketplaces.milanuncios import BlockedError, Milanuncios
+
+    monkeypatch.delenv("APIFY_TOKEN", raising=False)
+    m = Milanuncios(settings, settings.marketplaces["milanuncios"].model_copy(update={"fetcher": "apify"}))
+    with pytest.raises(BlockedError):
+        list(m.search("magic"))
