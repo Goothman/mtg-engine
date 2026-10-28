@@ -21,6 +21,7 @@ from .base import Marketplace, RawListing
 log = logging.getLogger(__name__)
 
 API_URL = "https://api.wallapop.com/api/v3/search"
+USER_URL = "https://api.wallapop.com/api/v3/users/{id}"
 ITEM_URL = "https://es.wallapop.com/item/{slug}"
 
 
@@ -136,6 +137,29 @@ class Wallapop(Marketplace):
                 break
             params = {"next_page": nxt}
             time.sleep(self.config.delay_seconds)
+
+    def seller_profile(self, seller_id: str) -> dict[str, Any] | None:
+        """Name, profile link and reputation; search results only carry the user id."""
+        user = get_with_retry(self.client, USER_URL.format(id=seller_id)).json()
+        try:
+            stats = get_with_retry(self.client, USER_URL.format(id=seller_id) + "/stats").json()
+        except Exception as e:  # reputation is a nice-to-have
+            log.debug("wallapop stats for %s failed: %s", seller_id, e)
+            stats = {}
+        counters = {c.get("type"): c.get("value") for c in stats.get("counters") or []}
+        seller_type = user.get("seller_type") or {}
+        return {
+            "name": user.get("micro_name"),
+            "url": user.get("url_share", "").split("?")[0] or None,
+            "rating": stats.get("rating_average"),
+            "reviews": counters.get("reviews"),
+            "sold": counters.get("sold"),
+            "on_sale": counters.get("publish"),
+            "top_profile": user.get("is_top_profile"),
+            "verified": seller_type.get("verified"),
+            "type": seller_type.get("type"),
+            "since": _ts(user.get("register_date")).date().isoformat() if user.get("register_date") else None,
+        }
 
     def close(self) -> None:
         self.client.close()

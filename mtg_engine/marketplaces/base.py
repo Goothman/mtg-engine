@@ -46,5 +46,9 @@ class Marketplace(ABC):
     def search(self, query: str, point: SearchPoint | None = None) -> Iterator[RawListing]:
         """Yield listings for a keyword query, paginating up to config.max_pages."""
 
+    def seller_profile(self, seller_id: str) -> dict[str, Any] | None:
+        """Public profile of a seller ({"name", "url", "rating", ...}); None if unsupported."""
+        return None
+
     def close(self) -> None:  # noqa: B027
         pass

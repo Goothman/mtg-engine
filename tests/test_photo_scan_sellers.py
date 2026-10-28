@@ -1,0 +1,128 @@
+"""Photo queries (vision on generic ads), recognition cache, seller profiles, column migration."""
+import httpx
+import respx
+from sqlalchemy import create_engine, text
+
+from mtg_engine.config import MarketplaceConfig, load_settings
+from mtg_engine.db import Database
+from mtg_engine.marketplaces import REGISTRY, Marketplace, RawListing
+from mtg_engine.marketplaces.wallapop import Wallapop
+from mtg_engine.models import ImageScan, Listing
+from mtg_engine.pipeline import Scanner
+from mtg_engine.vision.recognizer import Recognition
+
+EDITIONS = ["lea", "leb", "2ed", "3ed", "ced", "other"]
+
+
+def probs(edition, p):
+    rest = (1 - p) / (len(EDITIONS) - 1)
+    return {e: (p if e == edition else rest) for e in EDITIONS}
+
+
+class FakeRecognizer:
+    fingerprint = "test-model"
+
+    def __init__(self, by_image):
+        self.by_image, self.calls = by_image, 0
+
+    def recognize_image(self, image_bytes):
+        self.calls += 1
+        return self.by_image.get(image_bytes, [])
+
+
+PHOTO_ADS = [
+    # generic lot, the photo shows an Alpha Black Lotus
+    RawListing("fake", "p1", "https://x/p1", "Lote cartas magic", "muchas cartas", 40.0, seller_id="u1",
+               images=["https://img.test/lotus.jpg"]),
+    # generic lot, weak photo match -> ignored
+    RawListing("fake", "p2", "https://x/p2", "Cartas magic", "", 10.0, seller_id="u2", images=["https://img.test/weak.jpg"]),
+    # generic lot, confident but a non-target edition -> ignored, no red flag
+    RawListing("fake", "p3", "https://x/p3", "Cartas magic antiguas", "", 20.0, seller_id="u1",
+               images=["https://img.test/unlimited.jpg"]),
+]
+
+
+class PhotoMarket(Marketplace):
+    name = "fake"
+    profile_calls = 0
+
+    def search(self, query, point=None):
+        yield from PHOTO_ADS
+
+    def seller_profile(self, seller_id):
+        PhotoMarket.profile_calls += 1
+        return {"name": f"Seller {seller_id}", "rating": 4.5}
+
+
+def photo_scan(settings, db, recognizer):
+    REGISTRY["fake"] = PhotoMarket
+    settings.marketplaces = {"fake": MarketplaceConfig(use_search_points=False, delay_seconds=0)}
+    settings.games["pokemon"].enabled = False
+    settings.games["mtg"].photo_queries = ["cartas magic"]
+    return Scanner(settings, db, recognizer).run(photo_queries=True)
+
+
+@respx.mock
+def test_photo_query_finds_cards_only_in_photos(settings, db):
+    for name in ("lotus", "weak", "unlimited"):
+        respx.get(f"https://img.test/{name}.jpg").mock(return_value=httpx.Response(200, content=name.encode()))
+    rec = FakeRecognizer({
+        b"lotus": [Recognition("b-lotus", 0.86, probs("lea", 0.9), None)],
+        b"weak": [Recognition("a-bolt", 0.6, probs("lea", 0.9), None)],
+        b"unlimited": [Recognition("u-bolt", 0.9, probs("2ed", 0.95), None)],
+    })
+    PhotoMarket.profile_calls = 0
+    stats = photo_scan(settings, db, rec)
+    assert stats["photo_checked"] == 3 and stats["errors"] == 0
+    with db.session() as s:
+        lot = s.get(Listing, "fake:p1")
+        assert lot.photo_scan and "photo_match" in lot.flags
+        [m] = lot.matches
+        assert m.source == "vision" and m.card.id == "a-lotus"  # edition head picked the Alpha printing
+        assert lot.match_count == 1 and lot.est_total_value == 30000
+        assert lot.seller_name == "Seller u1" and lot.seller_info["rating"] == 4.5
+        assert s.get(Listing, "fake:p2").matches == [] and s.get(Listing, "fake:p2").match_count == 0
+        p3 = s.get(Listing, "fake:p3")
+        assert p3.matches == [] and not any(f.startswith("vision:") for f in p3.flags)
+        assert s.get(ImageScan, "https://img.test/lotus.jpg").model == "test-model"
+    assert rec.calls == 3 and PhotoMarket.profile_calls == 1  # p3 isn't shown, so no profile lookup
+
+    # rescan: unchanged ads are skipped; recognitions are cached per photo for rematches
+    photo_scan(settings, db, rec)
+    assert rec.calls == 3
+
+
+@respx.mock
+def test_text_scan_skips_photo_queries_without_model(settings, db):
+    REGISTRY["fake"] = PhotoMarket
+    settings.marketplaces = {"fake": MarketplaceConfig(use_search_points=False, delay_seconds=0)}
+    settings.games["pokemon"].enabled = False
+    settings.games["mtg"].queries, settings.games["mtg"].photo_queries = [], ["cartas magic"]
+    assert Scanner(settings, db).run()["fetched"] == 0
+
+
+@respx.mock
+def test_wallapop_seller_profile(settings):
+    respx.get("https://api.wallapop.com/api/v3/users/abc").mock(return_value=httpx.Response(200, json={
+        "id": "abc", "micro_name": "Álvaro V.", "url_share": "https://www.wallapop.com/user/alvaro-1?_pid=wi",
+        "register_date": 1416957464000, "is_top_profile": True, "seller_type": {"type": "Private", "verified": True}}))
+    respx.get("https://api.wallapop.com/api/v3/users/abc/stats").mock(return_value=httpx.Response(200, json={
+        "counters": [{"type": "publish", "value": 9}, {"type": "reviews", "value": 59}, {"type": "sold", "value": 53}],
+        "rating_average": 5.0}))
+    w = Wallapop(settings, settings.marketplaces["wallapop"])
+    assert w.seller_profile("abc") == {
+        "name": "Álvaro V.", "url": "https://www.wallapop.com/user/alvaro-1", "rating": 5.0, "reviews": 59,
+        "sold": 53, "on_sale": 9, "top_profile": True, "verified": True, "type": "Private", "since": "2014-11-25"}
+    w.close()
+
+
+def test_create_all_adds_new_columns(tmp_path):
+    url = f"sqlite:///{tmp_path}/old.db"
+    eng = create_engine(url)
+    with eng.begin() as c:  # a listings table from before photo_scan / seller_info existed
+        c.execute(text("CREATE TABLE listings (id VARCHAR(128) PRIMARY KEY, marketplace VARCHAR(32), title TEXT)"))
+        c.execute(text("INSERT INTO listings (id, marketplace, title) VALUES ('w:1', 'wallapop', 'x')"))
+    db = Database(load_settings(overrides={"database_url": url}))
+    db.create_all()
+    with db.engine.connect() as c:
+        assert c.execute(text("SELECT photo_scan, seller_info FROM listings")).one() == (0, None)

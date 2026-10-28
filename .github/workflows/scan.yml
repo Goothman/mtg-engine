@@ -1,0 +1,93 @@
+name: scan
+# Scans the marketplaces (text queries + photo queries with card recognition), refreshes the
+# static dashboard in site/ and commits it; Vercel redeploys on every push to main.
+# The SQLite database (listings, deals, photo-recognition cache) lives on the `engine-data`
+# branch as a single gzip'd commit, so runs build on each other without growing history.
+on:
+  schedule:
+    - cron: "17 4 * * *"   # daily, 04:17 UTC
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "all = text + photo queries, photo = photo queries only, text = text queries only"
+        type: choice
+        options: [all, photo, text]
+        default: all
+      max_queries:
+        description: "Only run the first N queries of each kind (empty = all)"
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e '.[vision]'
+
+      - name: Restore database
+        run: |
+          mkdir -p data
+          if git fetch --depth 1 origin engine-data 2>/dev/null; then
+            git show FETCH_HEAD:mtg_engine.db.gz | gunzip > data/mtg_engine.db
+            ls -l data/mtg_engine.db
+          else
+            echo "no engine-data branch yet: starting with an empty database"
+          fi
+
+      - run: mtg-engine sync-catalog
+      - name: Scan
+        env:
+          MODE: ${{ inputs.mode || 'all' }}
+          MAX_QUERIES: ${{ inputs.max_queries }}
+        run: |
+          args=()
+          case "$MODE" in
+            photo) args+=(--photo) ;;
+            text) args+=(--no-photo) ;;
+          esac
+          if [ -n "$MAX_QUERIES" ]; then args+=(--max-queries "$MAX_QUERIES"); fi
+          mtg-engine scan "${args[@]}" | tee scan-stats.json
+      - run: mtg-engine enrich-sellers
+      - run: mtg-engine agents run
+      - run: mtg-engine export-static
+
+      - name: Save database
+        if: always()
+        run: |
+          [ -f data/mtg_engine.db ] || exit 0
+          tmp=$(mktemp -d)
+          gzip -c data/mtg_engine.db > "$tmp/mtg_engine.db.gz"
+          cd "$tmp"
+          git init -q -b engine-data
+          git config user.name "mtg-engine bot"
+          git config user.email "mtg-engine-bot@users.noreply.github.com"
+          git add mtg_engine.db.gz
+          git commit -q -m "Database snapshot $(date -u +%FT%TZ)"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" engine-data
+
+      - name: Publish dashboard
+        run: |
+          git config user.name "mtg-engine bot"
+          git config user.email "mtg-engine-bot@users.noreply.github.com"
+          git add site
+          if git diff --cached --quiet; then echo "dashboard unchanged"; exit 0; fi
+          git commit -q -m "Dashboard snapshot $(date -u +%FT%TZ): $(cat scan-stats.json)"
+          for i in 1 2 3; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((i * 5))
+          done
+          exit 1

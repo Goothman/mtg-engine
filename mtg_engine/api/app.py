@@ -41,6 +41,7 @@ def listing_out(l: Listing, with_matches: bool = True) -> dict[str, Any]:
         "id": l.id, "marketplace": l.marketplace, "game": l.game, "url": l.url, "title": l.title,
         "description": l.description, "price_eur": l.price_eur, "city": l.city, "region": l.region,
         "lat": l.lat, "lon": l.lon, "geo_precision": l.geo_precision, "seller_name": l.seller_name,
+        "seller_id": l.seller_id, "seller": l.seller_info or {}, "photo_scan": l.photo_scan,
         "images": l.images, "published_at": l.published_at, "first_seen_at": l.first_seen_at,
         "last_seen_at": l.last_seen_at, "status": l.status, "is_demo": l.is_demo,
         "est_total_value": l.est_total_value, "est_score": l.est_score, "value_ratio": l.value_ratio,
@@ -167,7 +168,7 @@ def create_app(settings: Settings | None = None, db: Database | None = None) -> 
     def listings(
         s: Session = S, game: str | None = None, marketplace: str | None = None, edition: str | None = None,
         min_value: float | None = None, min_ratio: float | None = None, q: str | None = None,
-        status: str = "active", include_unmatched: bool = False, review: bool = True,
+        found: str | None = Query(None, pattern="^(photo|text)$"), status: str = "active", include_unmatched: bool = False, review: bool = True,
         sort: str = Query("value", pattern="^(value|ratio|score|newest|price)$"),
         limit: int = Query(100, le=500), offset: int = 0,
     ):
@@ -178,6 +179,8 @@ def create_app(settings: Settings | None = None, db: Database | None = None) -> 
         rows = list(s.scalars(_filtered(game, marketplace, edition, min_value, min_ratio, q, status, include_unmatched, review).order_by(order, Listing.id)))
         if edition:  # JSON column: filter in Python to stay DB-agnostic
             rows = [r for r in rows if edition in (r.editions or [])]
+        if found:  # "photo": recognised only in the ad photos
+            rows = [r for r in rows if ("photo_match" in (r.flags or [])) == (found == "photo")]
         total = len(rows)
         return {"total": total, "items": [listing_out(r) for r in rows[offset : offset + limit]]}
 

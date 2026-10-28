@@ -60,6 +60,7 @@ class Listing(Base):
     geo_precision: Mapped[str | None] = mapped_column(String(16))  # exact | city | province | none
     seller_id: Mapped[str | None] = mapped_column(String(96))
     seller_name: Mapped[str | None] = mapped_column(String(128))
+    seller_info: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)  # profile: url, rating, sales...
     images: Mapped[list[Any]] = mapped_column(JSON, default=list)
     published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     first_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
@@ -75,6 +76,7 @@ class Listing(Base):
     editions: Mapped[list[Any]] = mapped_column(JSON, default=list)  # detected target editions
     flags: Mapped[list[Any]] = mapped_column(JSON, default=list)
     needs_review: Mapped[bool] = mapped_column(Boolean, default=False)
+    photo_scan: Mapped[bool] = mapped_column(Boolean, default=False)  # found by a photo query: always run vision
 
     raw: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)
 
@@ -100,6 +102,17 @@ class Match(Base):
 
     listing: Mapped[Listing] = relationship(back_populates="matches")
     card: Mapped[CardPrinting] = relationship()
+
+
+class ImageScan(Base):
+    """Cached recognitions per ad photo, so rescans and rematches don't re-download images."""
+
+    __tablename__ = "image_scans"
+
+    url: Mapped[str] = mapped_column(Text, primary_key=True)
+    model: Mapped[str] = mapped_column(String(32))  # model+gallery fingerprint; a new model rescans
+    results: Mapped[list[Any]] = mapped_column(JSON, default=list)  # [{card_id, similarity, edition_probs}]
+    scanned_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
 
 class Deal(Base):

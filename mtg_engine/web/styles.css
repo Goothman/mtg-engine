@@ -83,6 +83,7 @@ main { padding: 16px 24px 32px; }
 .chip.flag { border-color: var(--serious); }
 .chip.review { border-color: var(--warning); }
 .chip.demo { border-style: dashed; }
+.chip.photo { border-color: var(--good); color: var(--text-primary); }
 .money { text-align: right; min-width: 120px; }
 .money .value { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .money .ask { color: var(--text-muted); font-size: 12px; font-variant-numeric: tabular-nums; }

@@ -4,7 +4,7 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -35,6 +35,25 @@ class Database:
 
     def create_all(self) -> None:
         Base.metadata.create_all(self.engine)
+        self._add_missing_columns()
+
+    def _add_missing_columns(self) -> None:
+        """Minimal forward migration: add columns introduced after a table was created."""
+        insp = inspect(self.engine)
+        with self.engine.begin() as conn:
+            for table in Base.metadata.sorted_tables:
+                have = {c["name"] for c in insp.get_columns(table.name)}
+                for col in table.columns:
+                    if col.name in have:
+                        continue
+                    ddl = col.type.compile(dialect=self.engine.dialect)
+                    default = col.default.arg if col.default is not None and col.default.is_scalar else None
+                    sql = f"ALTER TABLE {table.name} ADD COLUMN {col.name} {ddl}"
+                    if isinstance(default, bool):
+                        sql += f" NOT NULL DEFAULT {int(default) if self.engine.dialect.name == 'sqlite' else str(default).upper()}"
+                    elif isinstance(default, (int, float)):
+                        sql += f" DEFAULT {default}"
+                    conn.execute(text(sql))
 
     @contextmanager
     def session(self) -> Iterator[Session]:

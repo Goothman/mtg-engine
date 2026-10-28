@@ -70,13 +70,18 @@ def scan(
     game: list[str] = typer.Option(None, "--game", "-g"),
     marketplace: list[str] = typer.Option(None, "--marketplace", "-m"),
     max_queries: Optional[int] = typer.Option(None, help="Only run the first N queries (smoke test)"),
+    photo: Optional[bool] = typer.Option(None, "--photo/--no-photo",
+                                         help="--photo: only photo queries (vision on every ad); --no-photo: only text queries"),
     config: Optional[str] = ConfigOpt,
 ):
     """Run one scan across marketplaces and update matches/valuations."""
     from .pipeline import Scanner
 
     settings, db = _ctx(config)
-    stats = Scanner(settings, db, _recognizer(settings)).run(game or None, marketplace or None, max_queries)
+    recognizer = _recognizer(settings)
+    if photo and recognizer is None:
+        raise typer.BadParameter("--photo needs the vision model (models/) and pip install '.[vision]'")
+    stats = Scanner(settings, db, recognizer).run(game or None, marketplace or None, max_queries, photo)
     typer.echo(json.dumps(stats))
 
 
@@ -87,6 +92,15 @@ def rematch(config: Optional[str] = ConfigOpt):
 
     settings, db = _ctx(config)
     typer.echo(f"re-analysed {rematch_all(settings, db, _recognizer(settings))} listings")
+
+
+@app.command("enrich-sellers")
+def enrich_sellers_cmd(config: Optional[str] = ConfigOpt):
+    """Fetch seller names and reputation for the ads shown on the dashboard."""
+    from .pipeline import enrich_sellers
+
+    settings, db = _ctx(config)
+    typer.echo(f"filled {enrich_sellers(settings, db)} seller profiles")
 
 
 @app.command()

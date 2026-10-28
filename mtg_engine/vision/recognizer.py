@@ -11,6 +11,7 @@ always agree: input_h, input_w, mean, std, edition_classes.
 """
 from __future__ import annotations
 
+import hashlib
 import io
 import logging
 from dataclasses import dataclass
@@ -75,6 +76,10 @@ class CardRecognizer:
         import onnxruntime as ort
 
         self.closeup_margin = closeup_margin
+        h = hashlib.sha256()
+        for p in (model_path, gallery_path):
+            h.update(Path(p).read_bytes())
+        self.fingerprint = h.hexdigest()[:16]  # cache key: results are reused only for the same model
         self.session = ort.InferenceSession(str(model_path), providers=ort.get_available_providers())
         g = np.load(gallery_path, allow_pickle=False)
         self.embeddings = g["embeddings"].astype(np.float32)

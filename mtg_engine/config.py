@@ -62,6 +62,9 @@ class Filters(BaseModel):
 class GameConfig(BaseModel):
     enabled: bool = True
     queries: list[str] = Field(default_factory=list)
+    # Broad searches ("cartas magic") whose ads are checked photo by photo with the vision model,
+    # even when the text names no edition or card.
+    photo_queries: list[str] = Field(default_factory=list)
     targets: list[TargetSet] = Field(default_factory=list)
     confuser_sets: list[str] = Field(default_factory=list)
     filters: Filters = Field(default_factory=Filters)
@@ -84,6 +87,10 @@ class VisionConfig(BaseModel):
     gallery_path: str = "models/gallery.npz"
     min_similarity: float = 0.55
     max_images_per_listing: int = 6
+    # Stricter bar for matches found only in photos (no supporting text): generic lots are
+    # mostly modern cards, and the model has only seen Alpha/Beta and their look-alike editions.
+    photo_min_similarity: float = 0.7
+    photo_min_edition_prob: float = 0.7
 
 
 class DealsConfig(BaseModel):

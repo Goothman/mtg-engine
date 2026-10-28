@@ -39,6 +39,7 @@
         (l.match_count > 0 || (review && l.needs_review)) &&
         (!p.get("marketplace") || l.marketplace === p.get("marketplace")) &&
         (!p.get("edition") || (l.editions || []).includes(p.get("edition"))) &&
+        (!p.get("found") || (p.get("found") === "photo") === isPhotoFind(l)) &&
         l.est_total_value >= minV && (!minR || (l.value_ratio || 0) >= minR) &&
         (!q || [l.title, l.description, l.city].join(" ").toLowerCase().includes(q)));
       const key = { value: (l) => -l.est_total_value, ratio: (l) => -(l.value_ratio || 0), score: (l) => -l.est_score,
@@ -97,10 +98,37 @@
     return RAMP[Math.min(RAMP.length - 1, Math.floor(t * RAMP.length))];
   }
 
+  const SOFT_FLAGS = new Set(["photo_match", "photo_unavailable"]);
+
+  function isPhotoFind(l) {
+    return (l.flags || []).includes("photo_match");
+  }
+
+  function sellerName(l) {
+    const s = l.seller || {};
+    return s.name || l.seller_name || "";
+  }
+
+  function sellerHTML(l) {
+    const s = l.seller || {};
+    const name = sellerName(l);
+    if (!name) return "";
+    const link = s.url ? `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(name)}</a>` : esc(name);
+    const bits = [];
+    if (s.rating != null) bits.push(`★ ${(+s.rating).toFixed(1)}${s.reviews != null ? ` (${s.reviews} reviews)` : ""}`);
+    if (s.sold != null) bits.push(`${s.sold} sold`);
+    if (s.on_sale != null) bits.push(`${s.on_sale} on sale`);
+    if (s.since) bits.push(`since ${esc(s.since.slice(0, 4))}`);
+    if (s.verified) bits.push("verified");
+    if (s.type && s.type !== "Private") bits.push(esc(s.type));
+    return `<span class="small">Seller: <b>${link}</b>${bits.length ? ` <span class="muted">· ${bits.join(" · ")}</span>` : ""}</span>`;
+  }
+
   function rowHTML(l, i) {
     const img = l.images?.[0] ? `<img class="thumb" loading="lazy" src="${esc(l.images[0])}" alt="">` : `<div class="thumb"></div>`;
     const editions = (l.editions || []).map((e) => `<span class="chip edition">${esc(labelFor(e))}</span>`).join("");
-    const flags = (l.flags || []).map((f) => `<span class="chip flag" title="red flag">⚠ ${esc(f)}</span>`).join("");
+    const flags = (l.flags || []).filter((f) => !SOFT_FLAGS.has(f)).map((f) => `<span class="chip flag" title="red flag">⚠ ${esc(f)}</span>`).join("");
+    const photo = isPhotoFind(l) ? `<span class="chip photo" title="Card recognised in the ad photos; the text doesn't name it">📷 found in photos</span>` : "";
     const review = l.needs_review ? `<span class="chip review">needs review</span>` : "";
     const demo = l.is_demo ? `<span class="chip demo">demo data</span>` : "";
     const deal = l.deal ? `<span class="chip">deal: ${esc(l.deal.stage)}</span>` : "";
@@ -111,8 +139,8 @@
         ${img}
         <div style="min-width:0">
           <div class="title" title="${esc(l.title)}">${esc(l.title)}</div>
-          <div class="meta"><span>${esc(l.marketplace)}</span><span>${esc(place(l) || "location unknown")}</span><span>${l.match_count} card${l.match_count === 1 ? "" : "s"} matched</span><span>${esc(ago(l.first_seen_at))}</span></div>
-          <div class="chips">${editions}${review}${flags}${deal}${demo}</div>
+          <div class="meta"><span>${esc(l.marketplace)}</span><span>${esc(place(l) || "location unknown")}</span>${sellerName(l) ? `<span title="seller">👤 ${esc(sellerName(l))}</span>` : ""}<span>${l.match_count} card${l.match_count === 1 ? "" : "s"} matched</span><span>${esc(ago(l.first_seen_at))}</span></div>
+          <div class="chips">${editions}${photo}${review}${flags}${deal}${demo}</div>
         </div>
         <div class="money">
           <div class="value">${eur(l.est_total_value)}</div>
@@ -130,7 +158,7 @@
         <td class="r">${m.quantity}</td>
         <td class="r">${eur(m.unit_value_eur, 2)}</td>
         <td class="r">${eur(m.line_value_eur, 2)}</td>
-        <td class="r" title="${esc(m.source)}${m.matched_text ? " · " + esc(m.matched_text) : ""}">${pct(m.confidence)}${m.status === "confirmed" ? " ✓" : ""}</td>
+        <td class="r" title="${esc(m.source)}${m.matched_text ? " · " + esc(m.matched_text) : ""}">${m.source.includes("vision") ? '<span title="recognised in photo">📷 </span>' : ""}${pct(m.confidence)}${m.status === "confirmed" ? " ✓" : ""}</td>
         <td class="r">
           <button class="btn sm ghost" data-act="confirm" data-mid="${m.id}" title="Confirm match">✓</button>
           <button class="btn sm ghost" data-act="reject" data-mid="${m.id}" title="Reject match">✕</button>
@@ -146,6 +174,7 @@
         <div class="detail-actions">
           <a class="btn sm" href="${esc(l.url)}" target="_blank" rel="noopener">Open ad ↗</a>
           ${dealBtn}
+          ${sellerHTML(l)}
           <span class="muted small">Prices: ${esc([...new Set((l.matches || []).map((m) => m.price_source).filter(Boolean))].join(", ") || "—")}</span>
         </div>
       </div>`;
@@ -225,7 +254,7 @@
         radius: r, color: exact ? "#1a1a19" : color, weight: 2, dashArray: exact ? null : "3 3",
         fillColor: color, fillOpacity: exact ? 0.85 : 0.45,
       });
-      m.bindPopup(`<b>${esc(l.title)}</b><br>${esc(l.marketplace)} · ${esc(place(l))}${exact ? "" : " <span class='muted'>(approx.)</span>"}<br>Value <b>${eur(l.est_total_value)}</b> · asking ${eur(l.price_eur)}${l.value_ratio ? ` · ${l.value_ratio.toFixed(2)}×` : ""}<br><a href="${esc(l.url)}" target="_blank" rel="noopener">Open ad ↗</a>`);
+      m.bindPopup(`<b>${esc(l.title)}</b><br>${esc(l.marketplace)} · ${esc(place(l))}${exact ? "" : " <span class='muted'>(approx.)</span>"}${sellerName(l) ? ` · 👤 ${esc(sellerName(l))}` : ""}<br>Value <b>${eur(l.est_total_value)}</b> · asking ${eur(l.price_eur)}${l.value_ratio ? ` · ${l.value_ratio.toFixed(2)}×` : ""}<br><a href="${esc(l.url)}" target="_blank" rel="noopener">Open ad ↗</a>`);
       m.bindTooltip(`${eur(l.est_total_value)} · ${esc(l.title.slice(0, 40))}`, { direction: "top" });
       m.on("click", () => expand(l.id));
       m.addTo(state.layer);

@@ -51,13 +51,16 @@ def ingest(session: Session, settings: Settings, raw: RawListing, game: str) -> 
     row.url, row.title, row.description, row.price_eur = raw.url, raw.title, raw.description, raw.price_eur
     row.city, row.region, row.postal_code, row.country = raw.city, province or raw.region, raw.postal_code, raw.country
     row.lat, row.lon, row.geo_precision = lat, lon, precision
-    row.seller_id, row.seller_name, row.images = raw.seller_id, raw.seller_name, raw.images
+    if raw.seller_id != row.seller_id:
+        row.seller_info = {}
+    row.seller_id, row.seller_name = raw.seller_id, raw.seller_name or (row.seller_name if raw.seller_id == row.seller_id else None)
+    row.images = raw.images
     row.published_at = raw.published_at or row.published_at
     row.last_seen_at, row.status, row.raw = utcnow(), "active", raw.raw
     return row, is_new, changed
 
 
-def analyse(session: Session, settings: Settings, listing: Listing, matcher: TextMatcher, recognizer=None) -> None:
+def analyse(session: Session, settings: Settings, listing: Listing, matcher: TextMatcher, recognizer=None, image_client=None) -> None:
     """(Re)compute matches + valuation for one listing. Manual confirmations/rejections survive."""
     manual = {m.card_id: m for m in listing.matches if m.status != "auto"}
     for m in list(listing.matches):
@@ -79,12 +82,13 @@ def analyse(session: Session, settings: Settings, listing: Listing, matcher: Tex
             )
         )
     flags = list(result.flags)
-    # Vision only on candidates (an edition named or a card matched): image downloads are the
-    # expensive part, and most ads in a scan are unrelated cards.
-    if recognizer is not None and listing.images and (result.editions or result.matches):
+    # Vision on candidates (an edition named or a card matched) and on every ad found by a
+    # photo query; image downloads are the expensive part, and results are cached per photo.
+    text_evidence = bool(result.editions or result.matches)
+    if recognizer is not None and listing.images and (text_evidence or listing.photo_scan):
         from .vision.service import apply_vision
 
-        flags += apply_vision(session, settings, listing, recognizer)
+        flags += apply_vision(session, settings, listing, recognizer, text_evidence=text_evidence, client=image_client)
     listing.editions = result.editions
     v = value_listing(listing.matches, listing.price_eur)
     # Too good to be true: worth > IMPLAUSIBLE_RATIO x asking and the cards aren't in the title.
@@ -102,7 +106,8 @@ def analyse(session: Session, settings: Settings, listing: Listing, matcher: Tex
     listing.flags = flags
     listing.est_total_value, listing.est_score, listing.value_ratio = v.total_value, v.score, v.ratio
     listing.match_count = v.counted
-    listing.needs_review = result.needs_review and v.counted == 0
+    # photo-only finds are shown for a human to check even when below the counting threshold
+    listing.needs_review = (result.needs_review or "photo_match" in flags) and v.counted == 0
 
 
 class Scanner:
@@ -110,9 +115,17 @@ class Scanner:
         self.settings = settings
         self.db = db
         self.recognizer = recognizer
+        self.image_client = None
+        self._sellers: dict[str, dict] = {}
 
-    def run(self, games: list[str] | None = None, marketplaces: list[str] | None = None, max_queries: int | None = None) -> dict:
-        stats = {"fetched": 0, "new": 0, "updated": 0, "matched": 0, "deals_opened": 0, "errors": 0}
+    def run(self, games: list[str] | None = None, marketplaces: list[str] | None = None, max_queries: int | None = None,
+            photo_queries: bool | None = None) -> dict:
+        """photo_queries: None = text + photo queries, True = photo queries only, False = text only."""
+        stats = {"fetched": 0, "new": 0, "updated": 0, "matched": 0, "photo_checked": 0, "deals_opened": 0, "errors": 0}
+        if self.recognizer is not None:
+            from .http import make_client
+
+            self.image_client = make_client(self.settings)
         with self.db.session() as s:
             run = ScanRun()
             s.add(run)
@@ -128,10 +141,15 @@ class Scanner:
                 market = get_marketplace(mname, self.settings)
                 points = self.settings.region.search_points if mcfg.use_search_points else [None]
                 try:
-                    for query in gcfg.queries[:max_queries]:
+                    queries = [(q, False) for q in gcfg.queries[:max_queries]]
+                    if photo_queries is not False and self.recognizer is not None:  # useless without vision
+                        queries += [(q, True) for q in gcfg.photo_queries[:max_queries]]
+                        if photo_queries is True:  # photo queries only
+                            queries = [(q, p) for q, p in queries if p]
+                    for query, photo in queries:
                         for point in points:
                             try:
-                                self._scan_query(market, game, query, point, stats)
+                                self._scan_query(market, game, query, point, stats, photo)
                             except (httpx.ProxyError, httpx.ConnectError, BlockedError) as e:
                                 raise _MarketUnreachable(f"{mname} unreachable: {type(e).__name__}: {e}") from e
                             except Exception as e:
@@ -144,13 +162,15 @@ class Scanner:
                     log.error("%s; skipping %s for the rest of this scan", e, mname)
                 finally:
                     market.close()
+        if self.image_client is not None:
+            self.image_client.close()
         with self.db.session() as s:
             self._expire_stale(s)
             run = s.get(ScanRun, run_id)
             run.finished_at, run.stats, run.errors = utcnow(), stats, errors[-50:]
         return stats
 
-    def _scan_query(self, market, game, query, point, stats) -> None:
+    def _scan_query(self, market, game, query, point, stats, photo: bool = False) -> None:
         seen: set[str] = set()
         with self.db.session() as s:
             matcher = build_matcher(s, self.settings, game)
@@ -160,14 +180,21 @@ class Scanner:
                 seen.add(raw.key)
                 stats["fetched"] += 1
                 listing, is_new, changed = ingest(s, self.settings, raw, game)
-                if not (is_new or changed):
+                newly_photo = photo and not listing.photo_scan
+                listing.photo_scan = listing.photo_scan or photo
+                if not (is_new or changed or (newly_photo and self.recognizer is not None)):
                     continue
                 s.flush()
-                analyse(s, self.settings, listing, matcher, self.recognizer)
-                stats["new" if is_new else "updated"] += 1
+                analyse(s, self.settings, listing, matcher, self.recognizer, self.image_client)
+                if listing.photo_scan and self.recognizer is not None and listing.images:
+                    stats["photo_checked"] += 1
+                if listing.match_count or listing.needs_review:
+                    enrich_seller(s, market, listing, self._sellers)
                 if is_new:
+                    stats["new"] += 1
                     events.emit(s, events.LISTING_DISCOVERED, listing.id, marketplace=listing.marketplace)
-                else:
+                elif changed:  # (an unchanged ad may still be re-analysed for its first photo check)
+                    stats["updated"] += 1
                     events.emit(s, events.LISTING_UPDATED, listing.id, price=listing.price_eur)
                 if listing.match_count:
                     stats["matched"] += 1
@@ -183,6 +210,48 @@ class Scanner:
             s.execute(update(Listing).where(Listing.id.in_(stale)).values(status="gone"))
             for lid in stale:
                 events.emit(s, events.LISTING_GONE, lid)
+
+
+def enrich_seller(session: Session, market, listing: Listing, cache: dict[str, dict] | None = None) -> None:
+    """Fetch the seller's public profile (name, rating, sales) for ads worth showing."""
+    if not listing.seller_id or listing.seller_info:
+        return
+    cache = {} if cache is None else cache
+    info = cache.get(listing.seller_id)
+    if info is None:
+        known = session.scalars(select(Listing.seller_info).where(
+            Listing.seller_id == listing.seller_id, Listing.marketplace == listing.marketplace, Listing.id != listing.id))
+        info = next((k for k in known if k), None)
+    if info is None:
+        try:
+            info = market.seller_profile(listing.seller_id) or {}
+        except Exception as e:
+            log.warning("seller profile %s failed: %s", listing.seller_id, e)
+            return
+    cache[listing.seller_id] = info
+    listing.seller_info = info
+    listing.seller_name = info.get("name") or listing.seller_name
+
+
+def enrich_sellers(settings: Settings, db: Database) -> int:
+    """Fill seller profiles for ads already in the database that are shown on the dashboard."""
+    n = 0
+    cache: dict[str, dict] = {}
+    with db.session() as s:
+        rows = list(s.scalars(select(Listing).where(
+            Listing.status == "active", Listing.is_demo.is_(False),
+            (Listing.match_count > 0) | Listing.needs_review.is_(True))))
+        markets = {}
+        for listing in rows:
+            if listing.seller_info or listing.marketplace not in settings.marketplaces:
+                continue
+            market = markets.get(listing.marketplace) or markets.setdefault(
+                listing.marketplace, get_marketplace(listing.marketplace, settings))
+            enrich_seller(s, market, listing, cache)
+            n += bool(listing.seller_info)
+        for m in markets.values():
+            m.close()
+    return n
 
 
 def rematch_all(settings: Settings, db: Database, recognizer=None) -> int:

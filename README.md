@@ -24,8 +24,13 @@ To see the dashboard without network access: `mtg-engine seed-demo` loads demo d
 that is labelled as such (made-up ads, placeholder prices). Remove it with `mtg-engine clear-demo`.
 
 To publish a read-only snapshot (e.g. on Vercel): `mtg-engine export-static` writes `site/`
-(dashboard plus current findings, no backend). `vercel.json` serves `site/` as a static site.
-Re-export and push to update it.
+(dashboard plus current findings, no backend). `vercel.json` serves `site/` as a static site,
+and the Vercel project redeploys on every push to `main`.
+
+**Automatic scans:** `.github/workflows/scan.yml` runs daily (or on demand from the Actions tab,
+with mode `all`/`photo`/`text`): catalog sync → scan → seller profiles → agents → `export-static`,
+then commits `site/` to `main`, which publishes it. The database is kept between runs on the
+`engine-data` branch (one gzip'd commit, overwritten each run).
 
 To run continuously: `mtg-engine scheduler` (catalog sync every 24 h, scans every
 `scheduler.interval_minutes`, then an agent pass), or `docker compose up`.
@@ -36,6 +41,7 @@ To run continuously: `mtg-engine scheduler` (catalog sync every 24 h, scans ever
 |---|---|
 | `games.<game>.targets` | Editions to hunt (`set_code`, label, keywords). Add `2ed` for Unlimited, etc. |
 | `games.<game>.queries` | Search terms sent to every marketplace |
+| `games.<game>.photo_queries` | Generic searches ("cartas magic"): every ad's photos go through card recognition, even if the text names no card or edition (`mtg-engine scan --photo` runs only these) |
 | `games.<game>.filters` | Minimum card and ad value, maximum asking price, rarities, card types, basic lands |
 | `games.<game>.red_flags` | Words that halve match confidence (proxy, réplica, unlimited…) |
 | `marketplaces.*` | Enable/disable, pages, delay, `fetcher: playwright` for anti-bot pages |
@@ -65,6 +71,12 @@ switches the database.
   recalculates both.
 - Ads that name an edition but no identifiable cards are marked **needs review**. Vision
   or a human handles those.
+- **Photo finds:** for ads from photo queries, a card seen only in the photos counts when the
+  model is confident (`vision.photo_min_similarity`, `vision.photo_min_edition_prob`). These ads get
+  the `📷 found in photos` chip and the "Found in photos only" filter. Recognitions are cached
+  per photo URL and model (`image_scans` table), so rematches don't download images again.
+- **Sellers:** for ads shown on the dashboard, the seller's public profile (name, link, rating,
+  reviews, items sold, account age) is fetched and shown; `mtg-engine enrich-sellers` backfills it.
 
 ## Agents and integration
 Every change produces an event in the `events` outbox table: `listing.discovered`,
@@ -95,7 +107,6 @@ message for a human to approve; neither marketplace has a public messaging API.
 - The parsers were written from the sites' public behaviour and tested against hand-written
   fixtures (`tests/fixtures/`). Replace those with real captures on the first live scan.
 - Respect each site's terms and rate limits. Delays between pages are configurable.
-- Vision is off until a trained model is in `models/` (see `ml/README.md`).
 
 ## Tests
 
