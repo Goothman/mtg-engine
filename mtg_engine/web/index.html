@@ -35,7 +35,12 @@
         <input type="search" name="q" placeholder="Search title, description, city…" aria-label="Search">
         <select name="marketplace" aria-label="Marketplace"><option value="">All marketplaces</option></select>
         <select name="edition" aria-label="Edition"><option value="">All editions</option></select>
-        <select name="found" aria-label="Found by"><option value="">Found by text or photo</option><option value="photo">Found in photos only</option><option value="text">Found by text</option></select>
+        <select name="source" aria-label="Search source">
+          <option value="">All searches</option>
+          <option value="generic">Generic searches (“cartas magic”…)</option>
+          <option value="photo">Generic searches · card only in photos</option>
+          <option value="targeted">Alpha/Beta searches</option>
+        </select>
         <label class="inline">Min value €<input type="number" name="min_value" min="0" step="5" value=""></label>
         <label class="inline">Min ratio<input type="number" name="min_ratio" min="0" step="0.1" value=""></label>
         <select name="sort" aria-label="Sort">
@@ -44,7 +49,15 @@
           <option value="score">Rank: confidence-weighted</option>
           <option value="newest">Newest first</option>
         </select>
-        <label class="inline check"><input type="checkbox" name="review" checked> Include “needs review”</label>
+        <div class="price-range" role="group" aria-label="Asking price">
+          <span class="range-name">Price</span>
+          <div class="range-track">
+            <input type="range" id="price-lo" min="0" max="1000" value="0" aria-label="Minimum asking price">
+            <input type="range" id="price-hi" min="0" max="1000" value="1000" aria-label="Maximum asking price">
+          </div>
+          <span class="range-label num" id="price-label">any</span>
+          <input type="hidden" name="min_price"><input type="hidden" name="max_price">
+        </div>
       </form>
       <div class="split">
         <div class="panel list-panel">

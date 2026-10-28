@@ -34,9 +34,11 @@
     if (u.pathname === "/api/listings") {
       const q = (p.get("q") || "").toLowerCase();
       const minV = +p.get("min_value") || 0, minR = +p.get("min_ratio") || 0;
-      const review = p.get("review") !== "false";
+      const minP = p.get("min_price"), maxP = p.get("max_price");
       let items = STATIC.listings.filter((l) =>
-        (l.match_count > 0 || (review && l.needs_review)) &&
+        l.match_count > 0 &&
+        (!p.get("source") || l.photo_scan === (p.get("source") === "generic")) &&
+        (minP == null || (l.price_eur ?? 0) >= +minP) && (maxP == null || (l.price_eur ?? 0) <= +maxP) &&
         (!p.get("marketplace") || l.marketplace === p.get("marketplace")) &&
         (!p.get("edition") || (l.editions || []).includes(p.get("edition"))) &&
         (!p.get("found") || (p.get("found") === "photo") === isPhotoFind(l)) &&
@@ -73,7 +75,7 @@
       ["Total est. value", eur(s.total_value_eur), "sum over matched ads"],
       ["Total asking", eur(s.total_asking_eur), "what sellers ask"],
       ["Best value / price", s.best_ratio ? `${s.best_ratio.toFixed(2)}×` : "—", "highest single ad"],
-      ["Needs review", s.needs_review, "edition named, cards unclear"],
+      ["From “cartas magic”", s.matched_generic ?? 0, `${s.photo_finds ?? 0} spotted only in photos`],
       ["Open deals", Object.entries(s.deals_by_stage).filter(([k]) => !["received", "rejected", "cancelled"].includes(k)).reduce((a, [, v]) => a + v, 0), `${s.cards_in_catalog} cards in catalog`],
     ];
     $("#kpis").innerHTML = tiles.map(([l, v, h]) => `<div class="kpi"><div class="label">${esc(l)}</div><div class="value">${esc(v)}</div><div class="hint">${esc(h)}</div></div>`).join("");
@@ -86,9 +88,36 @@
   function filterParams() {
     const f = new FormData($("#filters"));
     const p = new URLSearchParams();
-    for (const [k, v] of f.entries()) if (v !== "" && k !== "review") p.set(k, v);
-    p.set("review", $("#filters [name=review]").checked ? "true" : "false");
+    for (const [k, v] of f.entries()) if (v !== "") p.set(k, v);
+    if (p.get("source") === "photo") { p.set("source", "generic"); p.set("found", "photo"); }
     return p;
+  }
+
+  // Asking-price slider: two overlapping range inputs on a log scale (cards go from 1 € to 50.000 €).
+  const PRICE_STEPS = 1000;
+  function niceRound(v) {
+    const step = v < 100 ? 1 : v < 1000 ? 10 : v < 10000 ? 50 : 500;
+    return Math.round(v / step) * step;
+  }
+  function posToPrice(pos) {
+    return pos <= 0 ? 0 : niceRound(Math.expm1((pos / PRICE_STEPS) * Math.log1p(state.priceMax)));
+  }
+  function initPriceRange(maxPrice) {
+    state.priceMax = Math.max(niceRound(maxPrice || 0) || 0, 100);
+    const lo = $("#price-lo"), hi = $("#price-hi");
+    const sync = (moved) => {
+      if (+lo.value > +hi.value) (moved === lo ? hi : lo).value = moved.value;
+      const a = +lo.value, b = +hi.value;
+      $("#filters [name=min_price]").value = a > 0 ? posToPrice(a) : "";
+      $("#filters [name=max_price]").value = b < PRICE_STEPS ? posToPrice(b) : "";
+      $("#price-label").textContent = a <= 0 && b >= PRICE_STEPS ? "any"
+        : `${a > 0 ? eur(posToPrice(a)) : "0 €"} – ${b < PRICE_STEPS ? eur(posToPrice(b)) : `${eur(state.priceMax)}+`}`;
+      $(".range-track").style.setProperty("--lo", `${(a / PRICE_STEPS) * 100}%`);
+      $(".range-track").style.setProperty("--hi", `${(b / PRICE_STEPS) * 100}%`);
+    };
+    lo.addEventListener("input", () => sync(lo));
+    hi.addEventListener("input", () => sync(hi));
+    sync(lo);
   }
 
   // ---------------------------------------------------------------- listings
@@ -303,6 +332,7 @@
     Object.values(state.config.games).forEach((g) => g.targets.forEach((t) => ed.insertAdjacentHTML("beforeend", `<option value="${esc(t.set_code)}">${esc(t.label)}</option>`)));
     $("#subtitle").textContent = `${Object.values(state.config.games).flatMap((g) => g.targets.map((t) => t.label)).join(" · ")} · ${state.config.marketplaces.join(", ")} · ${state.config.country}`;
     initMap();
+    try { initPriceRange((await api("/api/stats")).max_price_eur); } catch { initPriceRange(0); }
 
     let deb;
     $("#filters").addEventListener("input", () => { clearTimeout(deb); deb = setTimeout(loadListings, 250); });

@@ -59,6 +59,19 @@ main { padding: 16px 24px 32px; }
 .filters input, .filters select { background: var(--surface-1); color: var(--text-primary); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; font: inherit; }
 .filters input[type=search] { min-width: 260px; flex: 1 1 260px; }
 .filters input[type=number] { width: 80px; margin-left: 6px; }
+.price-range { display: inline-flex; align-items: center; gap: 10px; color: var(--text-secondary); font-size: 13px; flex: 1 1 280px; min-width: 260px; }
+.range-label { min-width: 120px; color: var(--text-primary); white-space: nowrap; }
+.range-track { --lo: 0%; --hi: 100%; position: relative; flex: 1 1 140px; height: 28px; }
+.range-track::before, .range-track::after { content: ""; position: absolute; top: 12px; height: 4px; border-radius: 2px; }
+.range-track::before { left: 0; right: 0; background: var(--surface-3); }
+.range-track::after { left: var(--lo); right: calc(100% - var(--hi)); background: var(--accent); }
+.range-track input[type=range] { position: absolute; inset: 0; width: 100%; margin: 0; background: none; pointer-events: none; -webkit-appearance: none; appearance: none; z-index: 1; }
+.range-track input[type=range]::-webkit-slider-runnable-track { background: none; height: 28px; }
+.range-track input[type=range]::-moz-range-track { background: none; }
+.range-track input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; pointer-events: auto; width: 16px; height: 16px; margin-top: 6px; border-radius: 50%; background: var(--text-primary); border: 2px solid var(--accent); cursor: pointer; }
+.range-track input[type=range]::-moz-range-thumb { pointer-events: auto; width: 12px; height: 12px; border-radius: 50%; background: var(--text-primary); border: 2px solid var(--accent); cursor: pointer; }
+.range-track input[type=range]:focus { outline: none; }
+.range-track input[type=range]:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--accent-strong); outline-offset: 2px; }
 .inline { display: inline-flex; align-items: center; color: var(--text-secondary); font-size: 13px; gap: 4px; }
 
 .split { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; align-items: start; }

@@ -73,7 +73,8 @@ def test_api(settings, db):
     st = c.get("/api/stats").json()
     assert st["listings_matched"] == 2 and st["total_value_eur"] == 19600
     items = c.get("/api/listings").json()["items"]
-    assert [i["id"] for i in items] == ["fake:2", "fake:1", "fake:4"]  # ranked by value, review last
+    assert [i["id"] for i in items] == ["fake:2", "fake:1"]  # ranked by value; unmatched ads hidden
+    assert [i["id"] for i in c.get("/api/listings?review=true").json()["items"]] == ["fake:2", "fake:1", "fake:4"]
     assert [i["id"] for i in c.get("/api/listings?sort=ratio&review=false").json()["items"]] == ["fake:1", "fake:2"]
     assert c.get("/api/listings?edition=leb").json()["total"] == 1
     assert len(c.get("/api/map").json()) == 3  # fake:3 unmatched, not shown

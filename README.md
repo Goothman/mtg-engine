@@ -73,7 +73,10 @@ switches the database.
   or a human handles those.
 - **Photo finds:** for ads from photo queries, a card seen only in the photos counts when the
   model is confident (`vision.photo_min_similarity`, `vision.photo_min_edition_prob`). These ads get
-  the `📷 found in photos` chip and the "Found in photos only" filter. Recognitions are cached
+  the `📷 found in photos` chip. The dashboard's search-source filter shows only ads from the
+  generic searches (optionally only those where the card was spotted just in the photos); the
+  price slider filters by asking price. Only ads with at least one recognised Alpha/Beta card
+  are shown (`/api/listings?review=true` also returns "needs review" ads, for agents). Recognitions are cached
   per photo URL and model (`image_scans` table), so rematches don't download images again.
 - **Sellers:** for ads shown on the dashboard, the seller's public profile (name, link, rating,
   reviews, items sold, account age) is fetched and shown; `mtg-engine enrich-sellers` backfills it.

@@ -6,7 +6,7 @@ import shutil
 from pathlib import Path
 
 from fastapi.testclient import TestClient
-from sqlalchemy import or_, select
+from sqlalchemy import select
 
 from .api.app import WEB, create_app, listing_out
 from .config import ROOT, Settings
@@ -22,8 +22,8 @@ def export_site(settings: Settings, db: Database, out: str) -> str:
 
     client = TestClient(create_app(settings, db))  # reuse the API serialisers exactly
     with db.session() as s:
-        rows = s.scalars(select(Listing).where(Listing.status == "active",
-                                               or_(Listing.match_count > 0, Listing.needs_review.is_(True))))
+        # only ads with at least one recognised Alpha/Beta card are published
+        rows = s.scalars(select(Listing).where(Listing.status == "active", Listing.match_count > 0))
         listings = [listing_out(l) for l in rows]
     data = {
         "generated_at": utcnow().isoformat(),

@@ -126,3 +126,27 @@ def test_create_all_adds_new_columns(tmp_path):
     db.create_all()
     with db.engine.connect() as c:
         assert c.execute(text("SELECT photo_scan, seller_info FROM listings")).one() == (0, None)
+
+
+@respx.mock
+def test_dashboard_filters_source_price_and_hides_unmatched(settings, db):
+    from fastapi.testclient import TestClient
+
+    from mtg_engine.api import create_app
+
+    for name in ("lotus", "weak", "unlimited"):
+        respx.get(f"https://img.test/{name}.jpg").mock(return_value=httpx.Response(200, content=name.encode()))
+    photo_scan(settings, db, FakeRecognizer({b"lotus": [Recognition("b-lotus", 0.86, probs("lea", 0.9), None)]}))
+    with db.session() as s:  # an ad from a targeted search, matched by text
+        s.add(Listing(id="fake:t1", marketplace="fake", external_id="t1", game="mtg", url="u", title="Bolt alpha",
+                      price_eur=300.0, match_count=1, est_total_value=400.0))
+        s.add(Listing(id="fake:r1", marketplace="fake", external_id="r1", game="mtg", url="u", title="Lote alpha",
+                      price_eur=50.0, needs_review=True))
+    c = TestClient(create_app(settings, db))
+    ids = lambda q="": [i["id"] for i in c.get(f"/api/listings?{q}").json()["items"]]  # noqa: E731
+    assert sorted(ids()) == ["fake:p1", "fake:t1"]  # needs-review / unmatched ads are not shown
+    assert ids("source=generic") == ["fake:p1"] and ids("source=targeted") == ["fake:t1"]
+    assert ids("source=generic&found=photo") == ["fake:p1"]
+    assert ids("max_price=100") == ["fake:p1"] and ids("min_price=100&max_price=1000") == ["fake:t1"]
+    st = c.get("/api/stats").json()
+    assert st["matched_generic"] == 1 and st["photo_finds"] == 1 and st["max_price_eur"] == 300.0

@@ -136,6 +136,11 @@ def create_app(settings: Settings | None = None, db: Database | None = None) -> 
             "listings_active": s.scalar(select(func.count()).where(active)),
             "listings_matched": s.scalar(select(func.count()).where(matched)),
             "needs_review": s.scalar(select(func.count()).where(active & Listing.needs_review.is_(True))),
+            # matched ads that came from generic searches ("cartas magic"), and how many of those
+            # were spotted only in the photos (the text doesn't name the card)
+            "matched_generic": s.scalar(select(func.count()).where(matched & Listing.photo_scan.is_(True))),
+            "photo_finds": sum("photo_match" in (f or []) for f in s.scalars(select(Listing.flags).where(matched))),
+            "max_price_eur": s.scalar(select(func.max(Listing.price_eur)).where(matched)),
             "total_value_eur": round(s.scalar(select(func.coalesce(func.sum(Listing.est_total_value), 0)).where(matched)) or 0, 2),
             "total_asking_eur": round(s.scalar(select(func.coalesce(func.sum(Listing.price_eur), 0)).where(matched)) or 0, 2),
             "best_ratio": s.scalar(select(func.max(Listing.value_ratio)).where(matched)),
@@ -168,7 +173,10 @@ def create_app(settings: Settings | None = None, db: Database | None = None) -> 
     def listings(
         s: Session = S, game: str | None = None, marketplace: str | None = None, edition: str | None = None,
         min_value: float | None = None, min_ratio: float | None = None, q: str | None = None,
-        found: str | None = Query(None, pattern="^(photo|text)$"), status: str = "active", include_unmatched: bool = False, review: bool = True,
+        found: str | None = Query(None, pattern="^(photo|text)$"),
+        source: str | None = Query(None, pattern="^(generic|targeted)$"),
+        min_price: float | None = None, max_price: float | None = None, status: str = "active",
+        include_unmatched: bool = False, review: bool = False,
         sort: str = Query("value", pattern="^(value|ratio|score|newest|price)$"),
         limit: int = Query(100, le=500), offset: int = 0,
     ):
@@ -176,7 +184,14 @@ def create_app(settings: Settings | None = None, db: Database | None = None) -> 
             "value": Listing.est_total_value.desc(), "ratio": Listing.value_ratio.desc().nulls_last(),
             "score": Listing.est_score.desc(), "newest": Listing.first_seen_at.desc(), "price": Listing.price_eur.asc().nulls_last(),
         }[sort]
-        rows = list(s.scalars(_filtered(game, marketplace, edition, min_value, min_ratio, q, status, include_unmatched, review).order_by(order, Listing.id)))
+        stmt = _filtered(game, marketplace, edition, min_value, min_ratio, q, status, include_unmatched, review)
+        if source:  # generic = found by a photo query ("cartas magic"); targeted = Alpha/Beta searches only
+            stmt = stmt.where(Listing.photo_scan.is_(source == "generic"))
+        if min_price is not None:
+            stmt = stmt.where(Listing.price_eur >= min_price)
+        if max_price is not None:
+            stmt = stmt.where(Listing.price_eur <= max_price)
+        rows = list(s.scalars(stmt.order_by(order, Listing.id)))
         if edition:  # JSON column: filter in Python to stay DB-agnostic
             rows = [r for r in rows if edition in (r.editions or [])]
         if found:  # "photo": recognised only in the ad photos
