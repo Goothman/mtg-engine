@@ -26,8 +26,16 @@ def _ctx(config: Optional[str]):
 def _recognizer(settings):
     if not settings.vision.enabled:
         return None
-    from .vision.service import load_recognizer
-
+    model, gallery = settings.resolve_path(settings.vision.model_path), settings.resolve_path(settings.vision.gallery_path)
+    if not (model.exists() and gallery.exists()):
+        logging.getLogger("vision").warning(
+            "vision enabled but %s / %s missing (train with ml/, see ml/README.md). Continuing with text matching only.", model, gallery)
+        return None
+    try:
+        from .vision.service import load_recognizer
+    except ImportError as e:
+        logging.getLogger("vision").warning("vision extras not installed (%s): pip install '.[vision]'", e)
+        return None
     return load_recognizer(settings)
 
 

@@ -79,7 +79,9 @@ def analyse(session: Session, settings: Settings, listing: Listing, matcher: Tex
             )
         )
     flags = list(result.flags)
-    if recognizer is not None and listing.images:
+    # Vision only on candidates (an edition named or a card matched): image downloads are the
+    # expensive part, and most ads in a scan are unrelated cards.
+    if recognizer is not None and listing.images and (result.editions or result.matches):
         from .vision.service import apply_vision
 
         flags += apply_vision(session, settings, listing, recognizer)

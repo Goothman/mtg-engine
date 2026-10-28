@@ -6,6 +6,10 @@ data/*
 !data/.gitkeep
 models/*
 !models/.gitkeep
+!models/card_model.onnx
+!models/gallery.npz
+!models/history.json
+!models/MODEL_CARD.md
 ml/dataset/
 ml/runs/
 *.egg-info/

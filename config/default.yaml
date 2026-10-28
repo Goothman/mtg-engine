@@ -99,7 +99,7 @@ pricing:
   sources: [cardmarket_price_guide, scryfall]
 
 vision:
-  enabled: false
+  enabled: true            # uses models/card_model.onnx + gallery.npz (trained on RunPod, committed); falls back to text-only if missing
   model_path: models/card_model.onnx
   gallery_path: models/gallery.npz
   min_similarity: 0.55
