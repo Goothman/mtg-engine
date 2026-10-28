@@ -45,8 +45,9 @@ export RUNPOD_API_KEY=... HF_TOKEN=... HF_REPO=<you>/mtg-engine-card-model
 python ml/runpod/launch.py --gpu "NVIDIA GeForce RTX 3090" --epochs 30
 ```
 
-The `ml/` code travels to the pod as a base64 tarball in an env var (`ml/runpod/bundle.py`), so
-the private repo needs no git credentials on the pod. The pod runs `ml/runpod/train.sh`
+The `ml/` code travels to the pod as plain-text env vars with per-file SHA-256 checksums
+(`ml/runpod/bundle.py`), so the private repo needs no git credentials on the pod and a corrupted
+file is caught before training starts. The pod runs `ml/runpod/train.sh`
 (base model, dataset, train, export), keeps the outputs and `pod.log` under
 `/workspace/mtg-engine-run/` on its persistent volume, uploads them to `HF_REPO` if `HF_TOKEN` is
 set, and stops itself on success or failure.

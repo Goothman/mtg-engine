@@ -17,7 +17,7 @@ import os
 
 import runpod
 
-from bundle import BOOT, make_bundle
+from bundle import BOOT, make_env
 
 IMAGE = "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404"
 
@@ -31,9 +31,9 @@ def main() -> None:
     args = ap.parse_args()
 
     runpod.api_key = os.environ["RUNPOD_API_KEY"]
-    # The code travels as an env var (see bundle.py), so a private repo needs no git credentials.
-    cmd = f"bash -c '{BOOT}'"
-    env = {"EPOCHS": str(args.epochs), "BACKBONE": args.backbone, "STOP_POD_WHEN_DONE": "1", "ML_BUNDLE": make_bundle()}
+    # The code travels as checksummed env vars (see bundle.py): no git credentials on the pod.
+    cmd = BOOT
+    env = {"EPOCHS": str(args.epochs), "BACKBONE": args.backbone, "STOP_POD_WHEN_DONE": "1", **make_env()}
     for k in ("HF_TOKEN", "HF_REPO"):
         if os.environ.get(k):
             env[k] = os.environ[k]
@@ -41,7 +41,7 @@ def main() -> None:
         print("warning: HF_REPO not set; trained weights stay on the pod volume only")
     pod = runpod.create_pod(
         name="mtg-engine-train", image_name=IMAGE, gpu_type_id=args.gpu, cloud_type=args.cloud, gpu_count=1,
-        container_disk_in_gb=40, volume_in_gb=20, volume_mount_path="/workspace", env=env, docker_args=cmd,
+        container_disk_in_gb=40, volume_in_gb=20, volume_mount_path="/workspace", env=env, docker_args=f"bash -c {cmd!r}",
         ports="22/tcp",
     )
     print(f"pod {pod['id']} created; follow logs in the RunPod console")
