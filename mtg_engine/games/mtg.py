@@ -75,7 +75,8 @@ class MtgProvider(GameProvider):
             if gp and gp.best():
                 card.price_eur = gp.best()
                 card.price_low_eur = gp.low
-                card.price_source = "cardmarket_trend"
+                card.price_source = "cardmarket_median"
+                card.extra["cardmarket"] = {"trend": gp.trend, "avg": gp.avg, "low": gp.low, "avg1": gp.avg1, "avg7": gp.avg7, "avg30": gp.avg30}
                 hits += 1
         log.info("cardmarket guide priced %d/%d cards", hits, len(cards))
 

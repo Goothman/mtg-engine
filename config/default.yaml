@@ -5,7 +5,8 @@ database_url: sqlite:///data/mtg_engine.db
 http:
   user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36"
   timeout_seconds: 30
-  proxy: null              # e.g. http://user:pass@es-proxy:8080 (Wallapop returns 0 results to non-EU IPs)
+  proxy: null              # global proxy for all requests; env MTG_ENGINE_PROXY overrides
+                           # per-marketplace proxies: marketplaces.<name>.proxy or env MTG_ENGINE_PROXY_<NAME>
 
 region:
   country: ES
@@ -35,6 +36,7 @@ marketplaces:
     max_pages: 5
     delay_seconds: 2.0
     use_search_points: true
+    proxy: null             # needs a Spanish/EU exit IP: set MTG_ENGINE_PROXY_WALLAPOP=http://user:pass@host:port
   milanuncios:
     enabled: true
     max_pages: 3

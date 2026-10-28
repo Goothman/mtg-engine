@@ -39,6 +39,9 @@ class MarketplaceConfig(BaseModel):
     delay_seconds: float = 2.0
     fetcher: str = "httpx"
     use_search_points: bool = False
+    # Per-marketplace proxy (e.g. a Spanish exit IP for Wallapop). Prefer setting it via the
+    # env var MTG_ENGINE_PROXY_<NAME> (e.g. MTG_ENGINE_PROXY_WALLAPOP) to keep credentials out of git.
+    proxy: str | None = None
 
 
 class TargetSet(BaseModel):
@@ -121,7 +124,13 @@ def load_settings(path: str | Path | None = None, overrides: dict[str, Any] | No
         data["database_url"] = url
     if overrides:
         data.update(overrides)
-    return Settings.model_validate(data)
+    settings = Settings.model_validate(data)
+    if p := os.environ.get("MTG_ENGINE_PROXY"):
+        settings.http.proxy = p
+    for name, mcfg in settings.marketplaces.items():
+        if p := os.environ.get(f"MTG_ENGINE_PROXY_{name.upper()}"):
+            mcfg.proxy = p
+    return settings
 
 
 @lru_cache

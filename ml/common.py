@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-INPUT_H, INPUT_W = 320, 224  # portrait, ~card aspect (88:63)
+INPUT_H, INPUT_W = 448, 320  # same as the HF base model (dhvazquez), portrait card
 MEAN = (0.485, 0.456, 0.406)
 STD = (0.229, 0.224, 0.225)
 # Edition head classes. cei (Intl. Collectors' Ed.) shares CE's square corners -> "ced".
@@ -18,17 +18,22 @@ def edition_index(set_code: str) -> int:
 
 
 class CardNet(nn.Module):
-    """Backbone -> (L2-normalised identity embedding, edition logits)."""
+    """Backbone -> neck -> L2-normalised identity embedding, plus an edition head.
 
-    def __init__(self, backbone: str = "tf_efficientnet_lite0", embed_dim: int = 512, pretrained: bool = True):
+    `backbone` + `neck` mirror dhvazquez/mtg_card_identification_embeddings exactly
+    (tf_efficientnet_lite0 -> BN -> Linear(no bias) -> BN, 256-d), so its `backbone_neck`
+    checkpoint loads 1:1. The edition head is new and trained from scratch.
+    """
+
+    def __init__(self, backbone: str = "tf_efficientnet_lite0", embed_dim: int = 256, pretrained: bool = True):
         super().__init__()
         import timm
 
         self.backbone = timm.create_model(backbone, pretrained=pretrained, num_classes=0, global_pool="avg")
         feat = self.backbone.num_features
-        self.embed = nn.Sequential(nn.Dropout(0.2), nn.Linear(feat, embed_dim), nn.BatchNorm1d(embed_dim))
+        self.neck = nn.Sequential(nn.BatchNorm1d(feat), nn.Linear(feat, embed_dim, bias=False), nn.BatchNorm1d(embed_dim))
         self.edition = nn.Sequential(nn.Dropout(0.3), nn.Linear(feat, len(EDITION_CLASSES)))
 
     def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         f = self.backbone(x)
-        return F.normalize(self.embed(f), dim=1), self.edition(f)
+        return F.normalize(self.neck(f), dim=1), self.edition(f)

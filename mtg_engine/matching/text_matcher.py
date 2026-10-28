@@ -79,7 +79,11 @@ class TextMatcher:
         self.by_name: dict[str, dict[str, CardRef]] = {}
         for c in cards:
             if c.set_code in game.target_codes:
-                self.by_name.setdefault(c.name_norm, {})[c.set_code] = c
+                # several printings of one name in a set (e.g. Alpha's two Islands): keep the cheapest
+                sets = self.by_name.setdefault(c.name_norm, {})
+                prev = sets.get(c.set_code)
+                if prev is None or (c.price_eur or float("inf")) < (prev.price_eur or float("inf")):
+                    sets[c.set_code] = c
         names = sorted(self.by_name, key=len, reverse=True)
         self.name_re = (
             re.compile(r"(?<![a-z0-9])(" + "|".join(re.escape(n) for n in names) + r")(?![a-z0-9])")

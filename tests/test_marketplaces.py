@@ -61,3 +61,18 @@ def test_milanuncios_html_fallback():
 def test_milanuncios_blocked():
     with pytest.raises(BlockedError):
         parse_search_page("<html><title>Pardon Our Interruption</title><script src='/_Incapsula_Resource'></script></html>")
+
+
+def test_proxy_env_overrides(monkeypatch):
+    from mtg_engine.config import load_settings
+
+    monkeypatch.setenv("MTG_ENGINE_PROXY_WALLAPOP", "http://u:p@es.example:8080")
+    s = load_settings(overrides={"database_url": "sqlite:///:memory:"})
+    assert s.marketplaces["wallapop"].proxy == "http://u:p@es.example:8080"
+    assert s.marketplaces["milanuncios"].proxy is None
+
+
+def test_playwright_proxy_parsing():
+    from mtg_engine.marketplaces.milanuncios import _playwright_proxy
+
+    assert _playwright_proxy("http://u:p@es.example:8080") == {"server": "http://es.example:8080", "username": "u", "password": "p"}

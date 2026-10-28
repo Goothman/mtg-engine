@@ -4,6 +4,7 @@ from __future__ import annotations
 import logging
 from datetime import timedelta
 
+import httpx
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
@@ -12,6 +13,7 @@ from .agents.workflow import maybe_open_deal
 from .config import Settings
 from .db import Database
 from .marketplaces import RawListing, get_marketplace
+from .marketplaces.milanuncios import BlockedError
 from .matching import CardRef, TextMatcher
 from .models import CardPrinting, Listing, Match, ScanRun, utcnow
 from .valuation import value_listing
@@ -19,6 +21,10 @@ from .valuation import value_listing
 log = logging.getLogger(__name__)
 
 STALE_AFTER = timedelta(days=7)
+
+
+class _MarketUnreachable(Exception):
+    pass
 BASIC = {"plains", "island", "swamp", "mountain", "forest"}
 
 
@@ -110,10 +116,16 @@ class Scanner:
                         for point in points:
                             try:
                                 self._scan_query(market, game, query, point, stats)
+                            except (httpx.ProxyError, httpx.ConnectError, BlockedError) as e:
+                                raise _MarketUnreachable(f"{mname} unreachable: {type(e).__name__}: {e}") from e
                             except Exception as e:
                                 stats["errors"] += 1
                                 errors.append(f"{mname} {query!r} {getattr(point, 'name', '')}: {type(e).__name__}: {e}")
                                 log.warning(errors[-1])
+                except _MarketUnreachable as e:  # don't hammer a host we can't reach; skip it this run
+                    stats["errors"] += 1
+                    errors.append(str(e))
+                    log.error("%s; skipping %s for the rest of this scan", e, mname)
                 finally:
                     market.close()
         with self.db.session() as s:

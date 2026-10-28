@@ -155,6 +155,16 @@ def parse_search_page(html: str) -> list[RawListing]:
     return parse_initial_props(html) or parse_html_cards(html)
 
 
+def _playwright_proxy(url: str) -> dict:
+    from urllib.parse import urlsplit
+
+    u = urlsplit(url)
+    out = {"server": f"{u.scheme}://{u.hostname}:{u.port}" if u.port else f"{u.scheme}://{u.hostname}"}
+    if u.username:
+        out.update(username=u.username, password=u.password or "")
+    return out
+
+
 class Milanuncios(Marketplace):
     name = "milanuncios"
 
@@ -170,7 +180,8 @@ class Milanuncios(Marketplace):
                 from playwright.sync_api import sync_playwright
 
                 self._pw = sync_playwright().start()
-                self._browser = self._pw.chromium.launch()
+                proxy = self.config.proxy or self.settings.http.proxy
+                self._browser = self._pw.chromium.launch(proxy=_playwright_proxy(proxy) if proxy else None)
             page = self._browser.new_page(locale="es-ES", user_agent=self.settings.http.user_agent)
             try:
                 from urllib.parse import urlencode
@@ -181,7 +192,7 @@ class Milanuncios(Marketplace):
             finally:
                 page.close()
         if self._client is None:
-            self._client = make_client(self.settings, Accept="text/html,application/xhtml+xml")
+            self._client = make_client(self.settings, self.config.proxy, Accept="text/html,application/xhtml+xml")
         resp = self._client.get(SEARCH_URL, params=params)
         if resp.status_code in (403, 429):
             raise BlockedError(f"milanuncios HTTP {resp.status_code}; try fetcher: playwright or a proxy")

@@ -106,6 +106,7 @@ class Wallapop(Marketplace):
         super().__init__(settings, config)
         self.client = make_client(
             settings,
+            config.proxy,
             Accept="application/json, text/plain, */*",
             Origin="https://es.wallapop.com",
             Referer="https://es.wallapop.com/",

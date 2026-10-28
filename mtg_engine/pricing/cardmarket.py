@@ -27,13 +27,21 @@ class GuidePrice:
     avg: float | None
     low: float | None
     avg30: float | None
+    avg1: float | None = None
+    avg7: float | None = None
 
     def best(self) -> float | None:
-        # trend is Cardmarket's own smoothed estimate; fall back to 30-day average, then average.
-        for v in (self.trend, self.avg30, self.avg):
-            if v:
-                return float(v)
-        return None
+        """Median of all available price fields.
+
+        Old cards trade rarely and Cardmarket mixes conditions, so any single field can be
+        far off (e.g. an Alpha Island with trend 1403 EUR vs low 32 EUR). The median of
+        trend/avg/low/avg1/avg7/avg30 is much more stable.
+        """
+        vals = sorted(float(v) for v in (self.trend, self.avg, self.low, self.avg1, self.avg7, self.avg30) if v)
+        if not vals:
+            return None
+        mid = len(vals) // 2
+        return round(vals[mid] if len(vals) % 2 else (vals[mid - 1] + vals[mid]) / 2, 2)
 
 
 def parse_price_guide(data: dict) -> dict[int, GuidePrice]:
@@ -43,7 +51,8 @@ def parse_price_guide(data: dict) -> dict[int, GuidePrice]:
         if pid is None:
             continue
         out[int(pid)] = GuidePrice(
-            trend=row.get("trend"), avg=row.get("avg"), low=row.get("low"), avg30=row.get("avg30")
+            trend=row.get("trend"), avg=row.get("avg"), low=row.get("low"), avg30=row.get("avg30"),
+            avg1=row.get("avg1"), avg7=row.get("avg7"),
         )
     return out
 

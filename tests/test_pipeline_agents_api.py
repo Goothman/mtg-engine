@@ -92,3 +92,23 @@ def test_api(settings, db):
     assert r.status_code == 200 and r.json()["stage"] == "contacted" and r.json()["offer_price_eur"] == 100
     # manual deal on review listing
     assert c.post("/api/listings/fake:4/deal").json()["stage"] == "new"
+
+
+def test_unreachable_marketplace_is_skipped_fast(settings, db):
+    import httpx
+
+    calls = []
+
+    class Down(Marketplace):
+        name = "down"
+
+        def search(self, query, point=None):
+            calls.append(query)
+            raise httpx.ProxyError("403 Forbidden")
+            yield  # pragma: no cover
+
+    REGISTRY["down"] = Down
+    settings.marketplaces = {"down": MarketplaceConfig(use_search_points=True, delay_seconds=0)}
+    settings.games["pokemon"].enabled = False
+    stats = Scanner(settings, db).run()
+    assert len(calls) == 1 and stats["errors"] == 1

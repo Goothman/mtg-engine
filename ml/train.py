@@ -6,10 +6,10 @@ Identity classes are oracle cards (Alpha and Beta prints of Lightning Bolt share
 identity); the edition head learns lea/leb/2ed/3ed/ced/other from border colour,
 corner radius and print details. Augmentations imitate second-hand marketplace photos.
 
-Initialising from the HF base model (dhvazquez/mtg_card_identification_embeddings):
-    python ml/train.py ... --backbone <its timm name> --init path/to/checkpoint.(pt|safetensors)
-Weights are loaded with strict=False and the number of matched tensors is printed —
-check that number; if it is ~0 the architectures differ.
+Initialising from the HF base model (dhvazquez/mtg_card_identification_embeddings, MIT):
+    python ml/train.py ... --init path/to/20260521-044732/best.pt --lr 1e-4
+Our backbone+neck mirror that model, so all of its tensors should match (the count is
+printed); only the edition head and the ArcFace class centres start from scratch.
 
 Validation note: Scryfall has one scan per printing, so the per-epoch metrics measure
 robustness to *synthetic* photo conditions on seen printings (fixed-seed augmented
@@ -172,7 +172,8 @@ def load_init(model: nn.Module, path: str) -> None:
         sd = load_file(path)
     else:
         sd = torch.load(path, map_location="cpu")
-        sd = sd.get("state_dict", sd.get("model", sd)) if isinstance(sd, dict) else sd
+        if isinstance(sd, dict):  # dhvazquez checkpoints store weights under "backbone_neck"
+            sd = sd.get("backbone_neck", sd.get("state_dict", sd.get("model", sd)))
     own = model.state_dict()
     matched = {}
     for k, v in sd.items():
@@ -190,7 +191,7 @@ def main() -> None:
     ap.add_argument("--out", default="ml/runs/v1")
     ap.add_argument("--backbone", default="tf_efficientnet_lite0")
     ap.add_argument("--init", default=None, help="optional checkpoint to initialise from (e.g. the HF base model)")
-    ap.add_argument("--embed-dim", type=int, default=512)
+    ap.add_argument("--embed-dim", type=int, default=256)
     ap.add_argument("--epochs", type=int, default=30)
     ap.add_argument("--repeats", type=int, default=8, help="augmented views per image per epoch")
     ap.add_argument("--batch", type=int, default=64)
@@ -221,7 +222,7 @@ def main() -> None:
     ce = nn.CrossEntropyLoss(label_smoothing=0.05)
     opt = torch.optim.AdamW([
         {"params": model.backbone.parameters(), "lr": args.lr},
-        {"params": list(model.embed.parameters()) + list(model.edition.parameters()), "lr": args.lr * 5},
+        {"params": list(model.neck.parameters()) + list(model.edition.parameters()), "lr": args.lr * 5},
         {"params": arc.parameters(), "lr": args.lr * 20},
     ], weight_decay=1e-4)
     total = args.epochs * len(train_dl)
