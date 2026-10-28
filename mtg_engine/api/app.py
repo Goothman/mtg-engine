@@ -121,6 +121,7 @@ def create_app(settings: Settings | None = None, db: Database | None = None) -> 
             "marketplaces": list(settings.enabled_marketplaces()),
             "games": {k: {"targets": [t.model_dump(include={"set_code", "label"}) for t in g.targets]} for k, g in settings.enabled_games().items()},
             "vision_enabled": settings.vision.enabled,
+            "map": settings.map.model_dump(),
         }
 
     @app.get("/api/stats")

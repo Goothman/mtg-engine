@@ -108,16 +108,14 @@ class CardDataset(Dataset):
     def __init__(self, data: Path, rows: list[dict], ident: dict[str, int], repeats: int, augment: bool, seed: int | None = None):
         self.data, self.rows, self.ident, self.repeats, self.augment, self.seed = data, rows, ident, repeats, augment, seed
         self.aug = build_aug()
-        self._cache: dict[str, np.ndarray] = {}
 
     def __len__(self) -> int:
         return len(self.rows) * self.repeats
 
     def _load(self, rel: str) -> np.ndarray:
-        if rel not in self._cache:
-            img = cv2.cvtColor(cv2.imread(str(self.data / rel)), cv2.COLOR_BGR2RGB)
-            self._cache[rel] = cv2.resize(img, (INPUT_W * 2, INPUT_H * 2), interpolation=cv2.INTER_AREA)
-        return self._cache[rel]
+        # Decode on demand. (A per-worker image cache OOM-killed a 39 GB pod: 16 workers x ~3 GB.)
+        img = cv2.cvtColor(cv2.imread(str(self.data / rel)), cv2.COLOR_BGR2RGB)
+        return cv2.resize(img, (int(INPUT_W * 1.5), int(INPUT_H * 1.5)), interpolation=cv2.INTER_AREA)
 
     def __getitem__(self, i: int):
         row = self.rows[i % len(self.rows)]

@@ -40,7 +40,7 @@ mtg-engine = "mtg_engine.cli:app"
 include = ["mtg_engine*"]
 
 [tool.setuptools.package-data]
-mtg_engine = ["web/*", "geo/data/*.json"]
+mtg_engine = ["web/*", "web/vendor/leaflet/*", "web/vendor/leaflet/images/*", "geo/data/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -111,3 +111,9 @@ deals:
 
 scheduler:
   interval_minutes: 60
+
+map:
+  # osm_dark: OpenStreetMap tiles darkened in CSS | osm | carto_dark | none
+  # (tile.openstreetmap.org is for light use with attribution; host your own for heavy traffic)
+  tiles: osm_dark
+  boundaries: es-provinces.geojson   # bundled province shapes (IGN via es-atlas); drawn even if tiles fail

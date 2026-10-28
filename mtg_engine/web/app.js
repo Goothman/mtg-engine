@@ -149,14 +149,34 @@
   }
 
   // ---------------------------------------------------------------- map
+  const TILES = {
+    osm_dark: { url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png", cls: "tiles-dark",
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' },
+    osm: { url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' },
+    carto_dark: { url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", subdomains: "abcd",
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>' },
+  };
+
   function initMap() {
-    if (!window.L) { $("#map").innerHTML = '<div class="empty">Map library failed to load (offline?)</div>'; return; }
+    if (!window.L) { $("#map").innerHTML = '<div class="empty">Map library failed to load</div>'; return; }
     const c = state.config;
+    const mc = c.map || {};
     state.map = L.map("map", { zoomControl: true, preferCanvas: true }).setView(c.map_center, c.map_zoom);
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: "abcd", maxZoom: 19,
-    }).addTo(state.map);
+    const t = TILES[mc.tiles];
+    if (t) {
+      L.tileLayer(t.url, { attribution: t.attribution, subdomains: t.subdomains || "abc", maxZoom: 19, className: t.cls || "" }).addTo(state.map);
+    }
+    // Bundled province shapes: the map stays readable even if the tile server is unreachable.
+    if (mc.boundaries) {
+      fetch(`/static/${mc.boundaries}`).then((r) => r.json()).then((geo) => {
+        L.geoJSON(geo, {
+          interactive: false,
+          style: { color: "#55544f", weight: 1, fillColor: "#2c2c2a", fillOpacity: t ? 0.05 : 0.9 },
+        }).addTo(state.map).bringToBack();
+        state.map.attributionControl.addAttribution("Boundaries &copy; IGN (es-atlas)");
+      }).catch(() => {});
+    }
     state.layer = L.layerGroup().addTo(state.map);
   }
 

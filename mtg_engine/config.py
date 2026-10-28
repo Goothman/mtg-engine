@@ -91,6 +91,11 @@ class DealsConfig(BaseModel):
     auto_open_min_ratio: float = 1.2
 
 
+class MapConfig(BaseModel):
+    tiles: str = "osm_dark"  # osm_dark | osm | carto_dark | none
+    boundaries: str | None = "es-provinces.geojson"  # bundled vector layer (works without tiles)
+
+
 class SchedulerConfig(BaseModel):
     interval_minutes: int = 60
 
@@ -105,6 +110,7 @@ class Settings(BaseModel):
     vision: VisionConfig = Field(default_factory=VisionConfig)
     deals: DealsConfig = Field(default_factory=DealsConfig)
     scheduler: SchedulerConfig = Field(default_factory=SchedulerConfig)
+    map: MapConfig = Field(default_factory=MapConfig)
 
     def enabled_games(self) -> dict[str, GameConfig]:
         return {k: v for k, v in self.games.items() if v.enabled}

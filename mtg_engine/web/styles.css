@@ -141,3 +141,6 @@ main { padding: 16px 24px 32px; }
   .detail { padding-left: 0; }
 }
 a.btn { text-decoration: none; color: var(--text-primary); display: inline-block; }
+
+/* OpenStreetMap standard tiles, darkened to match the UI */
+.tiles-dark { filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.85) saturate(0.6); }

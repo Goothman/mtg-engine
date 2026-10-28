@@ -37,7 +37,7 @@ fi
 
 python ml/build_dataset.py --sets ${SETS:-lea leb 2ed 3ed ced cei} --out "$WORK/dataset"
 WORKERS=$(( $(nproc) < 16 ? $(nproc) : 16 ))
-python ml/train.py --data "$WORK/dataset" --out "$WORK/run" --epochs "${EPOCHS:-30}" --workers "$WORKERS" \
+python ml/train.py --data "$WORK/dataset" --out "$WORK/run" --epochs "${EPOCHS:-12}" --workers "$WORKERS" \
   --backbone "${BACKBONE:-tf_efficientnet_lite0}" --lr "${LR:-3e-4}" ${INIT_CKPT:+--init "$INIT_CKPT"}
 (cd ml && python export.py --ckpt "$WORK/run/best.pt" --data "$WORK/dataset" --out "$WORK/models")
 cp "$WORK/run/history.json" "$WORK/models/"
