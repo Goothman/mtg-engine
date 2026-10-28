@@ -146,6 +146,15 @@ def agents_run(loop: bool = False, interval: int = 30, config: Optional[str] = C
         time.sleep(interval)
 
 
+@app.command("export-static")
+def export_static(out: str = "site", config: Optional[str] = ConfigOpt):
+    """Export the dashboard + current findings as a static, read-only site (e.g. for Vercel)."""
+    from .static_export import export_site
+
+    settings, db = _ctx(config)
+    typer.echo(export_site(settings, db, out))
+
+
 @app.command("seed-demo")
 def seed_demo_cmd(config: Optional[str] = ConfigOpt):
     """Insert clearly-labelled DEMO data (fake ads, illustrative prices) to preview the dashboard."""

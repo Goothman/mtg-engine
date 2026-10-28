@@ -23,6 +23,10 @@ mtg-engine serve                   # dashboard on http://127.0.0.1:8000
 To see the dashboard without network access: `mtg-engine seed-demo` loads demo data
 that is labelled as such (made-up ads, placeholder prices). Remove it with `mtg-engine clear-demo`.
 
+To publish a read-only snapshot (e.g. on Vercel): `mtg-engine export-static` writes `site/`
+(dashboard plus current findings, no backend). `vercel.json` serves `site/` as a static site.
+Re-export and push to update it.
+
 To run continuously: `mtg-engine scheduler` (catalog sync every 24 h, scans every
 `scheduler.interval_minutes`, then an agent pass), or `docker compose up`.
 

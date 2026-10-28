@@ -19,7 +19,38 @@
 
   const state = { config: null, items: [], selected: null, markers: new Map(), map: null, layer: null };
 
+  // Static snapshot mode (e.g. Vercel): data embedded as window.MTG_STATIC, read-only, filtered client-side.
+  const STATIC = window.MTG_STATIC || null;
+  const ASSETS = STATIC ? "static/" : "/static/";
+
+  function staticApi(path, opts) {
+    if (opts && opts.method && opts.method !== "GET") throw new Error("read-only snapshot");
+    const u = new URL(path, "http://x");
+    const p = u.searchParams;
+    if (u.pathname === "/api/config") return STATIC.config;
+    if (u.pathname === "/api/stats") return STATIC.stats;
+    if (u.pathname === "/api/deals") return STATIC.deals;
+    if (u.pathname === "/api/events") return STATIC.events;
+    if (u.pathname === "/api/listings") {
+      const q = (p.get("q") || "").toLowerCase();
+      const minV = +p.get("min_value") || 0, minR = +p.get("min_ratio") || 0;
+      const review = p.get("review") !== "false";
+      let items = STATIC.listings.filter((l) =>
+        (l.match_count > 0 || (review && l.needs_review)) &&
+        (!p.get("marketplace") || l.marketplace === p.get("marketplace")) &&
+        (!p.get("edition") || (l.editions || []).includes(p.get("edition"))) &&
+        l.est_total_value >= minV && (!minR || (l.value_ratio || 0) >= minR) &&
+        (!q || [l.title, l.description, l.city].join(" ").toLowerCase().includes(q)));
+      const key = { value: (l) => -l.est_total_value, ratio: (l) => -(l.value_ratio || 0), score: (l) => -l.est_score,
+        newest: (l) => -new Date(l.first_seen_at).getTime() }[p.get("sort") || "value"];
+      items = items.slice().sort((a, b) => key(a) - key(b));
+      return { total: items.length, items: items.slice(0, 500) };
+    }
+    throw new Error(`not in snapshot: ${u.pathname}`);
+  }
+
   async function api(path, opts = {}) {
+    if (STATIC) return staticApi(path, opts);
     const res = await fetch(path, { headers: { "Content-Type": "application/json" }, ...opts });
     if (!res.ok) throw new Error(`${res.status} ${(await res.text()).slice(0, 200)}`);
     return res.json();
@@ -169,7 +200,7 @@
     }
     // Bundled province shapes: the map stays readable even if the tile server is unreachable.
     if (mc.boundaries) {
-      fetch(`/static/${mc.boundaries}`).then((r) => r.json()).then((geo) => {
+      fetch(`${ASSETS}${mc.boundaries}`).then((r) => r.json()).then((geo) => {
         L.geoJSON(geo, {
           interactive: false,
           style: { color: "#55544f", weight: 1, fillColor: "#2c2c2a", fillOpacity: t ? 0.05 : 0.9 },
@@ -278,6 +309,11 @@
       refresh();
     }));
 
+    if (STATIC) {
+      document.body.classList.add("static-snapshot");
+      $("#scan-btn").hidden = true;
+      $("#subtitle").textContent += ` · snapshot ${new Date(STATIC.generated_at).toLocaleString("es-ES")} (read-only)`;
+    }
     $("#scan-btn").addEventListener("click", async () => {
       const b = $("#scan-btn");
       b.disabled = true;
