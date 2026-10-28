@@ -82,14 +82,20 @@ def analyse(session: Session, settings: Settings, listing: Listing, matcher: Tex
             )
         )
     flags = list(result.flags)
+    excluded = sorted({normalize(f) for f in settings.games[listing.game].exclude_flags} & set(flags))
     # Vision on candidates (an edition named or a card matched) and on every ad found by a
     # photo query; image downloads are the expensive part, and results are cached per photo.
     text_evidence = bool(result.editions or result.matches)
-    if recognizer is not None and listing.images and (text_evidence or listing.photo_scan):
+    if recognizer is not None and listing.images and (text_evidence or listing.photo_scan) and not excluded:
         from .vision.service import apply_vision
 
         flags += apply_vision(session, settings, listing, recognizer, text_evidence=text_evidence, client=image_client)
     listing.editions = result.editions
+    if excluded:  # e.g. "coreano": not an English Alpha/Beta card, whatever the photos look like
+        for m in listing.matches:
+            if m.status == "auto":
+                m.confidence = 0.0
+        flags.append("excluded")
     v = value_listing(listing.matches, listing.price_eur)
     # Too good to be true: worth > IMPLAUSIBLE_RATIO x asking and the cards aren't in the title.
     # On real ads this is almost always keyword stuffing or a reprint, so demote for human review.

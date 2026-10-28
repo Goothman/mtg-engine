@@ -150,3 +150,41 @@ def test_dashboard_filters_source_price_and_hides_unmatched(settings, db):
     assert ids("max_price=100") == ["fake:p1"] and ids("min_price=100&max_price=1000") == ["fake:t1"]
     st = c.get("/api/stats").json()
     assert st["matched_generic"] == 1 and st["photo_finds"] == 1 and st["max_price_eur"] == 300.0
+
+
+def _analyse_one(settings, db, raw, rec):
+    from mtg_engine.pipeline import analyse, build_matcher, ingest
+
+    with db.session() as s:
+        listing, _, _ = ingest(s, settings, raw, "mtg")
+        s.flush()
+        analyse(s, settings, listing, build_matcher(s, settings, "mtg"), rec)
+        return listing.match_count, sorted(listing.flags), [(m.card.name, m.confidence) for m in listing.matches]
+
+
+@respx.mock
+def test_reported_false_positives(settings, db):
+    """Real cases: 'Myr alfa' read as Alpha, a Korean lot, a white-bordered Stasis."""
+    for name in ("modern", "korean", "stasis_white", "stasis_vague"):
+        respx.get(f"https://img.test/{name}.jpg").mock(return_value=httpx.Response(200, content=name.encode()))
+    rec = FakeRecognizer({
+        b"modern": [Recognition("a-fog", 0.29, probs("3ed", 0.8), None)],          # nothing like an old card
+        b"korean": [Recognition("b-bolt", 0.72, probs("leb", 0.85), None)],        # FBB Korean looks like Beta
+        b"stasis_white": [Recognition("b-ritual", 0.80, probs("2ed", 0.63), None)],  # white border, confident
+        b"stasis_vague": [Recognition("a-ritual", 0.76, probs("2ed", 0.41), None)],  # same card, vaguer photo
+    })
+    # 1. edition keyword inside a modern card name; photos show nothing old
+    n, flags, _ = _analyse_one(settings, db, RawListing(
+        "fake", "r1", "u", "Lote de 8 cartas Magic", "- Dark Ritual - Myr alfa - Mago de guerra", 4.5,
+        images=["https://img.test/modern.jpg"]), rec)
+    assert n == 0 and "photos_dont_match" in flags
+    # 2. Korean lot: excluded whatever the photos say
+    n, flags, _ = _analyse_one(settings, db, RawListing(
+        "fake", "r2", "u", "Lote cartas Magic coreano", "Lightning Bolt beta", 12.0,
+        images=["https://img.test/korean.jpg"]), rec)
+    assert n == 0 and "excluded" in flags and rec.calls == 1  # no photo downloads for excluded ads
+    # 3. one confident white-border photo vetoes the card even if another photo is vague
+    n, flags, matches = _analyse_one(settings, db, RawListing(
+        "fake", "r3", "u", "Magic Dark Ritual carta", "", 10.0,
+        images=["https://img.test/stasis_white.jpg", "https://img.test/stasis_vague.jpg"]), rec)
+    assert n == 0 and "vision:white_border" in flags and all(c < 0.1 for _, c in matches)

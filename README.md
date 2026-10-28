@@ -78,6 +78,12 @@ switches the database.
   price slider filters by asking price. Only ads with at least one recognised Alpha/Beta card
   are shown (`/api/listings?review=true` also returns "needs review" ads, for agents). Recognitions are cached
   per photo URL and model (`image_scans` table), so rematches don't download images again.
+- **Photo checks of text matches:** when an ad's photos can be analysed, a card the model
+  confidently sees with a white border (Unlimited, Revised, 4th, 5th…) is vetoed, and if nothing in
+  the photos resembles an old card at all the text matches are demoted (`photos_dont_match`).
+- **Excluded ads:** `games.<game>.exclude_flags` rule an ad out entirely. By default these are
+  other languages: Alpha/Beta were printed only in English, while e.g. Korean and Japanese
+  black-bordered reprints look like Beta in photos.
 - **Sellers:** for ads shown on the dashboard, the seller's public profile (name, link, rating,
   reviews, items sold, account age) is fetched and shown; `mtg-engine enrich-sellers` backfills it.
 

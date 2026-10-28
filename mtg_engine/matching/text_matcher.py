@@ -140,7 +140,8 @@ class TextMatcher:
         self.edition_res = {t.set_code: [_kw_pattern(k) for k in t.keywords] for t in game.targets}
         self.tags = {normalize(k) for t in game.targets for k in t.keywords} | {normalize(t.label) for t in game.targets}
         # dedupe on the normalised form ("replica" and "réplica" are the same flag)
-        self.flag_res = list({normalize(f): (normalize(f), _kw_pattern(f)[0]) for f in game.red_flags}.values())
+        self.flag_res = list({normalize(f): (normalize(f), _kw_pattern(f)[0])
+                              for f in [*game.red_flags, *game.exclude_flags]}.values())
 
     def _passes_filters(self, c: CardRef) -> bool:
         f = self.game.filters

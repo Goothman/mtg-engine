@@ -90,8 +90,16 @@ games:
                 # other printings named explicitly (seen on real ads) - Alpha/Beta were English-only
                 "quinta edicion", "5th edition", "sexta edicion", "6th edition", "septima edicion",
                 "7th edition", "octava edicion", "8th edition", "novena edicion", "9th edition",
-                "decima edicion", "10th edition", japones, japonesa, japanese, chino, coreano,
-                reprint, reimpresion, unhinged, unglued, tempest, tempestad]
+                "decima edicion", "10th edition", reprint, reimpresion, unhinged, unglued, tempest,
+                tempestad, "en español", "en castellano", "version española", "5a edicion",
+                "4a edicion", "borde blanco", "white border"]
+    # Rule an ad out entirely: Alpha/Beta were printed in English only, so cards in other
+    # languages (e.g. the black-bordered Korean/Japanese/French reprints) are never Alpha/Beta.
+    exclude_flags: [coreano, coreana, coreanos, coreanas, korean, chino, chinos, chinas, chinese,
+                    japones, japonesa, japoneses, japonesas, japanese, frances, francesa, franceses,
+                    francesas, french, aleman, alemana, alemanes, alemanas, german, italiano, italiana,
+                    italianos, italianas, italian, portugues, portuguesa, portugueses, portuguesas,
+                    portuguese, ruso, rusa, rusos, rusas, russian]
 
   pokemon:
     enabled: false

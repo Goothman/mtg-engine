@@ -69,6 +69,8 @@ class GameConfig(BaseModel):
     confuser_sets: list[str] = Field(default_factory=list)
     filters: Filters = Field(default_factory=Filters)
     red_flags: list[str] = Field(default_factory=list)
+    # Words that rule an ad out entirely (e.g. other languages: Alpha/Beta were printed in English only).
+    exclude_flags: list[str] = Field(default_factory=list)
 
     @property
     def target_codes(self) -> list[str]:
@@ -91,6 +93,11 @@ class VisionConfig(BaseModel):
     # mostly modern cards, and the model has only seen Alpha/Beta and their look-alike editions.
     photo_min_similarity: float = 0.7
     photo_min_edition_prob: float = 0.7
+    # A photo that confidently shows a white border (Unlimited/Revised/4th/5th...) vetoes that card.
+    white_border_veto: float = 0.5
+    # If an ad's photos were checked and nothing in them resembles an old card, text matches
+    # are demoted (e.g. "Myr alfa" is a modern card, not Alpha).
+    photo_contradiction_similarity: float = 0.45
 
 
 class DealsConfig(BaseModel):

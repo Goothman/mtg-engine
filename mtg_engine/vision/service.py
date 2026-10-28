@@ -60,12 +60,20 @@ def recognize_url(session: Session, client: httpx.Client, recognizer, url: str, 
     return [Recognition(r["card_id"], r["similarity"], r["edition_probs"], None) for r in results]
 
 
+WHITE_BORDER = ("2ed", "3ed")  # edition classes the model knows with white borders (Unlimited, Revised)
+
+
 def apply_vision(session: Session, settings: Settings, listing: Listing, recognizer, *,
                  text_evidence: bool = True, client: httpx.Client | None = None) -> list[str]:
-    """Recognise cards in the listing photos. Returns extra flags.
+    """Check the listing photos against the text matches and add cards seen only in photos.
 
-    Without text evidence (ads from photo queries like "cartas magic") a photo match needs
-    `vision.photo_min_similarity` and a confident target edition, and the ad gets `photo_match`.
+    All photo readings are collected first, then:
+      * veto: a card confidently seen with a white border (or another non-target edition) in any
+        photo is not Alpha/Beta, whatever the text or other photos say;
+      * contradiction: photos were checked but nothing resembles an old card -> text matches demoted;
+      * support: a photo seeing the text-matched card in a target edition raises its confidence;
+      * photo-only finds (no supporting text) need `photo_min_similarity` and a confident edition.
+    Returns extra flags.
     """
     vc = settings.vision
     flags: list[str] = []
@@ -73,6 +81,8 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
     by_name = {m.card.name: m for m in listing.matches if m.card is not None}
     own_client = client is None
     client = client or make_client(settings)
+    readings: list[tuple[str, Recognition]] = []
+    checked = 0
     try:
         urls = listing.images[: vc.max_images_per_listing]
         # download the uncached photos of this ad in parallel; recognition stays sequential
@@ -83,47 +93,80 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
             if recs is None:
                 flags.append("photo_unavailable")
                 continue
-            for r in recs:
-                if r.similarity < vc.min_similarity:
-                    continue
-                card = session.get(CardPrinting, r.card_id)
-                if card is None:
-                    continue
-                edition, p = max(r.edition_probs.items(), key=lambda kv: kv[1])
-                if p >= EDITION_CONFIDENT and edition not in targets and edition != "other":
-                    if text_evidence:
-                        flags.append(f"vision:{edition}")
-                    continue
-                photo_only = not text_evidence and card.name not in by_name
-                if photo_only and (r.similarity < vc.photo_min_similarity or edition not in targets or p < vc.photo_min_edition_prob):
-                    continue
-                # pick the printing of this card name in the predicted target edition
-                chosen = card
-                if p >= EDITION_CONFIDENT and edition in targets and card.set_code != edition:
-                    chosen = session.scalar(
-                        select(CardPrinting).where(CardPrinting.name == card.name, CardPrinting.set_code == edition)
-                    ) or card
-                if chosen.set_code not in targets:
-                    continue
-                vconf = round(r.similarity * (p if edition in targets else 0.5), 3)
-                existing = by_name.get(chosen.name)
-                if existing is not None:
-                    if existing.source == "vision":
-                        existing.confidence = max(existing.confidence, vconf)
-                        continue
-                    existing.confidence = round(1 - (1 - existing.confidence) * (1 - vconf), 3)
-                    existing.source = "text+vision"
-                    if p >= EDITION_CONFIDENT and existing.card_id != chosen.id:
-                        existing.card, existing.unit_value_eur, existing.edition_ambiguous = chosen, chosen.price_eur, False
-                else:
-                    m = Match(card_id=chosen.id, quantity=1, confidence=vconf, source="vision",
-                              matched_text=url, unit_value_eur=chosen.price_eur, edition_ambiguous=p < EDITION_CONFIDENT)
-                    m.card = chosen
-                    listing.matches.append(m)
-                    by_name[chosen.name] = m
-                    if photo_only:
-                        flags.append("photo_match")
+            checked += 1
+            readings += [(url, r) for r in recs]
     finally:
         if own_client:
             client.close()
+    if not checked:
+        return sorted(set(flags))
+
+    # 1. vetoes: confident non-target edition for a card name, from any photo
+    vetoed: dict[str, str] = {}
+    for _, r in readings:
+        card = session.get(CardPrinting, r.card_id)
+        if card is None or r.similarity < vc.min_similarity:
+            continue
+        edition, p = max(r.edition_probs.items(), key=lambda kv: kv[1])
+        white = sum(r.edition_probs.get(e, 0.0) for e in WHITE_BORDER)
+        if white >= vc.white_border_veto:
+            vetoed.setdefault(card.name, "white_border")
+        elif p >= EDITION_CONFIDENT and edition not in targets and edition != "other":
+            vetoed.setdefault(card.name, edition)
+    for name, why in vetoed.items():
+        m = by_name.get(name)
+        if m is not None and m.status == "auto":
+            m.confidence = round(m.confidence * 0.1, 3)
+            flags.append(f"vision:{why}")
+        elif m is None and text_evidence:
+            flags.append(f"vision:{why}")
+
+    # 2. contradiction: the photos show nothing like any card the model knows
+    best = max((r.similarity for _, r in readings), default=0.0)
+    if text_evidence and best < vc.photo_contradiction_similarity:
+        for m in listing.matches:
+            if m.status == "auto" and m.source == "text":
+                m.confidence = round(m.confidence * 0.3, 3)
+        flags.append("photos_dont_match")
+        return sorted(set(flags))
+
+    # 3. support and photo-only finds
+    for url, r in readings:
+        if r.similarity < vc.min_similarity:
+            continue
+        card = session.get(CardPrinting, r.card_id)
+        if card is None or card.name in vetoed:
+            continue
+        edition, p = max(r.edition_probs.items(), key=lambda kv: kv[1])
+        if edition not in targets and (p >= EDITION_CONFIDENT or edition != "other"):
+            continue
+        photo_only = not text_evidence and card.name not in by_name
+        if photo_only and (r.similarity < vc.photo_min_similarity or edition not in targets or p < vc.photo_min_edition_prob):
+            continue
+        # pick the printing of this card name in the predicted target edition
+        chosen = card
+        if p >= EDITION_CONFIDENT and edition in targets and card.set_code != edition:
+            chosen = session.scalar(
+                select(CardPrinting).where(CardPrinting.name == card.name, CardPrinting.set_code == edition)
+            ) or card
+        if chosen.set_code not in targets:
+            continue
+        vconf = round(r.similarity * (p if edition in targets else 0.5), 3)
+        existing = by_name.get(chosen.name)
+        if existing is not None:
+            if existing.source == "vision":
+                existing.confidence = max(existing.confidence, vconf)
+                continue
+            existing.confidence = round(1 - (1 - existing.confidence) * (1 - vconf), 3)
+            existing.source = "text+vision"
+            if p >= EDITION_CONFIDENT and existing.card_id != chosen.id:
+                existing.card, existing.unit_value_eur, existing.edition_ambiguous = chosen, chosen.price_eur, False
+        else:
+            m = Match(card_id=chosen.id, quantity=1, confidence=vconf, source="vision",
+                      matched_text=url, unit_value_eur=chosen.price_eur, edition_ambiguous=p < EDITION_CONFIDENT)
+            m.card = chosen
+            listing.matches.append(m)
+            by_name[chosen.name] = m
+            if photo_only:
+                flags.append("photo_match")
     return sorted(set(flags))

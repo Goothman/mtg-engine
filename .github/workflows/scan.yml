@@ -65,6 +65,8 @@ jobs:
           if [ -n "$MAX_QUERIES" ]; then args+=(--max-queries "$MAX_QUERIES"); fi
           mtg-engine scan "${args[@]}" | tee scan-stats.json
           [ -s scan-stats.json ] || echo '{"note": "scan stopped early"}' > scan-stats.json
+      - name: Re-check all ads with the current rules (also verifies photos of text matches)
+        run: mtg-engine rematch
       - run: mtg-engine enrich-sellers
       - run: mtg-engine agents run
       - run: mtg-engine export-static
