@@ -81,14 +81,17 @@ message for a human to approve; neither marketplace has a public messaging API.
 `NegotiationAgent` suggests an opening offer. `LogisticsAgent` is a placeholder.
 
 ## Status and caveats
-- The Wallapop and Milanuncios clients follow the sites' current internal JSON and
-  HTML. They were written **without live access**: the sandbox they were built in
-  blocks those hosts, so the parsers are tested against hand-written fixtures
-  (`tests/fixtures/`). Phase 1 of the roadmap checks them against live responses.
-  Wallapop returns nothing to non-EU IPs (set `http.proxy`). Milanuncios may need
-  `fetcher: playwright`.
+- **Verified live:** catalog sync from Scryfall and Cardmarket (1,809 printings, 1,803
+  priced). Cards are valued at the median of Cardmarket's trend/avg/low/avg1/avg7/avg30,
+  because any single field swings wildly for thinly traded Alpha/Beta cards.
+- **Marketplace access:** Wallapop's search API (`api.wallapop.com`) only answers EU/Spanish IPs,
+  and Milanuncios is behind anti-bot protection. Set a Spanish proxy per marketplace with the
+  env vars `MTG_ENGINE_PROXY_WALLAPOP` / `MTG_ENGINE_PROXY_MILANUNCIOS` (or `MTG_ENGINE_PROXY` for
+  all traffic). An unreachable marketplace is skipped quickly and reported in the scan history.
+- The parsers were written from the sites' public behaviour and tested against hand-written
+  fixtures (`tests/fixtures/`). Replace those with real captures on the first live scan.
 - Respect each site's terms and rate limits. Delays between pages are configurable.
-- Vision is off until a model is trained (`ml/`).
+- Vision is off until a trained model is in `models/` (see `ml/README.md`).
 
 ## Tests
 
