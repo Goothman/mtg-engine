@@ -218,3 +218,23 @@ def test_strong_claims_and_collectors_edition_are_not_hidden(settings, db):
     n, flags, _ = _analyse_one(settings, db, RawListing(
         "fake", "s2", "u", "Lightning Bolt Beta", "", 300.0, images=["https://img.test/beta_as_ce.jpg"]), rec)
     assert n == 1 and not any(f.startswith("vision:") for f in flags)
+
+
+@respx.mock
+def test_photo_only_alpha_or_beta_unsure_values_cheaper(settings, db):
+    respx.get("https://img.test/split.jpg").mock(return_value=httpx.Response(200, content=b"split"))
+    split = {"lea": 0.42, "leb": 0.40, "2ed": 0.06, "3ed": 0.04, "ced": 0.05, "other": 0.03}
+    rec = FakeRecognizer({b"split": [Recognition("u-bolt", 0.8, split, None)]})  # gallery hit: an Unlimited scan
+    settings.games["mtg"].photo_queries = ["cartas magic"]
+    REGISTRY["fake"] = PhotoMarket
+    settings.marketplaces = {"fake": MarketplaceConfig(use_search_points=False, delay_seconds=0)}
+    settings.games["pokemon"].enabled = False
+    PHOTO_ADS_SPLIT = [RawListing("fake", "q1", "u", "Cartas magic", "", 5.0, images=["https://img.test/split.jpg"])]
+    PhotoMarket.search = lambda self, q, point=None: iter(PHOTO_ADS_SPLIT)
+    try:
+        Scanner(settings, db, rec).run(photo_queries=True)
+    finally:
+        PhotoMarket.search = lambda self, q, point=None: iter(PHOTO_ADS)
+    with db.session() as s:
+        [m] = s.get(Listing, "fake:q1").matches
+        assert m.card.id == "b-bolt" and m.edition_ambiguous and m.confidence == round(0.8 * 0.82, 3)

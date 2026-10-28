@@ -138,12 +138,25 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
         card = session.get(CardPrinting, r.card_id)
         if card is None or card.name in vetoed:
             continue
-        edition, p = max(r.edition_probs.items(), key=lambda kv: kv[1])
-        if edition not in targets and (p >= EDITION_CONFIDENT or edition != "other"):
-            continue
         photo_only = not text_evidence and card.name not in by_name
-        if photo_only and (r.similarity < vc.photo_min_similarity or edition not in targets or p < vc.photo_min_edition_prob):
-            continue
+        if photo_only:
+            # Calibrated on synthetic hard photos (ml/eval_scenes.py): Alpha+Beta probability
+            # combined (the model often splits between the two) >= 0.7 with similarity >= 0.7
+            # accepted no Unlimited/Revised/Collectors' Edition look-alike.
+            p_ab = sum(r.edition_probs.get(t, 0.0) for t in targets)
+            if r.similarity < vc.photo_min_similarity or p_ab < vc.photo_min_edition_prob:
+                continue
+            edition, p = max(((t, r.edition_probs.get(t, 0.0)) for t in targets), key=lambda kv: kv[1])
+            if p < EDITION_CONFIDENT:  # Alpha or Beta, not sure which: value the cheaper printing
+                cheapest = session.scalars(select(CardPrinting).where(
+                    CardPrinting.name == card.name, CardPrinting.set_code.in_(targets))).all()
+                cheapest = min(cheapest, key=lambda c: c.price_eur or 0, default=None)
+                if cheapest is not None:
+                    card, edition = cheapest, cheapest.set_code
+        else:
+            edition, p = max(r.edition_probs.items(), key=lambda kv: kv[1])
+            if edition not in targets and (p >= EDITION_CONFIDENT or edition != "other"):
+                continue
         # pick the printing of this card name in the predicted target edition
         chosen = card
         if p >= EDITION_CONFIDENT and edition in targets and card.set_code != edition:
@@ -153,6 +166,8 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
         if chosen.set_code not in targets:
             continue
         vconf = round(r.similarity * (p if edition in targets else 0.5), 3)
+        if photo_only:
+            vconf = round(r.similarity * p_ab, 3)
         existing = by_name.get(chosen.name)
         if existing is not None:
             if existing.source == "vision":

@@ -1,0 +1,184 @@
+{
+ "setups": {
+  "A": "v1 model + detector v1",
+  "B": "v1 model + detector v2 (deployed)",
+  "C": "v2 model (more occlusion/glare training) + detector v2"
+ },
+ "scenes": "ml/make_hard_scenes.py --per-condition 120 --seed 7 (960 photos, 3/4 Alpha/Beta, 1/4 look-alikes)",
+ "results": {
+  "A": {
+   "photo": {
+    "n": 120,
+    "found": 0.933,
+    "edition": 0.644,
+    "photo_ok": 0.4,
+    "false_ab": 0.0
+   },
+   "upside_down": {
+    "n": 120,
+    "found": 0.133,
+    "edition": 0.056,
+    "photo_ok": 0.0,
+    "false_ab": 0.0
+   },
+   "sideways": {
+    "n": 120,
+    "found": 0.589,
+    "edition": 0.489,
+    "photo_ok": 0.256,
+    "false_ab": 0.0
+   },
+   "covered": {
+    "n": 120,
+    "found": 0.011,
+    "edition": 0.011,
+    "photo_ok": 0.0,
+    "false_ab": 0.0
+   },
+   "pile": {
+    "n": 120,
+    "found": 0.033,
+    "edition": 0.033,
+    "photo_ok": 0.011,
+    "false_ab": 0.0
+   },
+   "cut_off": {
+    "n": 120,
+    "found": 0.0,
+    "edition": 0.0,
+    "photo_ok": 0.0,
+    "false_ab": 0.0
+   },
+   "glare": {
+    "n": 120,
+    "found": 0.811,
+    "edition": 0.633,
+    "photo_ok": 0.389,
+    "false_ab": 0.0
+   },
+   "sleeve": {
+    "n": 120,
+    "found": 0.733,
+    "edition": 0.567,
+    "photo_ok": 0.178,
+    "false_ab": 0.0
+   }
+  },
+  "B": {
+   "photo": {
+    "n": 120,
+    "found": 0.989,
+    "edition": 0.667,
+    "photo_ok": 0.4,
+    "false_ab": 0.0
+   },
+   "upside_down": {
+    "n": 120,
+    "found": 0.989,
+    "edition": 0.811,
+    "photo_ok": 0.478,
+    "false_ab": 0.0
+   },
+   "sideways": {
+    "n": 120,
+    "found": 0.989,
+    "edition": 0.778,
+    "photo_ok": 0.511,
+    "false_ab": 0.0
+   },
+   "covered": {
+    "n": 120,
+    "found": 0.6,
+    "edition": 0.211,
+    "photo_ok": 0.011,
+    "false_ab": 0.0
+   },
+   "pile": {
+    "n": 120,
+    "found": 0.544,
+    "edition": 0.256,
+    "photo_ok": 0.022,
+    "false_ab": 0.0
+   },
+   "cut_off": {
+    "n": 120,
+    "found": 0.111,
+    "edition": 0.044,
+    "photo_ok": 0.0,
+    "false_ab": 0.0
+   },
+   "glare": {
+    "n": 120,
+    "found": 0.978,
+    "edition": 0.722,
+    "photo_ok": 0.389,
+    "false_ab": 0.0
+   },
+   "sleeve": {
+    "n": 120,
+    "found": 0.978,
+    "edition": 0.644,
+    "photo_ok": 0.189,
+    "false_ab": 0.0
+   }
+  },
+  "C": {
+   "photo": {
+    "n": 120,
+    "found": 1.0,
+    "edition": 0.7,
+    "photo_ok": 0.022,
+    "false_ab": 0.0
+   },
+   "upside_down": {
+    "n": 120,
+    "found": 1.0,
+    "edition": 0.678,
+    "photo_ok": 0.022,
+    "false_ab": 0.0
+   },
+   "sideways": {
+    "n": 120,
+    "found": 0.989,
+    "edition": 0.633,
+    "photo_ok": 0.011,
+    "false_ab": 0.0
+   },
+   "covered": {
+    "n": 120,
+    "found": 0.867,
+    "edition": 0.356,
+    "photo_ok": 0.0,
+    "false_ab": 0.0
+   },
+   "pile": {
+    "n": 120,
+    "found": 0.767,
+    "edition": 0.378,
+    "photo_ok": 0.0,
+    "false_ab": 0.0
+   },
+   "cut_off": {
+    "n": 120,
+    "found": 0.1,
+    "edition": 0.022,
+    "photo_ok": 0.0,
+    "false_ab": 0.0
+   },
+   "glare": {
+    "n": 120,
+    "found": 0.978,
+    "edition": 0.633,
+    "photo_ok": 0.011,
+    "false_ab": 0.0
+   },
+   "sleeve": {
+    "n": 120,
+    "found": 0.989,
+    "edition": 0.544,
+    "photo_ok": 0.011,
+    "false_ab": 0.0
+   }
+  }
+ }
+}
