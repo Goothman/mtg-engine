@@ -3,6 +3,7 @@
 # Env: EPOCHS, BACKBONE, INIT_CKPT (default: HF base model; "none" = ImageNet), LR, HF_TOKEN + HF_REPO (to persist results; pods are ephemeral),
 #      SETS (default "lea leb 2ed 3ed ced cei"), STOP_POD_WHEN_DONE=1 to stop billing at the end.
 set -euo pipefail
+export PYTHONUNBUFFERED=1 NO_ALBUMENTATIONS_UPDATE=1  # live per-epoch logs through tee
 cd "$(dirname "$0")/../.."
 WORK=${WORK:-/workspace/mtg-engine-run}
 mkdir -p "$WORK"
