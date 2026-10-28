@@ -149,10 +149,18 @@ new → shortlisted → contacted → negotiating → agreed → paid → shippe
 - Outbox, deal state machine, agent base class and stubs
 - ML: dataset, training, ONNX export, gallery, RunPod launcher scripts
 
-### Phase 1: Live validation (needs network access to the marketplaces)
-- Run scans against the live sites and adjust the parsers to the real payloads
-- Store real response fixtures for regression tests
-- Tune rate limits, set a proxy if needed (Wallapop returns nothing to non-EU IPs)
+### Phase 1: Live validation (in progress)
+- ✅ Catalog + prices live: 1,809 printings (LEA/LEB + lookalike sets), 1,803 priced from the Cardmarket
+  guide; valued at the median of its price fields, since trend alone swings wildly on thin markets
+- ✅ Wallapop live: `api.wallapop.com/api/v3/search` with `distance_in_km`; works from a non-EU IP
+  (`x-wallapop-request-country-code: ES`); real capture kept as a test fixture
+- ✅ Matcher hardened on real ads: SEO keyword stuffing, generic names, other-printing flags,
+  placeholder prices ("precio x10"), implausible value/price ratios
+- ⛔ Milanuncios: Imperva bot wall ("Pardon Our Interruption") even for a real headless browser from
+  a datacenter IP. Options: run the scanner from a Spanish residential connection, a commercial
+  proxy that is allowed to scrape it, or an official data agreement with Adevinta. Bot-detection
+  evasion is out of scope.
+- ✅ Map: bundled province layer, so it renders without tiles; tiles configurable (OSM dark default)
 - Schedule hourly scans (`mtg-engine scheduler`)
 
 ### Phase 2: Vision
