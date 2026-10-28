@@ -33,8 +33,12 @@ def main() -> None:
     model.eval()
 
     dummy = torch.randn(1, 3, INPUT_H, INPUT_W)
-    torch.onnx.export(model, dummy, out / "card_model.onnx", input_names=["image"], output_names=["embedding", "edition_logits"],
-                      dynamic_axes={"image": {0: "batch"}, "embedding": {0: "batch"}, "edition_logits": {0: "batch"}}, opset_version=17)
+    kwargs = dict(input_names=["image"], output_names=["embedding", "edition_logits"],
+                  dynamic_axes={"image": {0: "batch"}, "embedding": {0: "batch"}, "edition_logits": {0: "batch"}}, opset_version=17)
+    try:  # classic TorchScript exporter: fewest dependencies
+        torch.onnx.export(model, dummy, out / "card_model.onnx", dynamo=False, **kwargs)
+    except TypeError:  # older torch without the `dynamo` flag
+        torch.onnx.export(model, dummy, out / "card_model.onnx", **kwargs)
 
     rows = read_manifest(Path(args.data))
     ident = {o: i for i, o in enumerate(sorted({r["oracle_id"] for r in rows}))}

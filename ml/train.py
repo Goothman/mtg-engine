@@ -197,6 +197,7 @@ def main() -> None:
     ap.add_argument("--lr", type=float, default=3e-4)
     ap.add_argument("--edition-weight", type=float, default=1.0)
     ap.add_argument("--workers", type=int, default=8)
+    ap.add_argument("--no-pretrained", action="store_true", help="random init (offline smoke tests)")
     args = ap.parse_args()
 
     torch.manual_seed(0)
@@ -213,7 +214,7 @@ def main() -> None:
     clean_dl = DataLoader(CardDataset(data, rows, ident, 1, False), batch_size=args.batch, num_workers=args.workers)
     val_dl = DataLoader(CardDataset(data, rows, ident, 2, True, seed=12345), batch_size=args.batch, num_workers=args.workers)
 
-    model = CardNet(args.backbone, args.embed_dim, pretrained=args.init is None).to(device)
+    model = CardNet(args.backbone, args.embed_dim, pretrained=args.init is None and not args.no_pretrained).to(device)
     if args.init:
         load_init(model, args.init)
     arc = SubCenterArcFaceLoss(num_classes=len(ident), embedding_size=args.embed_dim, sub_centers=3, margin=28.6, scale=64).to(device)
@@ -226,7 +227,7 @@ def main() -> None:
     total = args.epochs * len(train_dl)
     warm = max(1, len(train_dl))
     sched = torch.optim.lr_scheduler.LambdaLR(opt, lambda s: min(1.0, (s + 1) / warm) * 0.5 * (1 + math.cos(math.pi * min(s, total) / total)))
-    scaler = torch.cuda.amp.GradScaler(enabled=device == "cuda")
+    scaler = torch.amp.GradScaler("cuda", enabled=device == "cuda")
 
     best, history = -1.0, []
     for epoch in range(args.epochs):

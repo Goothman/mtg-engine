@@ -2,7 +2,7 @@
 
 Pipeline per ad photo:
   1. detect card-shaped quadrilaterals (OpenCV contours) and warp each one upright;
-     if none is found, the whole photo is used (single-card close-ups).
+     the whole photo is scored too unless detected cards cover most of it (close-ups).
   2. embed each crop with the ONNX model trained in `ml/` (identity embedding + edition logits).
   3. cosine kNN against `gallery.npz` (embeddings of clean Scryfall scans).
 
@@ -71,9 +71,10 @@ def detect_cards(img_bgr: np.ndarray, max_cards: int = 12) -> list[tuple[np.ndar
 
 
 class CardRecognizer:
-    def __init__(self, model_path: str | Path, gallery_path: str | Path):
+    def __init__(self, model_path: str | Path, gallery_path: str | Path, closeup_margin: float = 0.05):
         import onnxruntime as ort
 
+        self.closeup_margin = closeup_margin
         self.session = ort.InferenceSession(str(model_path), providers=ort.get_available_providers())
         g = np.load(gallery_path, allow_pickle=False)
         self.embeddings = g["embeddings"].astype(np.float32)
@@ -103,9 +104,22 @@ class CardRecognizer:
         from PIL import Image
 
         img = cv2.cvtColor(np.array(Image.open(io.BytesIO(image_bytes)).convert("RGB")), cv2.COLOR_RGB2BGR)
-        found = detect_cards(img) or [(img, None)]
+        found = detect_cards(img)
+        # Close-ups: the card fills the frame and the detector may lock onto the art box,
+        # so also score the whole photo unless detected cards cover most of it.
+        h, w = img.shape[:2]
+        if sum(b[2] * b[3] for _, b in found) < 0.5 * h * w:
+            found.append((img, None))
         emb, probs = self.embed([c for c, _ in found])
         sims = emb @ self.embeddings.T
+        # Whole photo vs detected crops: if the whole photo matches clearly better than every
+        # crop, it's a single-card close-up (crops were card parts); otherwise trust the crops.
+        if found[-1][1] is None and len(found) > 1:
+            best = sims.max(axis=1)
+            if best[-1] >= best[:-1].max() + self.closeup_margin:
+                found, sims, probs = found[-1:], sims[-1:], probs[-1:]
+            else:
+                found, sims, probs = found[:-1], sims[:-1], probs[:-1]
         out = []
         for i, (_, box) in enumerate(found):
             for j in np.argsort(-sims[i])[:top_k]:
