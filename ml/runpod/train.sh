@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Runs on the RunPod GPU pod: dataset -> train -> export -> (optional) upload.
 # Env: EPOCHS, BACKBONE, INIT_CKPT (default: HF base model; "none" = ImageNet), LR, HF_TOKEN + HF_REPO (to persist results; pods are ephemeral),
-#      SETS (default "lea leb 2ed 3ed ced cei"), STOP_POD_WHEN_DONE=1 to stop billing at the end.
+#      SETS (default "lea leb 2ed 3ed ced cei"), STOP_POD_WHEN_DONE=1 to stop billing at the end,
+#      SERVE_WHEN_DONE=1 to serve $WORK on port 8000 instead (expose 8000/http) for download.
 set -euo pipefail
 export PYTHONUNBUFFERED=1 NO_ALBUMENTATIONS_UPDATE=1  # live per-epoch logs through tee
 cd "$(dirname "$0")/../.."
@@ -11,6 +12,11 @@ exec > >(tee -a "$WORK/pod.log") 2>&1   # keep a log on the persistent volume
 
 stop_pod() {
   echo "=== exit code $1 at $(date -u +%FT%TZ) ==="
+  if [[ "${SERVE_WHEN_DONE:-0}" == "1" ]]; then
+    # Serve outputs + log over the pod's HTTP port (https://<podId>-8000.proxy.runpod.net/)
+    # so they can be downloaded; the caller stops the pod afterwards. Public URL: no secrets in $WORK.
+    cd "$WORK" && exec python3 -m http.server 8000 --bind 0.0.0.0
+  fi
   if [[ "${STOP_POD_WHEN_DONE:-0}" == "1" && -n "${RUNPOD_POD_ID:-}" ]]; then
     sleep 60  # leave time for log readers
     runpodctl stop pod "$RUNPOD_POD_ID" || true

@@ -73,7 +73,7 @@ def parse_item(item: dict) -> RawListing:
         description=item.get("description") or "",
         price_eur=_price(item),
         city=loc.get("city"),
-        region=loc.get("region") or loc.get("region2"),
+        region=loc.get("region2") or loc.get("region"),  # region2 = province, region = autonomous community
         postal_code=loc.get("postal_code") or loc.get("zip"),
         country=(loc.get("country_code") or "ES").upper(),
         lat=loc.get("latitude"),
@@ -114,16 +114,14 @@ class Wallapop(Marketplace):
         )
 
     def search(self, query: str, point: SearchPoint | None = None) -> Iterator[RawListing]:
-        params: dict[str, Any] = {
-            "keywords": query,
-            "source": "search_box",
-            "order_by": "newest",
-        }
+        # Verified live 2026-10-28: "order_by=newest" collapses results (35 -> 1), so we keep
+        # Wallapop's default relevance order; the radius parameter is "distance_in_km".
+        params: dict[str, Any] = {"keywords": query, "source": "search_box"}
         if point:
             params.update(
                 latitude=point.lat,
                 longitude=point.lon,
-                distance=self.settings.region.search_radius_km * 1000,
+                distance_in_km=self.settings.region.search_radius_km,
             )
         for page in range(self.config.max_pages):
             resp = get_with_retry(self.client, API_URL, params=params)

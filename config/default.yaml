@@ -77,7 +77,12 @@ games:
       exclude_basic_lands: false
     red_flags: [proxy, proxys, replica, "réplica", fake, falsa, falso, playtest, "gold border",
                 "borde dorado", "collector's edition", "collectors edition", "coleccionista",
-                unlimited, revised, "edicion revisada", "4th edition", "cuarta edicion"]
+                unlimited, revised, "edicion revisada", "4th edition", "cuarta edicion",
+                # other printings named explicitly (seen on real ads) - Alpha/Beta were English-only
+                "quinta edicion", "5th edition", "sexta edicion", "6th edition", "septima edicion",
+                "7th edition", "octava edicion", "8th edition", "novena edicion", "9th edition",
+                "decima edicion", "10th edition", japones, japonesa, japanese, chino, coreano,
+                reprint, reimpresion, unhinged, unglued, tempest, tempestad]
 
   pokemon:
     enabled: false

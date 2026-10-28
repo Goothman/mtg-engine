@@ -17,6 +17,7 @@ CATALOG = [
     ("a-fog", "Fog", "lea", 20.0),
     ("b-fog", "Fog", "leb", 10.0),
     ("a-wall", "Wall of Stone", "lea", 60.0),
+    ("b-web", "Web", "leb", 15.0),
     ("b-shivan", "Shivan Dragon", "leb", 700.0),
     ("u-bolt", "Lightning Bolt", "2ed", 60.0),  # confuser set, never a target
 ]

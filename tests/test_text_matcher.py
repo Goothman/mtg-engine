@@ -62,3 +62,43 @@ def test_filters(settings, refs):
     g.filters.min_card_value_eur = 100
     res = TextMatcher(refs, g).match("alpha Fog Wall of Stone Lightning Bolt", "")
     assert set(by_name(res)) == {"Lightning Bolt"}
+
+
+# Patterns below are from real Wallapop ads (2026-10-28), shortened.
+def test_keyword_stuffing_is_ignored(settings, refs):
+    tm = TextMatcher(refs, settings.games["mtg"])
+    r = tm.match("Lago hirviente Caldera lake Tempestad carta Magic",
+                 "Carta tierra rara de la coleccion Tempestad en español. Envío por Wallapop. "
+                 "Alpha. Beta. MTG. Old. Mox. Black Lotus. Land. Años 90. Borde negro.")
+    assert not r.matches and "keyword_stuffing" in r.flags
+    r = tm.match("Magic the Gathering: Reinos Misteriosos", "Caja de inicio Magic.\n"
+                 "Magic the gathering, black lotus, mox, arabian nights, sellado, sealed, alpha, beta, collector, carta.")
+    assert not r.matches
+    r = tm.match("Magic Wrath of God", "Carta de Magic.\nModern Commander Legacy Alpha Beta Foil Artefacto Criatura Tierra")
+    assert not r.matches
+
+
+def test_real_card_list_is_not_stuffing(settings, refs):
+    r = TextMatcher(refs, settings.games["mtg"]).match(
+        "Lote alpha", "4x Lightning Bolt, 2x Dark Ritual, Wall of Stone, Shivan Dragon, Fog")
+    names = {m.card.name for m in r.matches}
+    assert {"Lightning Bolt", "Dark Ritual", "Wall of Stone"} <= names
+
+
+def test_title_edition_wins_and_generic_name_needs_context(settings, refs):
+    r = TextMatcher(refs, settings.games["mtg"]).match(
+        "Black Lotus LEB Magic The Gathering CGC 5",
+        "Edición Beta, verificable en la web de CGC. Si alguien está interesado en un Black Lotus de Alpha preguntar.")
+    by = {m.card.name: m for m in r.matches}
+    assert by["Black Lotus"].card.set_code == "leb" and not by["Black Lotus"].edition_ambiguous
+    assert "Web" not in by and "Fog" not in by
+
+
+def test_other_printing_flags(settings, refs):
+    r = TextMatcher(refs, settings.games["mtg"]).match("Lightning Bolt beta", "Quinta edición, 1997")
+    assert "quinta edicion" in r.flags and r.matches[0].confidence < 0.5
+
+
+def test_price_placeholder_flag(settings, refs):
+    r = TextMatcher(refs, settings.games["mtg"]).match("Black Lotus LEB", "Más detalles y precio (x10) negociable por mensajería")
+    assert "price_placeholder" in r.flags and r.matches[0].confidence == 0.9

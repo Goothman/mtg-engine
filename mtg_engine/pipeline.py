@@ -16,11 +16,13 @@ from .marketplaces import RawListing, get_marketplace
 from .marketplaces.milanuncios import BlockedError
 from .matching import CardRef, TextMatcher
 from .models import CardPrinting, Listing, Match, ScanRun, utcnow
+from .text import normalize
 from .valuation import value_listing
 
 log = logging.getLogger(__name__)
 
 STALE_AFTER = timedelta(days=7)
+IMPLAUSIBLE_RATIO = 25
 
 
 class _MarketUnreachable(Exception):
@@ -82,8 +84,20 @@ def analyse(session: Session, settings: Settings, listing: Listing, matcher: Tex
 
         flags += apply_vision(session, settings, listing, recognizer)
     listing.editions = result.editions
-    listing.flags = flags
     v = value_listing(listing.matches, listing.price_eur)
+    # Too good to be true: worth > IMPLAUSIBLE_RATIO x asking and the cards aren't in the title.
+    # On real ads this is almost always keyword stuffing or a reprint, so demote for human review.
+    if v.ratio and v.ratio > IMPLAUSIBLE_RATIO:
+        title_norm = normalize(listing.title)
+        demoted = False
+        for m in listing.matches:
+            if m.status == "auto" and m.card is not None and m.card.name_norm not in title_norm:
+                m.confidence = round(m.confidence * 0.3, 3)
+                demoted = True
+        if demoted:
+            flags.append("implausible_price")
+            v = value_listing(listing.matches, listing.price_eur)
+    listing.flags = flags
     listing.est_total_value, listing.est_score, listing.value_ratio = v.total_value, v.score, v.ratio
     listing.match_count = v.counted
     listing.needs_review = result.needs_review and v.counted == 0

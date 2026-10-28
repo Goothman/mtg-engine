@@ -11,7 +11,12 @@ Heuristics (tuned for Spanish second-hand ads):
     printing and flag `edition_ambiguous`.
   * No edition evidence at all -> very likely a modern reprint: low confidence,
     excluded from total value but kept for review.
-  * Red-flag words (proxy, réplica, unlimited...) halve the confidence.
+  * Red-flag words (proxy, réplica, unlimited, other printings...) halve the confidence.
+  * SEO keyword stuffing ("Alpha. Beta. MTG. Old. Mox. Black Lotus." or
+    "Modern Commander Legacy Alpha Beta Foil...") is detected and removed before matching
+    (found on real Wallapop ads, 2026-10-28).
+  * Generic names only count from the title or from a sentence that also names the edition.
+  * Edition named in the title wins over editions mentioned in the description.
 """
 from __future__ import annotations
 
@@ -73,6 +78,48 @@ def _kw_pattern(kw: str) -> tuple[re.Pattern[str], bool]:
     return re.compile(rf"(?<![A-Za-z0-9]){re.escape(text)}(?![A-Za-z0-9])"), case_sensitive
 
 
+# asking price is a placeholder ("precio (x10)", "consultar precio"...): seen on real ads
+_PRICE_PLACEHOLDER = re.compile(
+    r"precio\s*\(?x\s?\d+|x\s?\d+\)?\s*(?:el\s+)?precio|precio real|consultar (?:el )?precio|"
+    r"preguntar (?:el )?precio|precio a consultar|precio por (?:privado|mensaje|mp)|no es el precio"
+)
+_SENT_SPLIT = re.compile(r"(?<!\d)[.;|!?¡¿](?!\d)|\n")
+
+
+def _is_tag(item: str, tags: set[str]) -> bool:
+    return normalize(item) in tags
+
+
+def split_stuffing(description: str, tags: set[str]) -> tuple[list[str], bool]:
+    """Split a description into sentences and drop SEO tag lists that contain edition words.
+
+    Returns (kept_sentences, removed_any_with_tags)."""
+    segs = [x.strip() for x in _SENT_SPLIT.split(description or "")]
+    segs = [x for x in segs if x]
+    drop = [False] * len(segs)
+    for i, seg in enumerate(segs):
+        words = seg.split()
+        parts = [p.strip() for p in seg.split(",") if p.strip()]
+        listy = len(parts) >= 5 and sum(len(p.split()) for p in parts) / len(parts) <= 3
+        alpha_words = [w for w in words if w[:1].isalpha()]
+        capsy = len(alpha_words) >= 6 and sum(w[0].isupper() for w in alpha_words) / len(alpha_words) >= 0.85
+        has_tag = any(_is_tag(p, tags) for p in parts) or any(_is_tag(w, tags) for w in words)
+        if (listy or capsy) and has_tag:
+            drop[i] = True
+    # runs of >= 4 consecutive 1-3 word fragments ("Alpha. Beta. MTG. Old.") containing a tag
+    i = 0
+    while i < len(segs):
+        j = i
+        while j < len(segs) and len(segs[j].split()) <= 3:
+            j += 1
+        if j - i >= 4 and any(_is_tag(x, tags) for x in segs[i:j]):
+            for k in range(i, j):
+                drop[k] = True
+        i = max(j, i + 1)
+    kept = [x for x, d in zip(segs, drop) if not d]
+    return kept, any(drop)
+
+
 class TextMatcher:
     def __init__(self, cards: list[CardRef], game: GameConfig):
         self.game = game
@@ -91,6 +138,7 @@ class TextMatcher:
             else None
         )
         self.edition_res = {t.set_code: [_kw_pattern(k) for k in t.keywords] for t in game.targets}
+        self.tags = {normalize(k) for t in game.targets for k in t.keywords} | {normalize(t.label) for t in game.targets}
         # dedupe on the normalised form ("replica" and "réplica" are the same flag)
         self.flag_res = list({normalize(f): (normalize(f), _kw_pattern(f)[0]) for f in game.red_flags}.values())
 
@@ -115,16 +163,25 @@ class TextMatcher:
                     return q
         return 1
 
-    def match(self, title: str, description: str = "") -> MatchResult:
-        raw = f"{title}\n{description}"
-        norm = normalize(raw)
-        cased = strip_accents(raw)
-        res = MatchResult()
+    def _editions(self, raw: str) -> list[str]:
+        norm, cased = normalize(raw), strip_accents(raw)
+        return [code for code, pats in self.edition_res.items() if any(p.search(cased if cs else norm) for p, cs in pats)]
 
-        for code, patterns in self.edition_res.items():
-            if any(p.search(cased if cs else norm) for p, cs in patterns):
-                res.editions.append(code)
+    def match(self, title: str, description: str = "") -> MatchResult:
+        kept, stuffed = split_stuffing(description, self.tags)
+        raw = "\n".join([title, *kept])
+        norm = normalize(raw)
+        res = MatchResult()
+        res.editions = self._editions(raw)
+        title_editions = self._editions(title)
+        title_norm = normalize(title)
         res.flags = [name for name, p in self.flag_res if p.search(norm)]
+        if stuffed:
+            res.flags.append("keyword_stuffing")
+        if _PRICE_PLACEHOLDER.search(normalize(f"{title} {description}")):
+            res.flags.append("price_placeholder")
+        # sentences that name an edition: generic card names are only trusted there (or in the title)
+        edition_sents = [strip_accents(x) for x in kept if self._editions(x)]
 
         found: dict[str, tuple[int, str]] = {}  # name_norm -> (max qty, matched text)
         if self.name_re:
@@ -135,13 +192,21 @@ class TextMatcher:
                 if not prev or qty > prev[0]:
                     found[name] = (qty, norm[max(0, m.start() - 8) : m.end() + 8].strip())
 
-        penalty = 0.5 if res.flags else 1.0
+        penalty = 0.5 if [f for f in res.flags if f not in ("keyword_stuffing", "price_placeholder")] else 1.0
+        word = lambda n, text: re.search(rf"(?<![a-z0-9]){re.escape(n)}(?![a-z0-9])", text)  # noqa: E731
         for name, (qty, snippet) in found.items():
             printings = self.by_name[name]
             generic = name in GENERIC_NAMES or len(name) < 5
-            if generic and not res.editions:
-                continue
-            named = [printings[c] for c in res.editions if c in printings]
+            in_title = bool(word(name, title_norm))
+            if generic:
+                # in the description a generic name must be capitalised like a card name
+                # ("Island x10" yes, "la web de CGC" no) and share a sentence with the edition
+                proper = re.compile(rf"(?<![A-Za-z0-9]){re.escape(strip_accents(printings[next(iter(printings))].name))}(?![A-Za-z0-9])")
+                if not (res.editions and (in_title or any(proper.search(x) for x in edition_sents))):
+                    continue
+            # an edition named in the title beats editions mentioned in the description
+            editions = title_editions if (in_title and len(title_editions) == 1) else res.editions
+            named = [printings[c] for c in editions if c in printings]
             if len(named) == 1:
                 card, conf, ambiguous = named[0], 0.9, False
             else:

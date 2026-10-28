@@ -37,7 +37,7 @@ def test_wallapop_paginates(settings):
     wp = get_marketplace("wallapop", settings)
     got = list(wp.search("magic alpha", settings.region.search_points[0]))
     assert len(got) == 2 and route.call_count == 2
-    assert route.calls[0].request.url.params["distance"] == str(settings.region.search_radius_km * 1000)
+    assert route.calls[0].request.url.params["distance_in_km"] == str(settings.region.search_radius_km)
     assert route.calls[1].request.url.params["next_page"] == "TOKEN2"
 
 
@@ -76,3 +76,13 @@ def test_playwright_proxy_parsing():
     from mtg_engine.marketplaces.milanuncios import _playwright_proxy
 
     assert _playwright_proxy("http://u:p@es.example:8080") == {"server": "http://es.example:8080", "username": "u", "password": "p"}
+
+
+def test_wallapop_real_capture():
+    """Real api.wallapop.com response captured 2026-10-28 (query "magic alpha", Madrid)."""
+    items, nxt = extract_items(json.loads((FX / "wallapop_search_real.json").read_text()))
+    assert len(items) == 35 and nxt
+    first = parse_item(items[0])
+    assert first.title == "Magic Alpha Island 7.5 NM" and first.price_eur == 70.0
+    assert first.region == "Madrid" and first.lat and first.images
+    assert all(parse_item(i).external_id for i in items)
