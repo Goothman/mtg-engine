@@ -188,3 +188,16 @@ def test_reported_false_positives(settings, db):
         "fake", "r3", "u", "Magic Dark Ritual carta", "", 10.0,
         images=["https://img.test/stasis_white.jpg", "https://img.test/stasis_vague.jpg"]), rec)
     assert n == 0 and "vision:white_border" in flags and all(c < 0.1 for _, c in matches)
+
+
+def test_recheck_rejects_untouched_deal(settings, db):
+    from mtg_engine.agents.workflow import maybe_close_deal
+    from mtg_engine.models import Deal
+
+    with db.session() as s:
+        for lid, stage in (("fake:d1", "new"), ("fake:d2", "contacted")):
+            s.add(Listing(id=lid, marketplace="fake", external_id=lid, game="mtg", url="u", title="x", match_count=0))
+            s.add(Deal(listing_id=lid, stage=stage))
+        s.flush()
+        assert maybe_close_deal(s, s.get(Listing, "fake:d1")).stage == "rejected"
+        assert maybe_close_deal(s, s.get(Listing, "fake:d2")) is None  # humans already involved

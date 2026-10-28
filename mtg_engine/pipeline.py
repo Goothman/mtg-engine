@@ -9,7 +9,7 @@ from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from . import events, geo
-from .agents.workflow import maybe_open_deal
+from .agents.workflow import maybe_close_deal, maybe_open_deal
 from .config import Settings
 from .db import Database
 from .marketplaces import RawListing, get_marketplace
@@ -210,6 +210,8 @@ class Scanner:
                     events.emit(s, events.LISTING_MATCHED, listing.id, value=listing.est_total_value, ratio=listing.value_ratio, price=listing.price_eur)
                     if maybe_open_deal(s, self.settings, listing):
                         stats["deals_opened"] += 1
+                else:
+                    maybe_close_deal(s, listing)
                 s.flush()
 
     def _expire_stale(self, s: Session) -> None:
@@ -275,5 +277,7 @@ def rematch_all(settings: Settings, db: Database, recognizer=None) -> int:
             analyse(s, settings, listing, m, recognizer)
             if listing.match_count:
                 maybe_open_deal(s, settings, listing)
+            else:
+                maybe_close_deal(s, listing)
             n += 1
     return n

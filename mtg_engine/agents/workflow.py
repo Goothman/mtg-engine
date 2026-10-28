@@ -65,3 +65,13 @@ def maybe_open_deal(session: Session, settings: Settings, listing: Listing) -> D
     session.flush()
     events.emit(session, events.DEAL_OPENED, listing.id, deal_id=deal.id, value=listing.est_total_value, ratio=listing.value_ratio)
     return deal
+
+
+def maybe_close_deal(session: Session, listing: Listing) -> Deal | None:
+    """Reject a deal nobody has acted on yet once its ad no longer has Alpha/Beta cards
+    (e.g. after a re-check vetoed the match). Deals already in contact are left to humans."""
+    deal = listing.deal
+    if deal is None or listing.match_count or deal.stage not in ("new", "shortlisted"):
+        return None
+    return transition(session, deal, "rejected", by="system:recheck",
+                      note=f"auto-rejected: no Alpha/Beta cards after re-check ({', '.join(listing.flags) or 'no matches'})")
