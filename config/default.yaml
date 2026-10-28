@@ -95,7 +95,7 @@ games:
                 "quinta edicion", "5th edition", "sexta edicion", "6th edition", "septima edicion",
                 "7th edition", "octava edicion", "8th edition", "novena edicion", "9th edition",
                 "decima edicion", "10th edition", reprint, reimpresion, unhinged, unglued, tempest,
-                tempestad, "en español", "en castellano", "version española", "5a edicion",
+                tempestad, "5a edicion",
                 "4a edicion", "borde blanco", "white border"]
     # Rule an ad out entirely: Alpha/Beta were printed in English only, so cards in other
     # languages (e.g. the black-bordered Korean/Japanese/French reprints) are never Alpha/Beta.
@@ -104,6 +104,8 @@ games:
                     francesas, french, aleman, alemana, alemanes, alemanas, german, italiano, italiana,
                     italianos, italianas, italian, portugues, portuguesa, portugueses, portuguesas,
                     portuguese, ruso, rusa, rusos, rusas, russian,
+                    "en español", "en castellano", "version española", "edicion española",
+                    foil, foils,  # Alpha/Beta were never printed in foil
                     # black-bordered reprints sold as such: never Alpha/Beta
                     "collector's edition", "collectors edition", "collector edition", "edicion coleccionista",
                     "international edition", "edicion internacional"]

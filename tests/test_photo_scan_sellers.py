@@ -238,3 +238,23 @@ def test_photo_only_alpha_or_beta_unsure_values_cheaper(settings, db):
     with db.session() as s:
         [m] = s.get(Listing, "fake:q1").matches
         assert m.card.id == "b-bolt" and m.edition_ambiguous and m.confidence == round(0.8 * 0.82, 3)
+
+
+@respx.mock
+def test_photo_only_needs_all_photos_to_agree(settings, db):
+    """Real case: a modern Counterspell (original art) passed on one crop, other photos disagreed."""
+    for name in ("good", "vague1", "vague2"):
+        respx.get(f"https://img.test/{name}.jpg").mock(return_value=httpx.Response(200, content=name.encode()))
+    ab = lambda x: {"lea": x / 2, "leb": x / 2, "2ed": (1 - x) / 4, "3ed": (1 - x) / 4, "ced": (1 - x) / 2, "other": 0.0}  # noqa: E731
+    rec = FakeRecognizer({b"good": [Recognition("a-bolt", 0.74, ab(0.77), None)],
+                          b"vague1": [Recognition("a-bolt", 0.75, ab(0.62), None)],
+                          b"vague2": [Recognition("a-bolt", 0.69, ab(0.58), None)]})
+    from mtg_engine.vision.service import apply_vision
+
+    with db.session() as s:
+        listing = Listing(id="fake:c1", marketplace="fake", external_id="c1", game="mtg", url="u", title="Cartas magic",
+                          images=["https://img.test/good.jpg", "https://img.test/vague1.jpg", "https://img.test/vague2.jpg"])
+        s.add(listing)
+        s.flush()
+        assert "photo_match" not in apply_vision(s, settings, listing, rec, text_evidence=False)
+        assert listing.matches == []

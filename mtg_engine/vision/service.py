@@ -131,7 +131,13 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
         flags.append("photos_dont_match")
         return sorted(set(flags))
 
-    # 3. support and photo-only finds
+    # 3. support and photo-only finds. A photo-only find must hold across all photos of that card:
+    # real modern reprints with the original art pass one lucky crop but not the average.
+    ab_by_name: dict[str, list[float]] = {}
+    for _, r in readings:
+        card = session.get(CardPrinting, r.card_id)
+        if card is not None and r.similarity >= vc.min_similarity:
+            ab_by_name.setdefault(card.name, []).append(sum(r.edition_probs.get(t, 0.0) for t in targets))
     for url, r in readings:
         if r.similarity < vc.min_similarity:
             continue
@@ -144,7 +150,9 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
             # combined (the model often splits between the two) >= 0.7 with similarity >= 0.7
             # accepted no Unlimited/Revised/Collectors' Edition look-alike.
             p_ab = sum(r.edition_probs.get(t, 0.0) for t in targets)
-            if r.similarity < vc.photo_min_similarity or p_ab < vc.photo_min_edition_prob:
+            agree = ab_by_name.get(card.name, [p_ab])
+            if (r.similarity < vc.photo_min_similarity or p_ab < vc.photo_min_edition_prob
+                    or sum(agree) / len(agree) < vc.photo_min_edition_prob):
                 continue
             edition, p = max(((t, r.edition_probs.get(t, 0.0)) for t in targets), key=lambda kv: kv[1])
             if p < EDITION_CONFIDENT:  # Alpha or Beta, not sure which: value the cheaper printing
