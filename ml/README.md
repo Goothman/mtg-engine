@@ -1,13 +1,18 @@
 # Card recognition model
 
-**Base:** [`dhvazquez/mtg_card_identification_embeddings`](https://huggingface.co/dhvazquez/mtg_card_identification_embeddings),
-EfficientNet-Lite0 + SubCenterArcFace, image → embedding, reported Recall@1 94.1%.
-We keep its approach (metric learning + gallery retrieval) and fine-tune a multi-task version
-for the old sets:
+**Base:** [`dhvazquez/mtg_card_identification_embeddings`](https://huggingface.co/dhvazquez/mtg_card_identification_embeddings)
+(MIT). Its layout is `tf_efficientnet_lite0` → BN → Linear (no bias) → BN → 256-d L2-normalised
+embedding, with 448×320 input and ImageNet normalisation. It was trained with SubCenterArcFace on
+82,115 *printings*, reaching Recall@1 94.1%. Its class map already contains 122 of 295 Alpha and
+131 of 302 Beta printings. `CardNet` (`common.py`) uses the same backbone and neck, so the
+checkpoint (`backbone_neck`) loads 1:1 (verified: 305/307 tensors; the other 2 are the new edition
+head). The RunPod job downloads it automatically (`fetch_base_model.py`).
+
+We fine-tune a multi-task version for the old sets:
 
 | Output | Trained on | Used for |
 |---|---|---|
-| `embedding` (512-d, L2-norm) | SubCenterArcFace over oracle identities | Which card is it (kNN over `gallery.npz`) |
+| `embedding` (256-d, L2-norm) | SubCenterArcFace over oracle identities | Which card is it (kNN over `gallery.npz`) |
 | `edition_logits` | CE over `lea, leb, 2ed, 3ed, ced, other` | Alpha / Beta / Unlimited / Revised / CE hint |
 
 Training data: Scryfall scans of LEA, LEB, 2ED, 3ED, CED and CEI, with augmentations that
@@ -29,19 +34,22 @@ cd ml && python export.py --ckpt runs/v1/best.pt --data dataset --out ../models
 
 Then in `config/default.yaml` set `vision.enabled: true` and run `mtg-engine rematch`.
 
-To start from the HF base model's weights, download its checkpoint and pass
-`--init <file> --backbone <its timm name>`. The script prints how many tensors matched.
+To start from the HF base model's weights: `python ml/fetch_base_model.py` and pass the printed
+path as `--init <file> --lr 1e-4`.
 
 ## On RunPod
 
 ```bash
 pip install runpod
 export RUNPOD_API_KEY=... HF_TOKEN=... HF_REPO=<you>/mtg-engine-card-model
-python ml/runpod/launch.py --gpu "NVIDIA GeForce RTX 4090" --epochs 30
+python ml/runpod/launch.py --gpu "NVIDIA GeForce RTX 3090" --epochs 30
 ```
 
-The pod clones the repo and runs `ml/runpod/train.sh` (dataset, train, export). It uploads
-`card_model.onnx`, `gallery.npz` and the logs to your private HF repo, then stops itself.
+The `ml/` code travels to the pod as a base64 tarball in an env var (`ml/runpod/bundle.py`), so
+the private repo needs no git credentials on the pod. The pod runs `ml/runpod/train.sh`
+(base model, dataset, train, export), keeps the outputs and `pod.log` under
+`/workspace/mtg-engine-run/` on its persistent volume, uploads them to `HF_REPO` if `HF_TOKEN` is
+set, and stops itself on success or failure.
 Expect about 1–2 GPU-hours for 30 epochs. Download the results into `models/`:
 
 ```bash

@@ -91,7 +91,8 @@ class TextMatcher:
             else None
         )
         self.edition_res = {t.set_code: [_kw_pattern(k) for k in t.keywords] for t in game.targets}
-        self.flag_res = [(f, _kw_pattern(f)[0]) for f in game.red_flags]
+        # dedupe on the normalised form ("replica" and "réplica" are the same flag)
+        self.flag_res = list({normalize(f): (normalize(f), _kw_pattern(f)[0]) for f in game.red_flags}.values())
 
     def _passes_filters(self, c: CardRef) -> bool:
         f = self.game.filters

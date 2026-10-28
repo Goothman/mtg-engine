@@ -6,6 +6,18 @@ set -euo pipefail
 cd "$(dirname "$0")/../.."
 WORK=${WORK:-/workspace/mtg-engine-run}
 mkdir -p "$WORK"
+exec > >(tee -a "$WORK/pod.log") 2>&1   # keep a log on the persistent volume
+
+stop_pod() {
+  echo "=== exit code $1 at $(date -u +%FT%TZ) ==="
+  if [[ "${STOP_POD_WHEN_DONE:-0}" == "1" && -n "${RUNPOD_POD_ID:-}" ]]; then
+    sleep 60  # leave time for log readers
+    runpodctl stop pod "$RUNPOD_POD_ID" || true
+  fi
+}
+trap 'stop_pod $?' EXIT  # also stops the pod (and GPU billing) when a step fails
+
+echo "=== start $(date -u +%FT%TZ) on $(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null) ==="
 pip install -q -r ml/requirements.txt
 
 # Start from the HF base model unless INIT_CKPT is given (set INIT_CKPT=none for ImageNet init).
@@ -17,10 +29,11 @@ elif [[ "$INIT_CKPT" == "none" ]]; then
 fi
 
 python ml/build_dataset.py --sets ${SETS:-lea leb 2ed 3ed ced cei} --out "$WORK/dataset"
-python ml/train.py --data "$WORK/dataset" --out "$WORK/run" --epochs "${EPOCHS:-30}" \
-  --backbone "${BACKBONE:-tf_efficientnet_lite0}" --lr "${LR:-3e-4}" ${INIT_CKPT:+--init "$INIT_CKPT"} 2>&1 | tee "$WORK/train.log"
+WORKERS=$(( $(nproc) < 16 ? $(nproc) : 16 ))
+python ml/train.py --data "$WORK/dataset" --out "$WORK/run" --epochs "${EPOCHS:-30}" --workers "$WORKERS" \
+  --backbone "${BACKBONE:-tf_efficientnet_lite0}" --lr "${LR:-3e-4}" ${INIT_CKPT:+--init "$INIT_CKPT"}
 (cd ml && python export.py --ckpt "$WORK/run/best.pt" --data "$WORK/dataset" --out "$WORK/models")
-cp "$WORK/run/history.json" "$WORK/train.log" "$WORK/models/"
+cp "$WORK/run/history.json" "$WORK/models/"
 
 if [[ -n "${HF_TOKEN:-}" && -n "${HF_REPO:-}" ]]; then
   python - <<PY
@@ -31,7 +44,5 @@ api.upload_folder(folder_path="${WORK}/models", repo_id="${HF_REPO}", commit_mes
 print("uploaded to https://huggingface.co/${HF_REPO}")
 PY
 fi
-echo "done: artifacts in $WORK/models"
-if [[ "${STOP_POD_WHEN_DONE:-0}" == "1" && -n "${RUNPOD_POD_ID:-}" ]]; then
-  runpodctl stop pod "$RUNPOD_POD_ID" || true
-fi
+ls -la "$WORK/models"
+echo "=== DONE: artifacts in $WORK/models ==="

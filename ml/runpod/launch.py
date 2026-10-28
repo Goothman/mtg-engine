@@ -3,7 +3,6 @@
     pip install runpod
     export RUNPOD_API_KEY=...            # https://www.runpod.io/console/user/settings
     export HF_TOKEN=... HF_REPO=you/mtg-engine-card-model   # where results are uploaded
-    export GITHUB_TOKEN=...              # only if the repo is private
     python ml/runpod/launch.py --gpu "NVIDIA GeForce RTX 4090" --epochs 30
 
 Cost: billed per second while the pod runs (an RTX 4090 community pod is roughly
@@ -18,28 +17,23 @@ import os
 
 import runpod
 
-IMAGE = "runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04"
+from bundle import BOOT, make_bundle
+
+IMAGE = "runpod/pytorch:1.0.2-cu1281-torch280-ubuntu2404"
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--gpu", default="NVIDIA GeForce RTX 4090")
+    ap.add_argument("--gpu", default="NVIDIA GeForce RTX 3090")
     ap.add_argument("--cloud", default="ALL", choices=["ALL", "SECURE", "COMMUNITY"])
     ap.add_argument("--epochs", type=int, default=30)
-    ap.add_argument("--repo", default="https://github.com/Goothman/mtg-engine.git")
-    ap.add_argument("--branch", default="main")
     ap.add_argument("--backbone", default="tf_efficientnet_lite0")
     args = ap.parse_args()
 
     runpod.api_key = os.environ["RUNPOD_API_KEY"]
-    repo = args.repo
-    if tok := os.environ.get("GITHUB_TOKEN"):
-        repo = repo.replace("https://", f"https://x-access-token:{tok}@")
-    cmd = (
-        f"bash -c 'git clone --depth 1 -b {args.branch} {repo} /workspace/mtg-engine && "
-        f"bash /workspace/mtg-engine/ml/runpod/train.sh; sleep infinity'"
-    )
-    env = {"EPOCHS": str(args.epochs), "BACKBONE": args.backbone, "STOP_POD_WHEN_DONE": "1"}
+    # The code travels as an env var (see bundle.py), so a private repo needs no git credentials.
+    cmd = f"bash -c '{BOOT}'"
+    env = {"EPOCHS": str(args.epochs), "BACKBONE": args.backbone, "STOP_POD_WHEN_DONE": "1", "ML_BUNDLE": make_bundle()}
     for k in ("HF_TOKEN", "HF_REPO"):
         if os.environ.get(k):
             env[k] = os.environ[k]
