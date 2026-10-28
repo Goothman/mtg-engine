@@ -171,6 +171,7 @@ class Scanner:
         return stats
 
     def _scan_query(self, market, game, query, point, stats, photo: bool = False) -> None:
+        log.info("query %r @ %s%s | so far %s", query, getattr(point, "name", "-"), " (photo)" if photo else "", stats)
         seen: set[str] = set()
         with self.db.session() as s:
             matcher = build_matcher(s, self.settings, game)
@@ -188,6 +189,8 @@ class Scanner:
                 analyse(s, self.settings, listing, matcher, self.recognizer, self.image_client)
                 if listing.photo_scan and self.recognizer is not None and listing.images:
                     stats["photo_checked"] += 1
+                    if stats["photo_checked"] % 100 == 0:
+                        log.info("photo-checked %d ads so far (%d matched)", stats["photo_checked"], stats["matched"])
                 if listing.match_count or listing.needs_review:
                     enrich_seller(s, market, listing, self._sellers)
                 if is_new:

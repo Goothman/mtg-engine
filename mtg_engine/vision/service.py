@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import logging
+from concurrent.futures import ThreadPoolExecutor
 
 import httpx
 from sqlalchemy import select
@@ -15,6 +16,8 @@ from .recognizer import Recognition
 log = logging.getLogger(__name__)
 
 EDITION_CONFIDENT = 0.6
+IMAGE_TIMEOUT = 15  # seconds per photo; a stalled CDN request must not hold the scan
+_downloads = ThreadPoolExecutor(max_workers=8, thread_name_prefix="img")
 
 
 def load_recognizer(settings: Settings):
@@ -23,15 +26,28 @@ def load_recognizer(settings: Settings):
     return CardRecognizer(settings.resolve_path(settings.vision.model_path), settings.resolve_path(settings.vision.gallery_path))
 
 
-def recognize_url(session: Session, client: httpx.Client, recognizer, url: str) -> list[Recognition] | None:
+def _download(client: httpx.Client, url: str) -> bytes | None:
+    try:
+        resp = client.get(url, timeout=IMAGE_TIMEOUT)
+        resp.raise_for_status()
+        return resp.content
+    except Exception as e:
+        log.debug("photo download failed %s: %s", url, e)
+        return None
+
+
+def recognize_url(session: Session, client: httpx.Client, recognizer, url: str, content: bytes | None = None,
+                  prefetched: bool = False) -> list[Recognition] | None:
     """Recognitions for one ad photo, cached per URL and model. None if the photo can't be fetched."""
     cached = session.get(ImageScan, url)
     if cached is not None and cached.model == recognizer.fingerprint:
         return [Recognition(r["card_id"], r["similarity"], r["edition_probs"], None) for r in cached.results]
+    if not prefetched:
+        content = _download(client, url)
+    if content is None:
+        return None
     try:
-        resp = client.get(url)
-        resp.raise_for_status()
-        recs = recognizer.recognize_image(resp.content)
+        recs = recognizer.recognize_image(content)
     except Exception as e:
         log.debug("vision failed on %s: %s", url, e)
         return None
@@ -58,8 +74,12 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
     own_client = client is None
     client = client or make_client(settings)
     try:
-        for url in listing.images[: vc.max_images_per_listing]:
-            recs = recognize_url(session, client, recognizer, url)
+        urls = listing.images[: vc.max_images_per_listing]
+        # download the uncached photos of this ad in parallel; recognition stays sequential
+        todo = [u for u in urls if (c := session.get(ImageScan, u)) is None or c.model != recognizer.fingerprint]
+        fetched = dict(zip(todo, _downloads.map(lambda u: _download(client, u), todo)))
+        for url in urls:
+            recs = recognize_url(session, client, recognizer, url, fetched.get(url), prefetched=url in fetched)
             if recs is None:
                 flags.append("photo_unavailable")
                 continue

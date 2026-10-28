@@ -50,6 +50,9 @@ jobs:
 
       - run: mtg-engine sync-catalog
       - name: Scan
+        # bounded so a slow run still saves its progress and publishes what it found
+        timeout-minutes: 230
+        continue-on-error: true
         env:
           MODE: ${{ inputs.mode || 'all' }}
           MAX_QUERIES: ${{ inputs.max_queries }}
@@ -61,6 +64,7 @@ jobs:
           esac
           if [ -n "$MAX_QUERIES" ]; then args+=(--max-queries "$MAX_QUERIES"); fi
           mtg-engine scan "${args[@]}" | tee scan-stats.json
+          [ -s scan-stats.json ] || echo '{"note": "scan stopped early"}' > scan-stats.json
       - run: mtg-engine enrich-sellers
       - run: mtg-engine agents run
       - run: mtg-engine export-static
