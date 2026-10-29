@@ -181,6 +181,17 @@ def _first(d: dict, *keys: str) -> Any:
     return None
 
 
+IMAGE_RULE = "hw545"  # the photo size Milanuncios' own ad pages request
+
+
+def _image_url(src: str) -> str:
+    """The actor returns bare media URLs (.../images/<id>), which answer 404; the site's own pages
+    request them with a size rule."""
+    if "images.milanuncios.com/api/" in src and "?" not in src:
+        return f"{src}?rule={IMAGE_RULE}"
+    return src
+
+
 def _author_profile(author: dict) -> dict:
     return {k: v for k, v in {
         "name": author.get("name"),
@@ -218,9 +229,9 @@ def parse_apify_item(item: dict) -> RawListing | None:
     for img in _first(item, "photos", "images", "imageUrls", "pictures") or []:
         src = img if isinstance(img, str) else _first(img, "url", "src", "imageUrl", "large", "original")
         if src:
-            images.append(src if str(src).startswith("http") else urljoin(BASE, src))
+            images.append(_image_url(src if str(src).startswith("http") else urljoin(BASE, src)))
     if not images and _first(item, "image", "imageUrl", "thumbnail"):
-        images = [_first(item, "image", "imageUrl", "thumbnail")]
+        images = [_image_url(_first(item, "image", "imageUrl", "thumbnail"))]
     seller = _first(item, "seller", "user", "advertiser")
     seller = seller if isinstance(seller, dict) else {"name": seller} if seller else {}
     # the ad's own geolocation if present, else the seller's (postcode-level) location

@@ -111,7 +111,7 @@ def test_milanuncios_apify_fetcher(settings, monkeypatch):
     assert json.loads(route.calls.last.request.content) == {"text": "magic beta", "maxResults": 5, "sort": "relevance", "isShippable": False}
     a, b = ads
     assert (a.external_id, a.price_eur, a.city, a.region, a.seller_name, a.images) == (
-        "512345678", 1200.0, "Getafe", "Madrid", "Ana", ["https://images.milanuncios.com/a.jpg"])
+        "512345678", 1200.0, "Getafe", "Madrid", "Ana", ["https://images.milanuncios.com/a.jpg"])  # not an api/ URL
     assert a.url == "https://www.milanuncios.com/cartas-coleccionables/black-lotus-512345678.htm"
     assert (b.external_id, b.city, b.images) == ("598765432", "Sevilla", ["https://images.milanuncios.com/b.jpg"])
 
@@ -156,7 +156,8 @@ def test_milanuncios_apify_real_items(settings, monkeypatch):
     assert (a.external_id, a.price_eur, a.city, a.region, a.postal_code) == ("621016983", 55.0, "Málaga", "Málaga", "29006")
     assert (a.lat, a.lon, a.seller_id, a.seller_name) == (36.7185, -4.4355, "1000", "Vendedor 0")
     assert a.url == "https://www.milanuncios.com/cartas-de-coleccion/magic-the-gathering-621016983.htm"
-    assert a.images[0].startswith("https://images.milanuncios.com/") and a.published_at.year == 2026
+    assert a.images[0].startswith("https://images.milanuncios.com/") and a.images[0].endswith("?rule=hw545")
+    assert a.published_at.year == 2026
     assert b.price_eur == 25.0 and b.city == "Las Palmas de Gran Canaria"
     assert m.seller_profile("1000")["name"] == "Vendedor 0" and m.seller_profile("1000")["type"] == "Private"
     m.close()
