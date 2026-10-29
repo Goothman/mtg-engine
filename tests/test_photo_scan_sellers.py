@@ -322,3 +322,10 @@ def test_incremental_scan_keeps_photo_results_on_price_change(settings, db):
         lot = s.get(Listing, "fake:p1")
         assert lot.price_eur == 2000.0 and lot.match_count == 1 and "photo_match" in lot.flags
         assert lot.value_ratio == round(30000 / 2000, 3)
+
+
+def test_bargains_are_not_penalised(settings, db):
+    """A Black Lotus for 50 EUR is exactly what we hunt: no demotion for a huge value/price ratio."""
+    n, flags, matches = _analyse_one(settings, db, RawListing(
+        "fake", "b1", "u", "Cartas viejas", "Black Lotus beta y otras", 50.0), FakeRecognizer({}))
+    assert n == 1 and "implausible_price" not in flags and matches[0][0] == "Black Lotus"

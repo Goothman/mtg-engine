@@ -24,7 +24,6 @@ log = logging.getLogger(__name__)
 
 STALE_AFTER = timedelta(days=7)
 GRADED = re.compile(r"\b(psa|cgc|bgs|beckett|gradead[ao]s?|graded|slab)\b")
-IMPLAUSIBLE_RATIO = 25
 
 
 class _MarketUnreachable(Exception):
@@ -109,19 +108,8 @@ def analyse(session: Session, settings: Settings, listing: Listing, matcher: Tex
             if m.status == "auto":
                 m.confidence = 0.0
         flags.append("excluded")
+    # No penalty for a price far below the cards' value: those are the bargains we're looking for.
     v = value_listing(listing.matches, listing.price_eur)
-    # Too good to be true: worth > IMPLAUSIBLE_RATIO x asking and the cards aren't in the title.
-    # On real ads this is almost always keyword stuffing or a reprint, so demote for human review.
-    if v.ratio and v.ratio > IMPLAUSIBLE_RATIO:
-        title_norm = normalize(listing.title)
-        demoted = False
-        for m in listing.matches:
-            if m.status == "auto" and m.card is not None and m.card.name_norm not in title_norm:
-                m.confidence = round(m.confidence * 0.3, 3)
-                demoted = True
-        if demoted:
-            flags.append("implausible_price")
-            v = value_listing(listing.matches, listing.price_eur)
     listing.flags = flags
     listing.est_total_value, listing.est_score, listing.value_ratio = v.total_value, v.score, v.ratio
     listing.match_count = v.counted
@@ -286,13 +274,14 @@ def enrich_sellers(settings: Settings, db: Database) -> int:
 
 
 def rematch_all(settings: Settings, db: Database, recognizer=None, max_minutes: float | None = None,
-                batch: int = 100) -> int:
+                batch: int = 100, keep_photos: bool = False) -> int:
     """Re-run matching/valuation on stored listings (after a price, config or model change).
 
     With vision, a new model or detector means re-downloading every photo, which may not fit in
     one run: ads are processed by priority (text evidence first, then ads from photo queries,
     newest first), committed in batches, and the run stops at `max_minutes`; the next run
     redoes the rest (photos already re-read hit the cache and are fast).
+    keep_photos: apply the current text/valuation rules but keep stored photo results (fast).
     """
     import time
 
@@ -320,7 +309,7 @@ def rematch_all(settings: Settings, db: Database, recognizer=None, max_minutes: 
                     if listing.game not in settings.games:
                         continue
                     m = matchers.get(listing.game) or matchers.setdefault(listing.game, build_matcher(s, settings, listing.game))
-                    analyse(s, settings, listing, m, recognizer, client)
+                    analyse(s, settings, listing, m, recognizer, client, keep_vision=keep_photos)
                     if listing.match_count:
                         maybe_open_deal(s, settings, listing)
                     else:

@@ -87,12 +87,14 @@ def scan(
 
 @app.command()
 def rematch(max_minutes: Optional[float] = typer.Option(None, help="Stop after this long (resume on the next run)"),
+            keep_photos: bool = typer.Option(False, "--keep-photos", help="Reuse stored photo results; no downloads"),
             config: Optional[str] = ConfigOpt):
     """Re-run matching and valuation on stored listings (after price/config/model changes)."""
     from .pipeline import rematch_all
 
     settings, db = _ctx(config)
-    typer.echo(f"re-analysed {rematch_all(settings, db, _recognizer(settings), max_minutes)} listings")
+    recognizer = None if keep_photos else _recognizer(settings)
+    typer.echo(f"re-analysed {rematch_all(settings, db, recognizer, max_minutes, keep_photos=keep_photos)} listings")
 
 
 @app.command("enrich-sellers")
