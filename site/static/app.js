@@ -128,6 +128,7 @@
   }
 
   const SOFT_FLAGS = new Set(["photo_match", "photo_unavailable"]);
+  const isSoftFlag = (f) => SOFT_FLAGS.has(f) || f.startsWith("photo_error:");
 
   function isPhotoFind(l) {
     return (l.flags || []).includes("photo_match");
@@ -156,7 +157,7 @@
   function rowHTML(l, i) {
     const img = l.images?.[0] ? `<img class="thumb" loading="lazy" src="${esc(l.images[0])}" alt="">` : `<div class="thumb"></div>`;
     const editions = (l.editions || []).map((e) => `<span class="chip edition">${esc(labelFor(e))}</span>`).join("");
-    const flags = (l.flags || []).filter((f) => !SOFT_FLAGS.has(f)).map((f) => `<span class="chip flag" title="red flag">⚠ ${esc(f)}</span>`).join("");
+    const flags = (l.flags || []).filter((f) => !isSoftFlag(f)).map((f) => `<span class="chip flag" title="red flag">⚠ ${esc(f)}</span>`).join("");
     const photo = isPhotoFind(l) ? `<span class="chip photo" title="Card recognised in the ad photos; the text doesn't name it">📷 found in photos</span>` : "";
     const review = l.needs_review ? `<span class="chip review">needs review</span>` : "";
     const demo = l.is_demo ? `<span class="chip demo">demo data</span>` : "";
