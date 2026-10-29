@@ -281,3 +281,23 @@ def test_paid_marketplace_runs_only_generic_photo_queries_first(settings, db):
     settings.marketplaces["fake"].query_kinds = ["photo", "text"]
     Scanner(settings, db, FakeRecognizer({})).run()
     assert seen == ["cartas magic", "lote magic", "mtg alpha"]  # generic first
+
+
+@respx.mock
+def test_photo_failure_reason_is_flagged(settings, db):
+    from mtg_engine.vision.service import apply_vision
+
+    respx.get("https://img.test/refused.jpg").mock(return_value=httpx.Response(403))
+    respx.get("https://img.test/odd.jpg").mock(return_value=httpx.Response(200, content=b"x", headers={"content-type": "image/avif"}))
+
+    class Breaks(FakeRecognizer):
+        def recognize_image(self, image_bytes):
+            raise OSError("cannot identify image file")
+
+    with db.session() as s:
+        listing = Listing(id="fake:e1", marketplace="fake", external_id="e1", game="mtg", url="u", title="Cartas magic",
+                          images=["https://img.test/refused.jpg", "https://img.test/odd.jpg"])
+        s.add(listing)
+        s.flush()
+        flags = apply_vision(s, settings, listing, Breaks({}), text_evidence=False)
+    assert {"photo_unavailable", "photo_error:http_403", "photo_error:decode:image/avif"} <= set(flags)

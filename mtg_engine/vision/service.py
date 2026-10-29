@@ -26,14 +26,28 @@ def load_recognizer(settings: Settings):
     return CardRecognizer(settings.resolve_path(settings.vision.model_path), settings.resolve_path(settings.vision.gallery_path))
 
 
+# Why the last attempt on a photo failed ("http_403", "timeout", "decode:image/avif"...), so the
+# ad's flags say whether a site refuses image downloads or serves a format we can't read.
+_failures: dict[str, str] = {}
+
+
 def _download(client: httpx.Client, url: str) -> bytes | None:
     try:
         resp = client.get(url, timeout=IMAGE_TIMEOUT)
         resp.raise_for_status()
+        _content_types[url] = resp.headers.get("content-type", "?")
         return resp.content
+    except httpx.HTTPStatusError as e:
+        _failures[url] = f"http_{e.response.status_code}"
+    except httpx.TimeoutException:
+        _failures[url] = "timeout"
     except Exception as e:
-        log.debug("photo download failed %s: %s", url, e)
-        return None
+        _failures[url] = type(e).__name__
+    log.debug("photo download failed %s: %s", url, _failures[url])
+    return None
+
+
+_content_types: dict[str, str] = {}
 
 
 def recognize_url(session: Session, client: httpx.Client, recognizer, url: str, content: bytes | None = None,
@@ -49,6 +63,7 @@ def recognize_url(session: Session, client: httpx.Client, recognizer, url: str, 
     try:
         recs = recognizer.recognize_image(content)
     except Exception as e:
+        _failures[url] = f"decode:{_content_types.get(url, '?').split(';')[0]}"
         log.debug("vision failed on %s: %s", url, e)
         return None
     results = [{"card_id": r.card_id, "similarity": round(r.similarity, 4),
@@ -94,7 +109,7 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
         for url in urls:
             recs = recognize_url(session, client, recognizer, url, fetched.get(url), prefetched=url in fetched)
             if recs is None:
-                flags.append("photo_unavailable")
+                flags += ["photo_unavailable", f"photo_error:{_failures.pop(url, 'unknown')}"]
                 continue
             checked += 1
             readings += [(url, r) for r in recs]
