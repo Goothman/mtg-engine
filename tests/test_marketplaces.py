@@ -145,7 +145,7 @@ def test_milanuncios_apify_run_budget(settings, monkeypatch):
 
     cfg = settings.marketplaces["milanuncios"].model_copy(
         update={"fetcher": "apify", "max_results": 100, "max_results_per_run": 250})
-    route = mock_apify([])
+    route = mock_apify([{"id": "600000001", "title": "Cartas magic", "url": "/x/a-600000001.htm"}])
     monkeypatch.setenv("APIFY_TOKEN", "t")
     m = Milanuncios(settings, cfg)
     for q in ("a", "b", "c", "d"):
