@@ -93,7 +93,7 @@ def rematch(max_minutes: Optional[float] = typer.Option(None, help="Stop after t
     from .pipeline import rematch_all
 
     settings, db = _ctx(config)
-    recognizer = None if keep_photos else _recognizer(settings)
+    recognizer = _recognizer(settings)  # with --keep-photos it only reads stored photo results
     typer.echo(f"re-analysed {rematch_all(settings, db, recognizer, max_minutes, keep_photos=keep_photos)} listings")
 
 

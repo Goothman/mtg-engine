@@ -329,3 +329,30 @@ def test_bargains_are_not_penalised(settings, db):
     n, flags, matches = _analyse_one(settings, db, RawListing(
         "fake", "b1", "u", "Cartas viejas", "Black Lotus beta y otras", 50.0), FakeRecognizer({}))
     assert n == 1 and "implausible_price" not in flags and matches[0][0] == "Black Lotus"
+
+
+@respx.mock
+def test_fast_rematch_keeps_photo_vetoes(settings, db):
+    """Regression: re-applying rules from stored readings must not undo a white-border veto."""
+    from mtg_engine.pipeline import rematch_all
+
+    respx.get("https://img.test/white.jpg").mock(return_value=httpx.Response(200, content=b"white"))
+    rec = FakeRecognizer({b"white": [Recognition("b-ritual", 0.85, probs("2ed", 0.7), None)]})
+    n, flags, _ = _analyse_one(settings, db, RawListing(
+        "fake", "w1", "u", "Dark Ritual Beta", "", 30.0, images=["https://img.test/white.jpg"]), rec)
+    assert n == 0 and "vision:white_border" in flags
+    calls = rec.calls
+    rematch_all(settings, db, rec, keep_photos=True)
+    with db.session() as s:
+        listing = s.get(Listing, "fake:w1")
+        assert listing.match_count == 0 and "vision:white_border" in listing.flags
+    assert rec.calls == calls  # nothing downloaded or recognised again
+
+
+def test_seller_with_proxy_ads_is_excluded(settings, db):
+    rec = FakeRecognizer({})
+    _analyse_one(settings, db, RawListing("fake", "x1", "u", "Cartas Magic", "3€ cada una P r x y - Black Lotus beta",
+                                          3.0, seller_id="proxyseller"), rec)
+    n, flags, _ = _analyse_one(settings, db, RawListing("fake", "x2", "u", "Balance. Magic. Mtg", "Black Lotus beta 15€",
+                                                        15.0, seller_id="proxyseller"), rec)
+    assert n == 0 and "seller_sells_proxies" in flags

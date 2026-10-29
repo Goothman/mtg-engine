@@ -109,6 +109,8 @@ games:
                     portuguese, ruso, rusa, rusos, rusas, russian,
                     "en español", "en castellano", "version española", "edicion española",
                     foil, foils,  # Alpha/Beta were never printed in foil
+                    # black-bordered later printings: Foreign/Fourth Black Border
+                    fbb, ivbb, 4bb, "foreign black border", "4th black border", "cuarta borde negro",
                     # black-bordered reprints sold as such: never Alpha/Beta
                     "collector's edition", "collectors edition", "collector edition", "edicion coleccionista",
                     "international edition", "edicion internacional"]

@@ -102,3 +102,18 @@ def test_other_printing_flags(settings, refs):
 def test_price_placeholder_flag(settings, refs):
     r = TextMatcher(refs, settings.games["mtg"]).match("Black Lotus LEB", "Más detalles y precio (x10) negociable por mensajería")
     assert "price_placeholder" in r.flags and r.matches[0].confidence == 0.9
+
+
+def test_disguised_proxy_and_negation(refs):
+    from mtg_engine.config import load_settings
+    from mtg_engine.matching import TextMatcher
+
+    m = TextMatcher(refs, load_settings().games["mtg"])
+    assert "proxy" in m.match("Cartas Magic", "3€ cada una\nP r x y\n- Black Lotus").flags
+    for disguised in ("prxy", "pr0xy", "p.r.o.x.y", "PROXIES"):
+        assert "proxy" in m.match("Cartas", f"Black Lotus {disguised}").flags, disguised
+    for honest in ("100% original, no proxy", "no son proxys", "not proxies", "autenticas, no se venden proxys",
+                   "cartas originales! nada de proxys", "sin proxies"):
+        assert "proxy" not in m.match("Black Lotus beta", honest).flags, honest
+    assert "proxy" not in m.match("Black Lotus beta", "approximately mint").flags
+    assert "proxy" in m.match("Deck", "No incluye caja. Cartas proxy de alta calidad").flags  # other sentence

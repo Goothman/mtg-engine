@@ -78,6 +78,10 @@ def _kw_pattern(kw: str) -> tuple[re.Pattern[str], bool]:
     return re.compile(rf"(?<![A-Za-z0-9]){re.escape(text)}(?![A-Za-z0-9])"), case_sensitive
 
 
+# "proxy" and its disguises: P r x y, prxy, pr0xy, p.r.o.x.y, proxies
+_PROXY = re.compile(r"(?<![a-z0-9])p[\s.\-_*]*r[\s.\-_*]*[o0]?[\s.\-_*]*x[\s.\-_*]*(?:y|i)(?:e?s)?(?![a-z0-9])")
+# a negation shortly before it: "no proxy", "no se venden proxys", "nada de proxys", "sin proxies"
+_NEGATION = re.compile(r"(?<![a-z])(no|sin|not|non|ni|nada|ningun[ao]?|nunca|cero|zero|never)(?![a-z])")
 # asking price is a placeholder ("precio (x10)", "consultar precio"...): seen on real ads
 _PRICE_PLACEHOLDER = re.compile(
     r"precio\s*\(?x\s?\d+|x\s?\d+\)?\s*(?:el\s+)?precio|precio real|consultar (?:el )?precio|"
@@ -168,6 +172,17 @@ class TextMatcher:
         norm, cased = normalize(raw), strip_accents(raw)
         return [code for code, pats in self.edition_res.items() if any(p.search(cased if cs else norm) for p, cs in pats)]
 
+    @staticmethod
+    def _proxy_claim(text: str) -> bool:
+        """'proxy' written plainly or disguised ('P r x y', 'prxy', 'pr0xy', 'p.r.o.x.y'), unless
+        negated ('no proxy', 'sin proxys', 'not proxies')."""
+        low = strip_accents(text.lower())
+        for m in _PROXY.finditer(low):
+            before = re.split(r"[.!?\n]", low[max(0, m.start() - 30) : m.start()])[-1]  # same sentence only
+            if not _NEGATION.search(before):
+                return True
+        return False
+
     def match(self, title: str, description: str = "") -> MatchResult:
         kept, stuffed = split_stuffing(description, self.tags)
         raw = "\n".join([title, *kept])
@@ -176,7 +191,9 @@ class TextMatcher:
         res.editions = self._editions(raw)
         title_editions = self._editions(title)
         title_norm = normalize(title)
-        res.flags = [name for name, p in self.flag_res if p.search(norm)]
+        res.flags = [name for name, p in self.flag_res if p.search(norm) and name not in ("proxy", "proxys")]
+        if self._proxy_claim(f"{title}\n{description}"):
+            res.flags.append("proxy")
         if stuffed:
             res.flags.append("keyword_stuffing")
         if _PRICE_PLACEHOLDER.search(normalize(f"{title} {description}")):

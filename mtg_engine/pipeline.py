@@ -6,7 +6,7 @@ import re
 from datetime import timedelta
 
 import httpx
-from sqlalchemy import select, update
+from sqlalchemy import String, cast, select, update
 from sqlalchemy.orm import Session
 
 from . import events, geo
@@ -65,18 +65,16 @@ def analyse(session: Session, settings: Settings, listing: Listing, matcher: Tex
             image_client=None, keep_vision: bool = False) -> None:
     """(Re)compute matches + valuation for one listing. Manual confirmations/rejections survive.
 
-    keep_vision: re-read the text and revalue (e.g. a known ad changed its price) but keep the
-    earlier photo results instead of downloading and recognising the photos again.
+    keep_vision: re-read the text and revalue (e.g. a known ad changed its price) using the stored
+    photo readings (vetoes, support, photo-only finds) instead of downloading the photos again.
     """
     manual = {m.card_id: m for m in listing.matches if m.status != "auto"}
-    kept = {m.card_id: m for m in listing.matches if keep_vision and m.status == "auto" and "vision" in (m.source or "")}
-    old_photo_flags = [f for f in listing.flags or [] if f.startswith(("photo", "vision:"))] if keep_vision else []
     for m in list(listing.matches):
-        if m.status == "auto" and m.card_id not in kept:
+        if m.status == "auto":
             listing.matches.remove(m)
     result = matcher.match(listing.title, listing.description)
     for tm in result.matches:
-        if tm.card.id in manual or tm.card.id in kept:
+        if tm.card.id in manual:
             continue
         listing.matches.append(
             Match(
@@ -89,19 +87,26 @@ def analyse(session: Session, settings: Settings, listing: Listing, matcher: Tex
                 edition_ambiguous=tm.edition_ambiguous,
             )
         )
-    flags = list(result.flags) + old_photo_flags
-    excluded = sorted({normalize(f) for f in settings.games[listing.game].exclude_flags} & set(flags))
+    flags = list(result.flags)
+    # a seller with any proxy ad: their cheap "Alpha/Beta" cards are copies too
+    if listing.seller_id and "proxy" not in flags and session.scalar(select(Listing.id).where(
+            Listing.seller_id == listing.seller_id, Listing.marketplace == listing.marketplace,
+            Listing.id != listing.id, cast(Listing.flags, String).like('%"proxy"%')).limit(1)):
+        flags.append("seller_sells_proxies")
+    # proxies (detected with negations handled) are never real cards, however cheap
+    excluded = sorted(({normalize(f) for f in settings.games[listing.game].exclude_flags} | {"proxy", "seller_sells_proxies"})
+                      & set(flags))
     # Vision on candidates (an edition named or a card matched) and on every ad found by a
     # photo query; image downloads are the expensive part, and results are cached per photo.
     text_evidence = bool(result.editions or result.matches)
-    if recognizer is not None and not keep_vision and listing.images and (text_evidence or listing.photo_scan) and not excluded:
+    if recognizer is not None and listing.images and (text_evidence or listing.photo_scan) and not excluded:
         from .vision.service import apply_vision
 
         # The "photos don't match" check is only trusted when the edition claim is weak: not in
         # the title (e.g. "Myr alfa" in a card list) and not a graded card (slabs photograph badly).
         strong_claim = bool(matcher.match(listing.title, "").editions) or bool(GRADED.search(normalize(f"{listing.title} {listing.description}")))
         flags += apply_vision(session, settings, listing, recognizer, text_evidence=text_evidence,
-                              strong_text_claim=strong_claim, client=image_client)
+                              strong_text_claim=strong_claim, client=image_client, cache_only=keep_vision)
     listing.editions = result.editions
     if excluded:  # e.g. "coreano": not an English Alpha/Beta card, whatever the photos look like
         for m in listing.matches:

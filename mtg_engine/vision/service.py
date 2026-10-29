@@ -51,10 +51,13 @@ _content_types: dict[str, str] = {}
 
 
 def recognize_url(session: Session, client: httpx.Client, recognizer, url: str, content: bytes | None = None,
-                  prefetched: bool = False) -> list[Recognition] | None:
-    """Recognitions for one ad photo, cached per URL and model. None if the photo can't be fetched."""
+                  prefetched: bool = False, cache_only: bool = False) -> list[Recognition] | None:
+    """Recognitions for one ad photo, cached per URL and model. None if the photo can't be fetched.
+
+    cache_only: use whatever reading is stored for the photo (any model version), never download.
+    """
     cached = session.get(ImageScan, url)
-    if cached is not None and cached.model == recognizer.fingerprint:
+    if cached is not None and (cache_only or cached.model == recognizer.fingerprint):
         return [Recognition(r["card_id"], r["similarity"], r["edition_probs"], None) for r in cached.results]
     if not prefetched:
         content = _download(client, url)
@@ -80,7 +83,7 @@ WHITE_BORDER = ("2ed", "3ed")  # edition classes the model knows with white bord
 
 def apply_vision(session: Session, settings: Settings, listing: Listing, recognizer, *,
                  text_evidence: bool = True, strong_text_claim: bool = False,
-                 client: httpx.Client | None = None) -> list[str]:
+                 client: httpx.Client | None = None, cache_only: bool = False) -> list[str]:
     """Check the listing photos against the text matches and add cards seen only in photos.
 
     All photo readings are collected first, then:
@@ -97,17 +100,21 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
     flags: list[str] = []
     targets = set(settings.games[listing.game].target_codes)
     by_name = {m.card.name: m for m in listing.matches if m.card is not None}
-    own_client = client is None
-    client = client or make_client(settings)
+    own_client = client is None and not cache_only
+    client = client or (None if cache_only else make_client(settings))
     readings: list[tuple[str, Recognition]] = []
     checked = 0
     try:
         urls = listing.images[: vc.max_images_per_listing]
         # download the uncached photos of this ad in parallel; recognition stays sequential
-        todo = [u for u in urls if (c := session.get(ImageScan, u)) is None or c.model != recognizer.fingerprint]
+        todo = [] if cache_only else [
+            u for u in urls if (c := session.get(ImageScan, u)) is None or c.model != recognizer.fingerprint]
         fetched = dict(zip(todo, _downloads.map(lambda u: _download(client, u), todo)))
         for url in urls:
-            recs = recognize_url(session, client, recognizer, url, fetched.get(url), prefetched=url in fetched)
+            recs = recognize_url(session, client, recognizer, url, fetched.get(url), prefetched=url in fetched,
+                                 cache_only=cache_only)
+            if recs is None and cache_only:  # never read: leave it for a scan with downloads
+                continue
             if recs is None:
                 flags += ["photo_unavailable", f"photo_error:{_failures.pop(url, 'unknown')}"]
                 continue
