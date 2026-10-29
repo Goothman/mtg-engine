@@ -195,9 +195,9 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
             ) or card
         if chosen.set_code not in targets:
             continue
-        vconf = round(r.similarity * (p if edition in targets else 0.5), 3)
-        if photo_only:
-            vconf = round(r.similarity * p_ab, 3)
+        # Confidence uses Alpha+Beta combined: the model often splits between the two (they differ
+        # only in corner radius), which says nothing against the card being one of them.
+        vconf = round(r.similarity * (sum(r.edition_probs.get(t, 0.0) for t in targets) if edition in targets else 0.5), 3)
         existing = by_name.get(chosen.name)
         if existing is not None:
             if existing.source == "vision":
