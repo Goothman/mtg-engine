@@ -87,7 +87,8 @@ def scan(
 
 @app.command()
 def rematch(max_minutes: Optional[float] = typer.Option(None, help="Stop after this long (resume on the next run)"),
-            keep_photos: bool = typer.Option(False, "--keep-photos", help="Reuse stored photo results; no downloads"),
+            keep_photos: bool = typer.Option(False, "--keep-photos",
+                                             help="Reuse stored photo results; only photos never read are downloaded"),
             config: Optional[str] = ConfigOpt):
     """Re-run matching and valuation on stored listings (after price/config/model changes)."""
     from .pipeline import rematch_all
@@ -100,7 +101,6 @@ def rematch(max_minutes: Optional[float] = typer.Option(None, help="Stop after t
 @app.command("import-ads")
 def import_ads(path: str, game: str = "mtg", photo: bool = typer.Option(True, "--photo/--no-photo",
                help="Check every ad's photos (as for a generic search)"),
-               all_images: bool = typer.Option(True, "--all-images/--max-images", help="Check every photo of each ad"),
                config: Optional[str] = ConfigOpt):
     """Analyse ads scraped elsewhere: Apify milanuncios items, a page-scraper export (ad_title...)
     or a gallery export ({"listings": [{external_id, url, title, price_text, images}]})."""
@@ -122,7 +122,7 @@ def import_ads(path: str, game: str = "mtg", photo: bool = typer.Option(True, "-
     raws = [r for it in items if isinstance(it, dict) for r in [parse(it)] if r is not None]
     typer.echo(f"{len(raws)}/{len(items)} ads parsed, {sum(len(r.images) for r in raws)} photos")
     recognizer = _recognizer(settings) if photo else None
-    typer.echo(json.dumps(import_listings(settings, db, recognizer, raws, game, photo=photo, all_images=all_images)))
+    typer.echo(json.dumps(import_listings(settings, db, recognizer, raws, game, photo=photo)))
 
 
 @app.command("enrich-sellers")

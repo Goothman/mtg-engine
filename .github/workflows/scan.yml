@@ -95,9 +95,12 @@ jobs:
             | sed -e 's/%/%25/g' -e 's/^/::notice title=scan::/'
           echo "::notice title=stats::$(cat scan-stats.json)"
           [ -f import-stats.json ] && echo "::notice title=import::$(tr '\n' ' ' < import-stats.json)" || true
-      - name: Apply the current rules to all stored ads (stored photo results, no downloads)
+      - name: Apply the current rules to all stored ads (stored photo results; reads photos never read)
         if: ${{ !inputs.recheck }}
-        run: mtg-engine rematch --keep-photos
+        # bounded: a backlog of unread photos is worked off over several runs, priority ads first
+        run: mtg-engine rematch --keep-photos --max-minutes 120
+        timeout-minutes: 140
+        continue-on-error: true
       - name: Re-check all ads with the current rules (also verifies photos of text matches)
         if: ${{ inputs.recheck }}
         # a new model/detector re-reads every photo: bounded, continues on the next run

@@ -134,7 +134,9 @@ vision:
   model_path: models/card_model.onnx
   gallery_path: models/gallery.npz
   min_similarity: 0.55
-  max_images_per_listing: 6
+  # Every photo of every ad. Do not cap this: the point is finding the unrecognised Alpha/Beta
+  # card in the 9th photo of a bulk lot.
+  max_images_per_listing: null
   # matches seen only in photos (no supporting text) must clear a higher bar
   photo_min_similarity: 0.7
   photo_min_edition_prob: 0.7

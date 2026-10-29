@@ -79,8 +79,8 @@ def analyse(session: Session, settings: Settings, listing: Listing, matcher: Tex
             image_client=None, keep_vision: bool = False) -> None:
     """(Re)compute matches + valuation for one listing. Manual confirmations/rejections survive.
 
-    keep_vision: re-read the text and revalue (e.g. a known ad changed its price) using the stored
-    photo readings (vetoes, support, photo-only finds) instead of downloading the photos again.
+    keep_vision: re-read the text and revalue (e.g. a known ad changed its price) reusing stored
+    photo readings (vetoes, support, photo-only finds); only photos never read are downloaded.
     """
     manual = {m.card_id: m for m in listing.matches if m.status != "auto"}
     for m in list(listing.matches):
@@ -120,7 +120,7 @@ def analyse(session: Session, settings: Settings, listing: Listing, matcher: Tex
         # the title (e.g. "Myr alfa" in a card list) and not a graded card (slabs photograph badly).
         strong_claim = bool(matcher.match(listing.title, "").editions) or bool(GRADED.search(normalize(f"{listing.title} {listing.description}")))
         flags += apply_vision(session, settings, listing, recognizer, text_evidence=text_evidence,
-                              strong_text_claim=strong_claim, client=image_client, cache_only=keep_vision)
+                              strong_text_claim=strong_claim, client=image_client, reuse_cached=keep_vision)
     listing.editions = result.editions
     if excluded:  # e.g. "coreano": not an English Alpha/Beta card, whatever the photos look like
         for m in listing.matches:
@@ -266,15 +266,8 @@ class _StaticMarket:
         return None
 
 
-def import_listings(settings: Settings, db: Database, recognizer, listings, game: str, photo: bool = True,
-                    all_images: bool = False) -> dict:
-    """Analyse listings scraped elsewhere exactly like a scan would (photo checks included).
-
-    all_images: check every photo of each ad, not just the first vision.max_images_per_listing.
-    """
-    if all_images:
-        settings = settings.model_copy(deep=True)
-        settings.vision.max_images_per_listing = max((len(r.images) for r in listings), default=0) or 1
+def import_listings(settings: Settings, db: Database, recognizer, listings, game: str, photo: bool = True) -> dict:
+    """Analyse listings scraped elsewhere exactly like a scan would (photo checks included)."""
     scanner = Scanner(settings, db, recognizer)
     scanner.full_analysis = True  # the point of an import is checking these ads' photos
     stats = {"fetched": 0, "new": 0, "updated": 0, "matched": 0, "photo_checked": 0, "deals_opened": 0, "errors": 0}
@@ -340,7 +333,8 @@ def rematch_all(settings: Settings, db: Database, recognizer=None, max_minutes: 
     one run: ads are processed by priority (text evidence first, then ads from photo queries,
     newest first), committed in batches, and the run stops at `max_minutes`; the next run
     redoes the rest (photos already re-read hit the cache and are fast).
-    keep_photos: apply the current text/valuation rules but keep stored photo results (fast).
+    keep_photos: apply the current rules reusing stored photo results; photos never read (e.g. beyond
+    an earlier photo limit) are downloaded and read now.
     """
     import time
 

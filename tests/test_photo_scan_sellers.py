@@ -369,10 +369,46 @@ def test_import_merges_partial_records(settings, db):
     gallery = parse_listing_item({"external_id": "611890139", "url": "u", "title": "cartas Magic", "price_text": "35 €",
                                   "images": ["https://images.milanuncios.com/api/v1/ma-ad-media-pro/images/x",
                                              "https://images.milanuncios.com/api/v1/ma-ad-media-pro/images/y"]})
-    stats = import_listings(settings, db, None, [gallery], "mtg", photo=False, all_images=True)
+    stats = import_listings(settings, db, None, [gallery], "mtg", photo=False)
     assert stats["fetched"] == 1
     with db.session() as s:
         listing = s.get(Listing, "milanuncios:611890139")
         assert (listing.description, listing.city, listing.region, listing.seller_name) == (
             "Lote de 350 cartas", "Elche", "Alicante", "Vendedor")
         assert listing.price_eur == 35.0 and len(listing.images) == 2 and listing.images[0].endswith("?rule=hw545")
+
+
+@respx.mock
+def test_needle_in_the_ninth_photo(settings, db):
+    """Every photo is checked: the Alpha card is only in the last of nine photos."""
+    urls = [f"https://img.test/bulk{i}.jpg" for i in range(1, 10)]
+    for i, u in enumerate(urls, 1):
+        respx.get(u).mock(return_value=httpx.Response(200, content=f"bulk{i}".encode()))
+    rec = FakeRecognizer({b"bulk9": [Recognition("b-lotus", 0.86, probs("lea", 0.9), None)]})
+    from mtg_engine.vision.service import apply_vision
+
+    with db.session() as s:
+        listing = Listing(id="fake:n1", marketplace="fake", external_id="n1", game="mtg", url="u",
+                          title="Lote cartas magic", images=urls)
+        s.add(listing)
+        s.flush()
+        assert "photo_match" in apply_vision(s, settings, listing, rec, text_evidence=False)
+    assert rec.calls == 9
+
+
+@respx.mock
+def test_fast_rematch_reads_photos_never_read(settings, db):
+    """Catch-up: stored readings are reused, photos never read (e.g. beyond an old limit) are read."""
+    from mtg_engine.models import ImageScan
+    from mtg_engine.pipeline import rematch_all
+
+    respx.get("https://img.test/new7.jpg").mock(return_value=httpx.Response(200, content=b"new7"))
+    rec = FakeRecognizer({b"new7": [Recognition("b-lotus", 0.86, probs("lea", 0.9), None)]})
+    with db.session() as s:
+        s.add(ImageScan(url="https://img.test/old1.jpg", model="older-model", results=[]))
+        s.add(Listing(id="fake:c7", marketplace="fake", external_id="c7", game="mtg", url="u", title="Cartas magic",
+                      photo_scan=True, images=["https://img.test/old1.jpg", "https://img.test/new7.jpg"]))
+    rematch_all(settings, db, rec, keep_photos=True)
+    assert rec.calls == 1  # only the unread photo
+    with db.session() as s:
+        assert s.get(Listing, "fake:c7").match_count == 1

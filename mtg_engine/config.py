@@ -94,7 +94,7 @@ class VisionConfig(BaseModel):
     model_path: str = "models/card_model.onnx"
     gallery_path: str = "models/gallery.npz"
     min_similarity: float = 0.55
-    max_images_per_listing: int = 6
+    max_images_per_listing: int | None = None  # None = every photo (a valuable card can be in any of them)
     # Stricter bar for matches found only in photos (no supporting text): generic lots are
     # mostly modern cards, and the model has only seen Alpha/Beta and their look-alike editions.
     photo_min_similarity: float = 0.7
