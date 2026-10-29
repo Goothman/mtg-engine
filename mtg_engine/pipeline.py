@@ -129,6 +129,7 @@ class Scanner:
         self.recognizer = recognizer
         self.image_client = None
         self._sellers: dict[str, dict] = {}
+        self.full_analysis = False  # True: known ads get the photo check too (imports)
 
     def run(self, games: list[str] | None = None, marketplaces: list[str] | None = None, max_queries: int | None = None,
             photo_queries: bool | None = None) -> dict:
@@ -201,14 +202,14 @@ class Scanner:
                 newly_photo = photo and not listing.photo_scan
                 listing.photo_scan = listing.photo_scan or photo
                 photo_now = newly_photo and self.recognizer is not None  # never photo-checked before
-                if not (is_new or changed or photo_now):
+                if not (is_new or changed or photo_now or self.full_analysis):
                     continue
                 s.flush()
                 # Incremental: new ads (and ads never photo-checked) get the full analysis; known ads
                 # only get their text re-read and value recalculated, keeping earlier photo results.
                 analyse(s, self.settings, listing, matcher, self.recognizer, self.image_client,
-                        keep_vision=not (is_new or photo_now))
-                if (is_new or photo_now) and listing.photo_scan and self.recognizer is not None and listing.images:
+                        keep_vision=not (is_new or photo_now or self.full_analysis))
+                if (is_new or photo_now or self.full_analysis) and listing.photo_scan and self.recognizer is not None and listing.images:
                     stats["photo_checked"] += 1
                     if stats["photo_checked"] % 100 == 0:
                         log.info("photo-checked %d ads so far (%d matched)", stats["photo_checked"], stats["matched"])
@@ -236,6 +237,36 @@ class Scanner:
             s.execute(update(Listing).where(Listing.id.in_(stale)).values(status="gone"))
             for lid in stale:
                 events.emit(s, events.LISTING_GONE, lid)
+
+
+class _StaticMarket:
+    """Feeds already-scraped listings (an export file) through the scan pipeline."""
+
+    def __init__(self, listings):
+        self.listings = listings
+
+    def search(self, query, point=None):
+        return iter(self.listings)
+
+    def seller_profile(self, seller_id):
+        return None
+
+
+def import_listings(settings: Settings, db: Database, recognizer, listings, game: str, photo: bool = True) -> dict:
+    """Analyse listings scraped elsewhere exactly like a scan would (photo checks included)."""
+    scanner = Scanner(settings, db, recognizer)
+    scanner.full_analysis = True  # the point of an import is checking these ads' photos
+    stats = {"fetched": 0, "new": 0, "updated": 0, "matched": 0, "photo_checked": 0, "deals_opened": 0, "errors": 0}
+    if recognizer is not None:
+        from .http import make_client
+
+        scanner.image_client = make_client(settings)
+    try:
+        scanner._scan_query(_StaticMarket(listings), game, "import", None, stats, photo=photo)
+    finally:
+        if scanner.image_client is not None:
+            scanner.image_client.close()
+    return stats
 
 
 def enrich_seller(session: Session, market, listing: Listing, cache: dict[str, dict] | None = None) -> None:

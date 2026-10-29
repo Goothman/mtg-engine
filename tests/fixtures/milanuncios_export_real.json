@@ -1,0 +1,46 @@
+[
+ {
+  "ad_title": "cartas Magic 2",
+  "current_price": {
+   "value": 30,
+   "currency": "EUR",
+   "symbol": "€"
+  },
+  "previous_price": {
+   "value": 35,
+   "currency": "EUR",
+   "symbol": "€"
+  },
+  "description": "Lote de cartas de Magic: The Gathering Se vende lote de unas 350 cartas Magic de varios idiomas : inglés, español y francés. Son cartas comunes y tierras. Son de múltiples expansiones: M9, M10, M12 M1",
+  "location": "Elche (Alicante)",
+  "seller_name": "Vendedor 0",
+  "seller_ratings": "(28 valoraciones)",
+  "reference": "Referencia: 611890139",
+  "published_date": "Publicado el 27/08/2026 a las 11:42",
+  "product_condition": "en buen estado",
+  "image_urls": [
+   "https://images.milanuncios.com/api/v1/ma-ad-media-pro/images/49ebf2a8-61bc-473d-b92f-bfadf3bda1c8?rule=detail_640x480"
+  ],
+  "product_page_url": "https://www.milanuncios.com/cartas-de-coleccion/cartas-magic-611890139.htm",
+  "input": {
+   "url": "https://www.milanuncios.com/anuncios/?s=cartas%20magic"
+  }
+ },
+ {
+  "ad_title": "Lote cartas Magic The Gathering 0",
+  "description": "Colección de cartas Magic: The Gathering en buen estado. Incluye múltiples cartas de diferentes colores y efectos. - Cartas de juego coleccionables - Diferentes tipos y colores de maná - Ilustraciones",
+  "location": "Valencia (Valencia)",
+  "seller_name": "Vendedor 1",
+  "seller_ratings": "(1 valoración)",
+  "reference": "Referencia: 617543096",
+  "published_date": "Publicado el 30/09/2026 a las 18:06",
+  "product_condition": "en buen estado",
+  "image_urls": [
+   "https://images.milanuncios.com/api/v1/ma-ad-media-pro/images/adcf638f-03ae-4189-aed9-7cb9a828f45a?rule=detail_640x480"
+  ],
+  "product_page_url": "https://www.milanuncios.com/cartas-de-coleccion/lote-cartas-magic-the-gathering-617543096.htm",
+  "input": {
+   "url": "https://www.milanuncios.com/anuncios/?s=cartas%20magic"
+  }
+ }
+]

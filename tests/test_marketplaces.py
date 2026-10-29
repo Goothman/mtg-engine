@@ -215,3 +215,15 @@ def test_milanuncios_apify_plan_limit_is_reported(settings, monkeypatch):
     m = Milanuncios(settings, settings.marketplaces["milanuncios"].model_copy(update={"fetcher": "apify"}))
     with pytest.raises(BlockedError, match="Free plan limit"):
         list(m.search("cartas magic"))
+
+
+def test_milanuncios_export_items():
+    """Ads exported by a page scraper (fields ad_title, reference, image_urls...), seller anonymised."""
+    from mtg_engine.marketplaces.milanuncios import parse_export_item
+
+    items = json.loads((Path(__file__).parent / "fixtures" / "milanuncios_export_real.json").read_text())
+    a, b = (parse_export_item(i) for i in items)
+    assert (a.external_id, a.title, a.price_eur, a.city, a.region) == ("611890139", "cartas Magic 2", 30.0, "Elche", "Alicante")
+    assert a.url.endswith("-611890139.htm") and a.images[0].endswith("?rule=detail_640x480")  # keeps its size rule
+    assert a.seller_name == "Vendedor 0" and (b.city, b.region) == ("Valencia", "Valencia")
+    assert (b.published_at.year, b.published_at.month, b.published_at.day, b.published_at.hour) == (2026, 9, 30, 18)

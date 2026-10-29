@@ -268,6 +268,44 @@ def parse_apify_item(item: dict) -> RawListing | None:
     )
 
 
+_REF = re.compile(r"(\d{6,})")
+_DATE = re.compile(r"(\d{1,2})/(\d{1,2})/(\d{4})(?:\D+(\d{1,2}):(\d{2}))?")
+
+
+def parse_export_item(item: dict) -> RawListing | None:
+    """One ad from a page-scraper export (fields ad_title, current_price, image_urls,
+    product_page_url, reference "Referencia: 611890139", location "Ciudad (Provincia)",
+    published_date "Publicado el 27/08/2026 a las 11:42", seller_name)."""
+    from datetime import datetime, timezone
+
+    url = item.get("product_page_url") or ""
+    ref = _REF.search(str(item.get("reference") or "")) or _ID_IN_URL.search(url)
+    if not ref:
+        return None
+    loc = str(item.get("location") or "")
+    m = re.match(r"\s*(.*?)\s*\(([^)]*)\)\s*$", loc)
+    city, province = (m.group(1), m.group(2)) if m else (loc or None, None)
+    published = None
+    if d := _DATE.search(str(item.get("published_date") or "")):
+        day, month, year, hh, mm = d.groups()
+        published = datetime(int(year), int(month), int(day), int(hh or 0), int(mm or 0), tzinfo=timezone.utc)
+    price = item.get("current_price")
+    return RawListing(
+        marketplace="milanuncios",
+        external_id=ref.group(1),
+        url=url or f"{BASE}/anuncios/r{ref.group(1)}.htm",
+        title=item.get("ad_title") or "",
+        description=item.get("description") or "",
+        price_eur=_num(price.get("value") if isinstance(price, dict) else price),
+        city=city,
+        region=province,
+        seller_name=item.get("seller_name"),
+        images=[_image_url(u) for u in item.get("image_urls") or [] if u],
+        published_at=published,
+        raw=item,
+    )
+
+
 def in_categories(item: dict, slugs: list[str]) -> bool:
     if not slugs or not item.get("categories"):  # no category information: keep
         return True

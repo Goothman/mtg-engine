@@ -97,6 +97,22 @@ def rematch(max_minutes: Optional[float] = typer.Option(None, help="Stop after t
     typer.echo(f"re-analysed {rematch_all(settings, db, recognizer, max_minutes, keep_photos=keep_photos)} listings")
 
 
+@app.command("import-ads")
+def import_ads(path: str, game: str = "mtg", photo: bool = typer.Option(True, "--photo/--no-photo",
+               help="Check every ad's photos (as for a generic search)"), config: Optional[str] = ConfigOpt):
+    """Analyse ads scraped elsewhere (a JSON list: Apify milanuncios items or a page-scraper export)."""
+    from .marketplaces.milanuncios import parse_apify_item, parse_export_item
+    from .pipeline import import_listings
+
+    settings, db = _ctx(config)
+    items = json.loads(open(path, encoding="utf-8").read())
+    raws = [r for it in items if isinstance(it, dict)
+            for r in [parse_export_item(it) if "ad_title" in it else parse_apify_item(it)] if r is not None]
+    typer.echo(f"{len(raws)}/{len(items)} ads parsed")
+    recognizer = _recognizer(settings) if photo else None
+    typer.echo(json.dumps(import_listings(settings, db, recognizer, raws, game, photo=photo)))
+
+
 @app.command("enrich-sellers")
 def enrich_sellers_cmd(config: Optional[str] = ConfigOpt):
     """Fetch seller names and reputation for the ads shown on the dashboard."""
