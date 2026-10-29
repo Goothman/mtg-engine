@@ -16,6 +16,10 @@ on:
       marketplace:
         description: "Only this marketplace (empty = all), e.g. milanuncios"
         default: ""
+      recheck:
+        description: "Also re-check every stored ad's photos with the current model (slow; off = incremental)"
+        type: boolean
+        default: false
       max_queries:
         description: "Only run the first N queries of each kind (empty = all)"
         default: ""
@@ -72,6 +76,7 @@ jobs:
           mtg-engine scan "${args[@]}" | tee scan-stats.json
           [ -s scan-stats.json ] || echo '{"note": "scan stopped early"}' > scan-stats.json
       - name: Re-check all ads with the current rules (also verifies photos of text matches)
+        if: ${{ inputs.recheck }}
         # a new model/detector re-reads every photo: bounded, continues on the next run
         run: mtg-engine rematch --max-minutes 120
         timeout-minutes: 140

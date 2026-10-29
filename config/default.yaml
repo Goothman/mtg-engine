@@ -36,6 +36,7 @@ marketplaces:
     max_pages: 5
     delay_seconds: 2.0
     use_search_points: true
+    query_kinds: [photo]    # only the generic search ("cartas magic"); targeted text queries are off
     proxy: null             # needs a Spanish/EU exit IP: set MTG_ENGINE_PROXY_WALLAPOP=http://user:pass@host:port
   milanuncios:
     enabled: true

@@ -301,3 +301,24 @@ def test_photo_failure_reason_is_flagged(settings, db):
         s.flush()
         flags = apply_vision(s, settings, listing, Breaks({}), text_evidence=False)
     assert {"photo_unavailable", "photo_error:http_403", "photo_error:decode:image/avif"} <= set(flags)
+
+
+@respx.mock
+def test_incremental_scan_keeps_photo_results_on_price_change(settings, db):
+    respx.get("https://img.test/lotus.jpg").mock(return_value=httpx.Response(200, content=b"lotus"))
+    rec = FakeRecognizer({b"lotus": [Recognition("b-lotus", 0.86, probs("lea", 0.9), None)]})
+    photo_scan(settings, db, rec)
+    assert rec.calls >= 1
+    calls = rec.calls
+    old = PHOTO_ADS[0]
+    PHOTO_ADS[0] = RawListing(old.marketplace, old.external_id, old.url, old.title, old.description, 2000.0,
+                              seller_id=old.seller_id, images=old.images)
+    try:
+        stats = photo_scan(settings, db, rec)
+    finally:
+        PHOTO_ADS[0] = old
+    assert rec.calls == calls and stats["updated"] == 1 and stats["photo_checked"] == 0  # no photo work
+    with db.session() as s:
+        lot = s.get(Listing, "fake:p1")
+        assert lot.price_eur == 2000.0 and lot.match_count == 1 and "photo_match" in lot.flags
+        assert lot.value_ratio == round(30000 / 2000, 3)

@@ -62,15 +62,22 @@ def ingest(session: Session, settings: Settings, raw: RawListing, game: str) -> 
     return row, is_new, changed
 
 
-def analyse(session: Session, settings: Settings, listing: Listing, matcher: TextMatcher, recognizer=None, image_client=None) -> None:
-    """(Re)compute matches + valuation for one listing. Manual confirmations/rejections survive."""
+def analyse(session: Session, settings: Settings, listing: Listing, matcher: TextMatcher, recognizer=None,
+            image_client=None, keep_vision: bool = False) -> None:
+    """(Re)compute matches + valuation for one listing. Manual confirmations/rejections survive.
+
+    keep_vision: re-read the text and revalue (e.g. a known ad changed its price) but keep the
+    earlier photo results instead of downloading and recognising the photos again.
+    """
     manual = {m.card_id: m for m in listing.matches if m.status != "auto"}
+    kept = {m.card_id: m for m in listing.matches if keep_vision and m.status == "auto" and "vision" in (m.source or "")}
+    old_photo_flags = [f for f in listing.flags or [] if f.startswith(("photo", "vision:"))] if keep_vision else []
     for m in list(listing.matches):
-        if m.status == "auto":
+        if m.status == "auto" and m.card_id not in kept:
             listing.matches.remove(m)
     result = matcher.match(listing.title, listing.description)
     for tm in result.matches:
-        if tm.card.id in manual:
+        if tm.card.id in manual or tm.card.id in kept:
             continue
         listing.matches.append(
             Match(
@@ -83,12 +90,12 @@ def analyse(session: Session, settings: Settings, listing: Listing, matcher: Tex
                 edition_ambiguous=tm.edition_ambiguous,
             )
         )
-    flags = list(result.flags)
+    flags = list(result.flags) + old_photo_flags
     excluded = sorted({normalize(f) for f in settings.games[listing.game].exclude_flags} & set(flags))
     # Vision on candidates (an edition named or a card matched) and on every ad found by a
     # photo query; image downloads are the expensive part, and results are cached per photo.
     text_evidence = bool(result.editions or result.matches)
-    if recognizer is not None and listing.images and (text_evidence or listing.photo_scan) and not excluded:
+    if recognizer is not None and not keep_vision and listing.images and (text_evidence or listing.photo_scan) and not excluded:
         from .vision.service import apply_vision
 
         # The "photos don't match" check is only trusted when the edition claim is weak: not in
@@ -198,11 +205,15 @@ class Scanner:
                 listing, is_new, changed = ingest(s, self.settings, raw, game)
                 newly_photo = photo and not listing.photo_scan
                 listing.photo_scan = listing.photo_scan or photo
-                if not (is_new or changed or (newly_photo and self.recognizer is not None)):
+                photo_now = newly_photo and self.recognizer is not None  # never photo-checked before
+                if not (is_new or changed or photo_now):
                     continue
                 s.flush()
-                analyse(s, self.settings, listing, matcher, self.recognizer, self.image_client)
-                if listing.photo_scan and self.recognizer is not None and listing.images:
+                # Incremental: new ads (and ads never photo-checked) get the full analysis; known ads
+                # only get their text re-read and value recalculated, keeping earlier photo results.
+                analyse(s, self.settings, listing, matcher, self.recognizer, self.image_client,
+                        keep_vision=not (is_new or photo_now))
+                if (is_new or photo_now) and listing.photo_scan and self.recognizer is not None and listing.images:
                     stats["photo_checked"] += 1
                     if stats["photo_checked"] % 100 == 0:
                         log.info("photo-checked %d ads so far (%d matched)", stats["photo_checked"], stats["matched"])
