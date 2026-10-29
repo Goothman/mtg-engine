@@ -339,8 +339,10 @@ class Milanuncios(Marketplace):
             r = self._client.get(f"{APIFY}/actor-runs/{run['id']}", params={"waitForFinish": 60}, headers=auth, timeout=90)
             r.raise_for_status()
             run = r.json()["data"]
-        if run.get("status") != "SUCCEEDED":  # still use whatever it collected
-            log.warning("milanuncios (apify) run %s ended %s; using the items collected so far", run["id"], run.get("status"))
+        status = run.get("status")
+        if status != "SUCCEEDED":  # still use whatever it collected
+            log.warning("milanuncios (apify) run %s ended %s (%s); using the items collected so far",
+                        run["id"], status, run.get("statusMessage"))
         items: list = []
         offset = 0
         while True:
@@ -352,6 +354,8 @@ class Milanuncios(Marketplace):
             if len(page) < APIFY_PAGE:
                 break
             offset += APIFY_PAGE
+        if not items and status != "SUCCEEDED":  # e.g. input rejected: surface it in the scan errors
+            raise RuntimeError(f"apify run {status}: {run.get('statusMessage') or 'no message'}")
         kept = [it for it in items if isinstance(it, dict) and in_categories(it, self.config.category_slugs)]
         log.info("milanuncios (apify) q=%r -> %d items, %d in categories %s", query, len(items), len(kept), self.config.category_slugs)
         for item in kept:

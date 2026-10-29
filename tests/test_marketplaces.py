@@ -193,3 +193,14 @@ def test_milanuncios_apify_pages_and_partial_runs(settings, monkeypatch):
     m = mm.Milanuncios(st, cfg.model_copy(update={"fetcher": "apify", "category_slugs": []}))
     assert len(list(m.search("cartas magic"))) == 5
     m.close()
+
+
+@respx.mock
+def test_milanuncios_apify_failed_run_is_an_error(settings, monkeypatch):
+    from mtg_engine.marketplaces.milanuncios import Milanuncios
+
+    mock_apify([], status="FAILED")
+    monkeypatch.setenv("APIFY_TOKEN", "t")
+    m = Milanuncios(settings, settings.marketplaces["milanuncios"].model_copy(update={"fetcher": "apify"}))
+    with pytest.raises(RuntimeError, match="FAILED"):
+        list(m.search("cartas magic"))
