@@ -16,6 +16,9 @@ on:
       marketplace:
         description: "Only this marketplace (empty = all), e.g. milanuncios"
         default: ""
+      milanuncios_max_results:
+        description: "One-off: Milanuncios results per search, lifting the per-run budget (e.g. 10000 = everything)"
+        default: ""
       recheck:
         description: "Also re-check every stored ad's photos with the current model (slow; off = incremental)"
         type: boolean
@@ -58,13 +61,14 @@ jobs:
       - run: mtg-engine sync-catalog
       - name: Scan
         # bounded so a slow run still saves its progress and publishes what it found
-        timeout-minutes: 120
+        timeout-minutes: 200   # a one-off full Milanuncios crawl waits for Apify, then checks photos
         continue-on-error: true
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}   # Milanuncios via Apify; skipped if unset
           MODE: ${{ inputs.mode || 'all' }}
           MAX_QUERIES: ${{ inputs.max_queries }}
           MARKETPLACE: ${{ inputs.marketplace }}
+          MTG_ENGINE_MAX_RESULTS_MILANUNCIOS: ${{ inputs.milanuncios_max_results }}
         run: |
           args=()
           case "$MODE" in

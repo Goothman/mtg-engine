@@ -195,6 +195,8 @@ class Scanner:
                     continue
                 seen.add(raw.key)
                 stats["fetched"] += 1
+                if stats["fetched"] % 50 == 0:  # long result sets: keep progress if the run is cut short
+                    s.commit()
                 listing, is_new, changed = ingest(s, self.settings, raw, game)
                 newly_photo = photo and not listing.photo_scan
                 listing.photo_scan = listing.photo_scan or photo

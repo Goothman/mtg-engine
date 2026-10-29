@@ -156,6 +156,8 @@ def load_settings(path: str | Path | None = None, overrides: dict[str, Any] | No
     for name, mcfg in settings.marketplaces.items():
         if p := os.environ.get(f"MTG_ENGINE_PROXY_{name.upper()}"):
             mcfg.proxy = p
+        if n := os.environ.get(f"MTG_ENGINE_MAX_RESULTS_{name.upper()}"):  # one-off full crawls
+            mcfg.max_results, mcfg.max_results_per_run = int(n), None
     return settings
 
 

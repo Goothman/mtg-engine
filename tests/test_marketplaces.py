@@ -88,21 +88,35 @@ def test_wallapop_real_capture():
     assert all(parse_item(i).external_id for i in items)
 
 
+def mock_apify(items, status="SUCCEEDED"):
+    """Mock Apify's async flow: start run -> poll -> paged dataset. Returns the start-run route."""
+    start = respx.post("https://api.apify.com/v2/acts/zen-studio~milanuncios-scraper/runs").mock(
+        return_value=httpx.Response(201, json={"data": {"id": "r1", "status": "RUNNING", "defaultDatasetId": "d1"}}))
+    respx.get("https://api.apify.com/v2/actor-runs/r1").mock(
+        return_value=httpx.Response(200, json={"data": {"id": "r1", "status": status, "defaultDatasetId": "d1"}}))
+
+    def page(request):
+        off, lim = int(request.url.params["offset"]), int(request.url.params["limit"])
+        return httpx.Response(200, json=items[off: off + lim])
+
+    respx.get("https://api.apify.com/v2/datasets/d1/items").mock(side_effect=page)
+    return start
+
+
 @respx.mock
 def test_milanuncios_apify_fetcher(settings, monkeypatch):
     """Item format of zen-studio/milanuncios-scraper is assumed; the parser accepts common variants."""
     from mtg_engine.marketplaces.milanuncios import Milanuncios
 
     cfg = settings.marketplaces["milanuncios"].model_copy(update={"fetcher": "apify", "max_results": 5})
-    route = respx.post("https://api.apify.com/v2/acts/zen-studio~milanuncios-scraper/run-sync-get-dataset-items").mock(
-        return_value=httpx.Response(200, json=[
+    route = mock_apify([
             {"id": "512345678", "title": "Black Lotus beta", "description": "original", "price": "1.200 €",
              "url": "/cartas-coleccionables/black-lotus-512345678.htm", "location": "Getafe (Madrid)",
              "images": [{"url": "https://images.milanuncios.com/a.jpg"}], "seller": {"name": "Ana", "id": 77}},
             {"url": "https://www.milanuncios.com/x/lote-magic-598765432.htm", "title": "Lote magic",
              "location": {"city": "Sevilla", "province": "Sevilla"}, "photos": ["https://images.milanuncios.com/b.jpg"]},
             {"title": "no id at all"},
-        ]))
+        ])
     monkeypatch.setenv("APIFY_TOKEN", "test-token")
     m = Milanuncios(settings, cfg)
     ads = list(m.search("magic beta"))
@@ -131,8 +145,7 @@ def test_milanuncios_apify_run_budget(settings, monkeypatch):
 
     cfg = settings.marketplaces["milanuncios"].model_copy(
         update={"fetcher": "apify", "max_results": 100, "max_results_per_run": 250})
-    route = respx.post("https://api.apify.com/v2/acts/zen-studio~milanuncios-scraper/run-sync-get-dataset-items").mock(
-        return_value=httpx.Response(200, json=[]))
+    route = mock_apify([])
     monkeypatch.setenv("APIFY_TOKEN", "t")
     m = Milanuncios(settings, cfg)
     for q in ("a", "b", "c", "d"):
@@ -147,8 +160,7 @@ def test_milanuncios_apify_real_items(settings, monkeypatch):
     from mtg_engine.marketplaces.milanuncios import Milanuncios
 
     items = json.loads((Path(__file__).parent / "fixtures" / "milanuncios_apify_real.json").read_text())
-    respx.post("https://api.apify.com/v2/acts/zen-studio~milanuncios-scraper/run-sync-get-dataset-items").mock(
-        return_value=httpx.Response(200, json=items))
+    mock_apify(items)
     monkeypatch.setenv("APIFY_TOKEN", "t")
     m = Milanuncios(settings, settings.marketplaces["milanuncios"].model_copy(update={"fetcher": "apify"}))
     ads = list(m.search("magic"))
@@ -160,4 +172,24 @@ def test_milanuncios_apify_real_items(settings, monkeypatch):
     assert a.published_at.year == 2026
     assert b.price_eur == 25.0 and b.city == "Las Palmas de Gran Canaria"
     assert m.seller_profile("1000")["name"] == "Vendedor 0" and m.seller_profile("1000")["type"] == "Private"
+    m.close()
+
+
+@respx.mock
+def test_milanuncios_apify_pages_and_partial_runs(settings, monkeypatch):
+    """Large crawls: the dataset is read in pages; a run that timed out still yields what it collected."""
+    import mtg_engine.marketplaces.milanuncios as mm
+
+    monkeypatch.setattr(mm, "APIFY_PAGE", 2)
+    items = [{"id": str(600000000 + i), "title": f"Cartas magic {i}", "url": f"/x/a-{600000000 + i}.htm"} for i in range(5)]
+    mock_apify(items, status="TIMED-OUT")
+    monkeypatch.setenv("APIFY_TOKEN", "t")
+    monkeypatch.setenv("MTG_ENGINE_MAX_RESULTS_MILANUNCIOS", "10000")
+    from mtg_engine.config import load_settings
+
+    st = load_settings(overrides={"database_url": "sqlite:///:memory:"})
+    cfg = st.marketplaces["milanuncios"]
+    assert (cfg.max_results, cfg.max_results_per_run) == (10000, None)
+    m = mm.Milanuncios(st, cfg.model_copy(update={"fetcher": "apify", "category_slugs": []}))
+    assert len(list(m.search("cartas magic"))) == 5
     m.close()

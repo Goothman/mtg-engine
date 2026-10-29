@@ -170,7 +170,9 @@ def _playwright_proxy(url: str) -> dict:
     return out
 
 
-APIFY_RUN = "https://api.apify.com/v2/acts/{actor}/run-sync-get-dataset-items"
+APIFY = "https://api.apify.com/v2"
+APIFY_MAX_WAIT = 100 * 60  # seconds to wait for one actor run (a full crawl can take a while)
+APIFY_PAGE = 1000
 
 
 def _first(d: dict, *keys: str) -> Any:
@@ -323,16 +325,33 @@ class Milanuncios(Marketplace):
                      self.config.max_results_per_run, query)
             return
         self._results_used += want
-        resp = self._client.post(
-            APIFY_RUN.format(actor=actor),
-            headers={"Authorization": f"Bearer {token}"},
-            json={"text": query, "maxResults": want, "sort": "relevance", "isShippable": False},
-            timeout=330,  # the sync endpoint waits up to 300 s for the run
-        )
+        auth = {"Authorization": f"Bearer {token}"}
+        # Asynchronous run: start, poll until finished, then page through the dataset (the sync
+        # endpoint gives up after 300 s, too short for large result sets).
+        resp = self._client.post(f"{APIFY}/acts/{actor}/runs", headers=auth, timeout=60,
+                                 json={"text": query, "maxResults": want, "sort": "relevance", "isShippable": False})
         if resp.status_code in (401, 402, 403):
             raise BlockedError(f"apify HTTP {resp.status_code}: {resp.text[:200]}")
         resp.raise_for_status()
-        items = resp.json()
+        run = resp.json()["data"]
+        deadline = time.monotonic() + APIFY_MAX_WAIT
+        while run.get("status") in ("READY", "RUNNING") and time.monotonic() < deadline:
+            r = self._client.get(f"{APIFY}/actor-runs/{run['id']}", params={"waitForFinish": 60}, headers=auth, timeout=90)
+            r.raise_for_status()
+            run = r.json()["data"]
+        if run.get("status") != "SUCCEEDED":  # still use whatever it collected
+            log.warning("milanuncios (apify) run %s ended %s; using the items collected so far", run["id"], run.get("status"))
+        items: list = []
+        offset = 0
+        while True:
+            r = self._client.get(f"{APIFY}/datasets/{run['defaultDatasetId']}/items", headers=auth, timeout=120,
+                                 params={"format": "json", "clean": "true", "offset": offset, "limit": APIFY_PAGE})
+            r.raise_for_status()
+            page = r.json()
+            items += page
+            if len(page) < APIFY_PAGE:
+                break
+            offset += APIFY_PAGE
         kept = [it for it in items if isinstance(it, dict) and in_categories(it, self.config.category_slugs)]
         log.info("milanuncios (apify) q=%r -> %d items, %d in categories %s", query, len(items), len(kept), self.config.category_slugs)
         for item in kept:
