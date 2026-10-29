@@ -77,8 +77,15 @@ jobs:
           esac
           if [ -n "$MAX_QUERIES" ]; then args+=(--max-queries "$MAX_QUERIES"); fi
           if [ -n "$MARKETPLACE" ]; then args+=(--marketplace "$MARKETPLACE"); fi
-          mtg-engine scan "${args[@]}" | tee scan-stats.json
+          mtg-engine scan "${args[@]}" 2> >(tee scan.log >&2) | tee scan-stats.json
           [ -s scan-stats.json ] || echo '{"note": "scan stopped early"}' > scan-stats.json
+      - name: Scan summary (as annotations, readable through the API)
+        if: always()
+        run: |
+          [ -f scan.log ] || exit 0
+          grep -E "milanuncios|apify|query |ERROR|Traceback|Error" scan.log | grep -v "HTTP Request" | tail -25 \
+            | sed -e 's/%/%25/g' -e 's/^/::notice title=scan::/'
+          echo "::notice title=stats::$(cat scan-stats.json)"
       - name: Apply the current rules to all stored ads (stored photo results, no downloads)
         if: ${{ !inputs.recheck }}
         run: mtg-engine rematch --keep-photos
