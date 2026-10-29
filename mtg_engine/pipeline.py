@@ -153,11 +153,14 @@ class Scanner:
                 market = get_marketplace(mname, self.settings)
                 points = self.settings.region.search_points if mcfg.use_search_points else [None]
                 try:
-                    queries = [(q, False) for q in gcfg.queries[:max_queries]]
+                    # Photo (generic) queries go first: on a marketplace with a paid result budget they
+                    # are the valuable ones (unrecognised Alpha/Beta cards in "cartas magic" lots).
+                    queries = []
                     if photo_queries is not False and self.recognizer is not None:  # useless without vision
                         queries += [(q, True) for q in gcfg.photo_queries[:max_queries]]
-                        if photo_queries is True:  # photo queries only
-                            queries = [(q, p) for q, p in queries if p]
+                    if photo_queries is not True:
+                        queries += [(q, False) for q in gcfg.queries[:max_queries]]
+                    queries = [(q, p) for q, p in queries if ("photo" if p else "text") in mcfg.query_kinds]
                     for query, photo in queries:
                         for point in points:
                             try:

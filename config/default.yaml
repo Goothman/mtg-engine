@@ -45,7 +45,10 @@ marketplaces:
     # apify runs the zen-studio/milanuncios-scraper actor (token: env/secret APIFY_TOKEN; billed by Apify)
     fetcher: apify
     apify_actor: zen-studio/milanuncios-scraper
-    max_results: 100        # per query
+    # Paid per result: spend it on the generic searches ("cartas magic"...), whose photos are all
+    # checked for Alpha/Beta cards the seller didn't recognise. 6 photo queries x 84 ~= 500 per run.
+    query_kinds: [photo]
+    max_results: 84         # per query
     max_results_per_run: 500  # total per scan run, to bound the Apify bill
     # the actor's search also returns books, DVDs, pins...: keep the categories Magic ads use
     category_slugs: [cartas-de-coleccion, otros-coleccionables, cromos-de-coleccion,

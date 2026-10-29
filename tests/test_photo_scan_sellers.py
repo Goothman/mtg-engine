@@ -258,3 +258,26 @@ def test_photo_only_needs_all_photos_to_agree(settings, db):
         s.flush()
         assert "photo_match" not in apply_vision(s, settings, listing, rec, text_evidence=False)
         assert listing.matches == []
+
+
+@respx.mock
+def test_paid_marketplace_runs_only_generic_photo_queries_first(settings, db):
+    seen = []
+
+    class Recorder(Marketplace):
+        name = "fake"
+
+        def search(self, query, point=None):
+            seen.append(query)
+            return iter(())
+
+    REGISTRY["fake"] = Recorder
+    settings.marketplaces = {"fake": MarketplaceConfig(use_search_points=False, delay_seconds=0, query_kinds=["photo"])}
+    settings.games["pokemon"].enabled = False
+    settings.games["mtg"].queries, settings.games["mtg"].photo_queries = ["mtg alpha"], ["cartas magic", "lote magic"]
+    Scanner(settings, db, FakeRecognizer({})).run()
+    assert seen == ["cartas magic", "lote magic"]
+    seen.clear()
+    settings.marketplaces["fake"].query_kinds = ["photo", "text"]
+    Scanner(settings, db, FakeRecognizer({})).run()
+    assert seen == ["cartas magic", "lote magic", "mtg alpha"]  # generic first
