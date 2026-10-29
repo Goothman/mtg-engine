@@ -1,0 +1,388 @@
+[
+ {
+  "attributes": {
+   "itemCondition": {
+    "raw": "BRAND_NEW",
+    "formatted": "sin estrenar"
+   }
+  },
+  "authorId": "1000",
+  "authorName": "Vendedor 0",
+  "categories": [
+   {
+    "id": 44,
+    "name": "Aficiones y ocio",
+    "slug": "aficiones"
+   },
+   {
+    "id": 644,
+    "name": "Coleccionismo",
+    "slug": "coleccionismo"
+   },
+   {
+    "id": 651,
+    "name": "Cartas",
+    "slug": "cartas-de-coleccion"
+   }
+  ],
+  "contactMethods": {
+   "chat": true,
+   "form": true,
+   "phone": false,
+   "whatsapp": false
+  },
+  "description": "Vendo el set oficial y exclusivo Secret Lair x Marvel: True Believers in Love de Magic: The Gathering. Se encuentra totalmente nuevo, cerrado de fábrica y con su precinto intacto (como se aprecia en la tira trasera de seguridad).\nEsta edición limitada une el universo de Marvel con MTG mediante espec",
+  "distance": null,
+  "extras": [],
+  "id": "621016983",
+  "isHighlighted": false,
+  "isNew": false,
+  "location": {
+   "city": {
+    "id": 53,
+    "name": "Málaga",
+    "slug": "malaga"
+   },
+   "geolocation": null,
+   "province": {
+    "id": 29,
+    "name": "Málaga",
+    "slug": "malaga"
+   },
+   "region": {
+    "id": 55,
+    "name": "Andalucía",
+    "slug": "andalucia"
+   }
+  },
+  "origin": {
+   "name": "milanuncios",
+   "provider": null
+  },
+  "previousPrice": null,
+  "price": {
+   "cash": {
+    "label": "55 €",
+    "value": 55
+   }
+  },
+  "publicationDate": "2026-10-23T05:58:55Z",
+  "shipping": {
+   "externalCheckoutUrl": null,
+   "packageWeight": "UP_TO_2KG",
+   "shippable": true,
+   "type": "maexpress"
+  },
+  "sortDate": "2026-10-23T05:58:55Z",
+  "title": "Magic: The Gathering -",
+  "transaction": "supply",
+  "type": "private",
+  "updateDate": "2026-10-23T05:58:55Z",
+  "url": "/cartas-de-coleccion/magic-the-gathering-621016983.htm",
+  "visibility": "normal",
+  "scrapedAt": "2026-10-29T04:22:50.548204+00:00",
+  "scrapedAtTimestamp": 1793247770,
+  "author": {
+   "id": "1000",
+   "isEmailVerified": true,
+   "location": {
+    "city": "Málaga",
+    "lat": 36.7185,
+    "long": -4.4355,
+    "province": "Málaga",
+    "zipCode": "29006"
+   },
+   "memberSince": "2023-02-09T14:32:34.228452Z",
+   "name": "Vendedor 0",
+   "rating": {},
+   "sellerType": "PRIVATE"
+  },
+  "photos": [
+   "https://images.milanuncios.com/api/v1/ma-ad-media-pro/images/7c69852a-7ca4-4edd-a842-c9a1d3843fc3",
+   "https://images.milanuncios.com/api/v1/ma-ad-media-pro/images/300c8b08-680d-4644-a5af-b0c8303a67df"
+  ],
+  "stats": {
+   "autoRenewals": 0,
+   "emailsSent": 0,
+   "favorites": 0,
+   "listings": 0,
+   "phoneViews": 0,
+   "shares": 0,
+   "views": 0
+  },
+  "carriers": [
+   {
+    "id": "SEUR",
+    "logoImageUrl": "https://scm-milanuncios-frontend-pro.milanuncios.com/statics/images/shipping/seur.png",
+    "name": "Seur",
+    "originalPrice": 1.99,
+    "price": 1.99,
+    "service": "DOOR_TO_DOOR"
+   },
+   {
+    "id": "CORREOS",
+    "logoImageUrl": "https://scm-milanuncios-frontend-pro.milanuncios.com/statics/images/shipping/correos.png",
+    "name": "Correos",
+    "originalPrice": 0,
+    "price": 0,
+    "service": "SHOP_TO_DOOR"
+   }
+  ],
+  "reserve": {
+   "isReserved": false,
+   "status": "RELEASED"
+  },
+  "sellerId": "1000",
+  "packageWeight": "UP_TO_2KG",
+  "isShippableContentSharing": false,
+  "isShippableExternalCheckout": false,
+  "isShippableMaExpress": true
+ },
+ {
+  "attributes": {
+   "itemCondition": {
+    "raw": "ALMOST_NEW",
+    "formatted": "prácticamente nuevo"
+   }
+  },
+  "authorId": "1001",
+  "authorName": "Vendedor 1",
+  "categories": [
+   {
+    "id": 39,
+    "name": "Juegos",
+    "slug": "juegos"
+   },
+   {
+    "id": 433,
+    "name": "Otros juegos",
+    "slug": "otros-juegos"
+   },
+   {
+    "id": 437,
+    "name": "Otros juegos",
+    "slug": "otros-juegos-diferentes"
+   }
+  ],
+  "contactMethods": {
+   "chat": true,
+   "form": true,
+   "phone": false,
+   "whatsapp": false
+  },
+  "description": " juego Magic the Gathering 25€ negociable",
+  "distance": null,
+  "extras": [],
+  "id": "592906795",
+  "isHighlighted": false,
+  "isNew": false,
+  "location": {
+   "city": {
+    "id": 62,
+    "name": "Las Palmas de Gran Canaria",
+    "slug": "las-palmas-de-gran-canaria"
+   },
+   "geolocation": null,
+   "province": {
+    "id": 35,
+    "name": "Las Palmas",
+    "slug": "las_palmas"
+   },
+   "region": {
+    "id": 62,
+    "name": "Canarias",
+    "slug": "canarias"
+   }
+  },
+  "origin": {
+   "name": "milanuncios",
+   "provider": null
+  },
+  "previousPrice": null,
+  "price": {
+   "cash": {
+    "label": "25 €",
+    "value": 25
+   }
+  },
+  "publicationDate": "2026-04-29T09:46:30Z",
+  "shipping": {
+   "externalCheckoutUrl": null,
+   "packageWeight": "NONE",
+   "shippable": false,
+   "type": "maexpress"
+  },
+  "sortDate": "2026-10-21T11:26:35Z",
+  "title": "Magic the Gathering",
+  "transaction": "supply",
+  "type": "private",
+  "updateDate": "2026-10-21T20:26:35Z",
+  "url": "/otros-juegos-diferentes/magic-the-gathering-592906795.htm",
+  "visibility": "normal",
+  "scrapedAt": "2026-10-29T04:22:22.174411+00:00",
+  "scrapedAtTimestamp": 1793247742,
+  "author": {
+   "id": "1001",
+   "image": {
+    "thumbnail": "https://images.milanuncios.com/api/v1/ma-user-profile-pro/images/af4e5d40-294d-4587-b87b-69b6d561dd30?rule=thumb"
+   },
+   "isEmailVerified": true,
+   "location": {
+    "city": "Las Palmas de Gran Canaria",
+    "lat": 28.1535,
+    "long": -15.4275,
+    "province": "Las Palmas",
+    "zipCode": "35009"
+   },
+   "memberSince": "2019-08-09T20:03:52.902Z",
+   "name": "Vendedor 1",
+   "rating": {},
+   "sellerType": "PRIVATE"
+  },
+  "photos": [
+   "https://images.milanuncios.com/api/v1/ma-ad-media-pro/images/93e2f7a7-d18a-480f-a2db-a7bd2bb8007b"
+  ],
+  "stats": {
+   "autoRenewals": 0,
+   "emailsSent": 0,
+   "favorites": 2,
+   "listings": 0,
+   "phoneViews": 0,
+   "shares": 0,
+   "views": 0
+  },
+  "carriers": [],
+  "reserve": {
+   "isReserved": false,
+   "status": "RELEASED"
+  },
+  "sellerId": "1001",
+  "packageWeight": "NONE",
+  "isShippableContentSharing": false,
+  "isShippableExternalCheckout": false,
+  "isShippableMaExpress": false
+ },
+ {
+  "attributes": {},
+  "authorId": "1002",
+  "authorName": "Vendedor 2",
+  "categories": [
+   {
+    "id": 9,
+    "name": "Imagen y Sonido",
+    "slug": "imagen-y-sonido"
+   },
+   {
+    "id": 81,
+    "name": "Imagen",
+    "slug": "imagen"
+   },
+   {
+    "id": 86,
+    "name": "Reproductores de DVD",
+    "slug": "reproductores-de-dvd"
+   }
+  ],
+  "contactMethods": {
+   "chat": false,
+   "form": true,
+   "phone": true,
+   "whatsapp": false
+  },
+  "description": "Disfruta de la clásica película de Disney, '101 Dálmatas', en formato DVD. Esta edición limitada te sumerge en una aventura llena de diversión y emoción, donde Pongo y Perdita, dos adorables dálmatas, luchan contra la malvada Cruella de Vil para rescatar a sus cachorros. Con una animación encantador",
+  "distance": null,
+  "extras": [],
+  "id": "573664403",
+  "isHighlighted": false,
+  "isNew": false,
+  "location": {
+   "city": {
+    "id": 44,
+    "name": "Madrid",
+    "slug": "madrid"
+   },
+   "geolocation": null,
+   "province": {
+    "id": 28,
+    "name": "Madrid",
+    "slug": "madrid"
+   },
+   "region": {
+    "id": 28,
+    "name": "Madrid",
+    "slug": "madrid"
+   }
+  },
+  "origin": {
+   "name": "outer",
+   "provider": "milanuncios_pro"
+  },
+  "previousPrice": null,
+  "price": {
+   "cash": {
+    "label": "6 €",
+    "value": 6
+   }
+  },
+  "publicationDate": "2025-12-29T12:25:26Z",
+  "shipping": null,
+  "sortDate": "2026-10-24T07:20:54Z",
+  "title": "0717951003973 - 101 Dalmatians",
+  "transaction": "supply",
+  "type": "professional",
+  "updateDate": "2026-10-24T16:20:54Z",
+  "url": "/reproductores-de-dvd/0717951003973-101-dalmatians-573664403.htm",
+  "visibility": "normal",
+  "scrapedAt": "2026-10-29T04:22:50.548204+00:00",
+  "scrapedAtTimestamp": 1793247770,
+  "author": {
+   "id": "1002",
+   "isEmailVerified": false,
+   "location": {
+    "city": "Madrid",
+    "lat": 40.4265,
+    "long": -3.6855,
+    "province": "Madrid"
+   },
+   "memberSince": "2025-11-24T16:27:29.779111Z",
+   "name": "Vendedor 2",
+   "rating": {},
+   "sellerType": "PROFESSIONAL"
+  },
+  "photos": [
+   "https://images.milanuncios.com/api/v1/ma-ad-media-pro/images/0bf17546-9165-4615-ab52-6c80687ef524"
+  ],
+  "stats": {
+   "autoRenewals": 0,
+   "emailsSent": 0,
+   "favorites": 0,
+   "listings": 0,
+   "phoneViews": 0,
+   "shares": 0,
+   "views": 0
+  },
+  "carriers": [],
+  "reserve": {
+   "isReserved": false,
+   "status": "RELEASED"
+  },
+  "sellerId": "1002",
+  "shop": {
+   "address": "Coslada, Madrid",
+   "description": "Hamelyn es tu tienda de segunda mano de libros, música, películas y videojuegos, donde puedes encontrar una gran selección de productos a precios inmejorables. Nos especializamos en ofrecer el mayor catálogo de libros de segunda mano de España. Además, no solo podrás buscar libros. También contamos con una amplia variedad de videojuegos de segunda mano, CD y vinilos de música, y películas en formato DVD y Blu-ray, todos revisados cuidadosamente para garantizarte la mejor calidad. Disfruta de una experiencia de compra sencilla y segura, con envío gratuito. Explora nuestras diferentes secciones y encuentra lo que buscas a precios que no encontrarás en otro lugar. ¡Empieza ya a descubrir tesoros en nuestra tienda de segunda mano!",
+   "hasShopProfile": true,
+   "locality": "Coslada",
+   "logoUrl": "https://images.milanuncios.com/ma-store-logo-pro/images/cdf2b247-3df5-4b95-a71b-bf23e042e631?rule=thumb",
+   "name": "Hamelyn",
+   "packType": "PREMIUM_25",
+   "province": "Madrid",
+   "storeId": "203206",
+   "url": "/tiendas-profesionales/hamelyn-203206",
+   "zipcode": "28823"
+  },
+  "packageWeight": "NONE",
+  "isShippableContentSharing": false,
+  "isShippableExternalCheckout": false,
+  "isShippableMaExpress": false
+ }
+]

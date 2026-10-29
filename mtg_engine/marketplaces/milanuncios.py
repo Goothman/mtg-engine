@@ -181,8 +181,23 @@ def _first(d: dict, *keys: str) -> Any:
     return None
 
 
+def _author_profile(author: dict) -> dict:
+    return {k: v for k, v in {
+        "name": author.get("name"),
+        "since": (author.get("memberSince") or "")[:10] or None,
+        "verified": author.get("isEmailVerified"),
+        "type": (author.get("sellerType") or "").title() or None,
+    }.items() if v is not None}
+
+
 def parse_apify_item(item: dict) -> RawListing | None:
-    """One dataset item from the Milanuncios actor -> RawListing (tolerant of field names)."""
+    """One dataset item from the Milanuncios actor -> RawListing.
+
+    Shape seen live (zen-studio/milanuncios-scraper, 2026-10-29): price {"cash": {"value"}},
+    location {city, province, region} as {id, name, slug}, photos [url], authorName/authorId and
+    author {location {lat, long, zipCode}, memberSince, sellerType}, publicationDate, categories.
+    Other common field names are still accepted.
+    """
     url = _first(item, "url", "link", "adUrl", "detailUrl") or ""
     ext = _first(item, "id", "adId", "ad_id", "listingId")
     if ext is None and url:
@@ -192,13 +207,15 @@ def parse_apify_item(item: dict) -> RawListing | None:
         return None
     loc = item.get("location") if isinstance(item.get("location"), dict) else {}
     loc_text = item.get("location") if isinstance(item.get("location"), str) else None
-    city = _name(_first(loc, "city", "town", "municipality")) or _first(item, "city", "town")
-    province = _name(_first(loc, "province", "region", "state")) or _first(item, "province", "region")
+    author = item.get("author") if isinstance(item.get("author"), dict) else {}
+    aloc = author.get("location") if isinstance(author.get("location"), dict) else {}
+    city = _name(_first(loc, "city", "town", "municipality")) or _first(item, "city", "town") or aloc.get("city")
+    province = _name(_first(loc, "province", "state")) or _first(item, "province") or aloc.get("province")
     if loc_text and not (city or province):  # "Ciudad (Provincia)" or "Ciudad, Provincia"
         m = re.match(r"\s*(.*?)\s*[(,]\s*([^)]*)\)?\s*$", loc_text)
         city, province = (m.group(1), m.group(2)) if m else (loc_text, None)
     images = []
-    for img in _first(item, "images", "photos", "imageUrls", "pictures") or []:
+    for img in _first(item, "photos", "images", "imageUrls", "pictures") or []:
         src = img if isinstance(img, str) else _first(img, "url", "src", "imageUrl", "large", "original")
         if src:
             images.append(src if str(src).startswith("http") else urljoin(BASE, src))
@@ -206,24 +223,42 @@ def parse_apify_item(item: dict) -> RawListing | None:
         images = [_first(item, "image", "imageUrl", "thumbnail")]
     seller = _first(item, "seller", "user", "advertiser")
     seller = seller if isinstance(seller, dict) else {"name": seller} if seller else {}
-    coords = _first(item, "coordinates", "geo") or {}
+    # the ad's own geolocation if present, else the seller's (postcode-level) location
+    geo = loc.get("geolocation") if isinstance(loc.get("geolocation"), dict) else {}
+    geo = geo or _first(item, "coordinates", "geo") or aloc
+    price = _first(item, "price", "priceValue", "amount")
+    if isinstance(price, dict) and isinstance(price.get("cash"), dict):
+        price = price["cash"]
+    from datetime import datetime
+
+    try:
+        published = datetime.fromisoformat(str(_first(item, "publicationDate", "date")).replace("Z", "+00:00"))
+    except ValueError:
+        published = None
     return RawListing(
         marketplace="milanuncios",
         external_id=str(ext),
         url=urljoin(BASE, url) if url else f"{BASE}/anuncios/r{ext}.htm",
         title=_first(item, "title", "name") or "",
         description=_first(item, "description", "body", "text") or "",
-        price_eur=_num(_first(item, "price", "priceValue", "amount")),
+        price_eur=_num(price),
         city=city,
         region=province,
-        postal_code=_first(loc, "zipCode", "postalCode", "zip") or _first(item, "zipCode", "postalCode"),
-        lat=_num(_first(coords, "lat", "latitude")) if isinstance(coords, dict) else None,
-        lon=_num(_first(coords, "lon", "lng", "longitude")) if isinstance(coords, dict) else None,
-        seller_id=str(_first(seller, "id", "userId")) if _first(seller, "id", "userId") else None,
-        seller_name=_first(seller, "name", "nickname", "username"),
+        postal_code=_first(loc, "zipCode", "postalCode", "zip") or _first(item, "zipCode", "postalCode") or aloc.get("zipCode"),
+        lat=_num(_first(geo, "lat", "latitude")) if isinstance(geo, dict) else None,
+        lon=_num(_first(geo, "lon", "long", "lng", "longitude")) if isinstance(geo, dict) else None,
+        seller_id=str(_first(item, "authorId", "sellerId") or _first(seller, "id", "userId") or author.get("id") or "") or None,
+        seller_name=_first(item, "authorName") or author.get("name") or _first(seller, "name", "nickname", "username"),
         images=images,
+        published_at=published,
         raw=item,
     )
+
+
+def in_categories(item: dict, slugs: list[str]) -> bool:
+    if not slugs or not item.get("categories"):  # no category information: keep
+        return True
+    return any(isinstance(c, dict) and c.get("slug") in slugs for c in item.get("categories") or [])
 
 
 class Milanuncios(Marketplace):
@@ -233,6 +268,7 @@ class Milanuncios(Marketplace):
         super().__init__(settings, config)
         self._client = None
         self._results_used = 0  # results requested from the actor in this run
+        self._authors: dict[str, dict] = {}  # seller profiles seen in actor results
         self._browser = None
         self._pw = None
 
@@ -286,11 +322,19 @@ class Milanuncios(Marketplace):
             raise BlockedError(f"apify HTTP {resp.status_code}: {resp.text[:200]}")
         resp.raise_for_status()
         items = resp.json()
-        log.info("milanuncios (apify) q=%r -> %d items", query, len(items))
-        for item in items:
-            listing = parse_apify_item(item) if isinstance(item, dict) else None
-            if listing is not None:
-                yield listing
+        kept = [it for it in items if isinstance(it, dict) and in_categories(it, self.config.category_slugs)]
+        log.info("milanuncios (apify) q=%r -> %d items, %d in categories %s", query, len(items), len(kept), self.config.category_slugs)
+        for item in kept:
+            listing = parse_apify_item(item)
+            if listing is None:
+                continue
+            if listing.seller_id and isinstance(item.get("author"), dict):
+                self._authors[listing.seller_id] = _author_profile(item["author"])
+            yield listing
+
+    def seller_profile(self, seller_id: str) -> dict | None:
+        """Only from actor results (the scan saw the ad); Milanuncios itself isn't queried."""
+        return self._authors.get(seller_id)
 
     def search(self, query: str, point: SearchPoint | None = None) -> Iterator[RawListing]:
         if self.config.fetcher == "apify":

@@ -139,3 +139,24 @@ def test_milanuncios_apify_run_budget(settings, monkeypatch):
         list(m.search(q))
     m.close()
     assert [json.loads(c.request.content)["maxResults"] for c in route.calls] == [100, 100, 50]
+
+
+@respx.mock
+def test_milanuncios_apify_real_items(settings, monkeypatch):
+    """Items as returned live by zen-studio/milanuncios-scraper (seller anonymised)."""
+    from mtg_engine.marketplaces.milanuncios import Milanuncios
+
+    items = json.loads((Path(__file__).parent / "fixtures" / "milanuncios_apify_real.json").read_text())
+    respx.post("https://api.apify.com/v2/acts/zen-studio~milanuncios-scraper/run-sync-get-dataset-items").mock(
+        return_value=httpx.Response(200, json=items))
+    monkeypatch.setenv("APIFY_TOKEN", "t")
+    m = Milanuncios(settings, settings.marketplaces["milanuncios"].model_copy(update={"fetcher": "apify"}))
+    ads = list(m.search("magic"))
+    a, b = ads  # the DVD (category reproductores-de-dvd) is dropped
+    assert (a.external_id, a.price_eur, a.city, a.region, a.postal_code) == ("621016983", 55.0, "Málaga", "Málaga", "29006")
+    assert (a.lat, a.lon, a.seller_id, a.seller_name) == (36.7185, -4.4355, "1000", "Vendedor 0")
+    assert a.url == "https://www.milanuncios.com/cartas-de-coleccion/magic-the-gathering-621016983.htm"
+    assert a.images[0].startswith("https://images.milanuncios.com/") and a.published_at.year == 2026
+    assert b.price_eur == 25.0 and b.city == "Las Palmas de Gran Canaria"
+    assert m.seller_profile("1000")["name"] == "Vendedor 0" and m.seller_profile("1000")["type"] == "Private"
+    m.close()

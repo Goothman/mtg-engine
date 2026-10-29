@@ -46,6 +46,7 @@ class MarketplaceConfig(BaseModel):
     apify_actor: str | None = None
     max_results: int = 100  # per query, for actor-based fetchers
     max_results_per_run: int | None = None  # total budget per scan run (billed per result)
+    category_slugs: list[str] = Field(default_factory=list)  # keep only ads in these categories
 
 
 class TargetSet(BaseModel):

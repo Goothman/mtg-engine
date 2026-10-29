@@ -47,6 +47,9 @@ marketplaces:
     apify_actor: zen-studio/milanuncios-scraper
     max_results: 100        # per query
     max_results_per_run: 500  # total per scan run, to bound the Apify bill
+    # the actor's search also returns books, DVDs, pins...: keep the categories Magic ads use
+    category_slugs: [cartas-de-coleccion, otros-coleccionables, cromos-de-coleccion,
+                     otros-juegos-diferentes, juegos-de-rol, juegos-de-mesa]
     use_search_points: false
 
 games:
