@@ -356,3 +356,23 @@ def test_seller_with_proxy_ads_is_excluded(settings, db):
     n, flags, _ = _analyse_one(settings, db, RawListing("fake", "x2", "u", "Balance. Magic. Mtg", "Black Lotus beta 15€",
                                                         15.0, seller_id="proxyseller"), rec)
     assert n == 0 and "seller_sells_proxies" in flags
+
+
+def test_import_merges_partial_records(settings, db):
+    """A gallery export has no description/location: importing it must not wipe what we know."""
+    from mtg_engine.marketplaces.milanuncios import parse_listing_item
+    from mtg_engine.pipeline import import_listings
+
+    full = RawListing("milanuncios", "611890139", "u", "cartas Magic", "Lote de 350 cartas", 30.0,
+                      city="Elche", region="Alicante", seller_name="Vendedor", images=["https://img.test/a.jpg"])
+    import_listings(settings, db, None, [full], "mtg", photo=False)
+    gallery = parse_listing_item({"external_id": "611890139", "url": "u", "title": "cartas Magic", "price_text": "35 €",
+                                  "images": ["https://images.milanuncios.com/api/v1/ma-ad-media-pro/images/x",
+                                             "https://images.milanuncios.com/api/v1/ma-ad-media-pro/images/y"]})
+    stats = import_listings(settings, db, None, [gallery], "mtg", photo=False, all_images=True)
+    assert stats["fetched"] == 1
+    with db.session() as s:
+        listing = s.get(Listing, "milanuncios:611890139")
+        assert (listing.description, listing.city, listing.region, listing.seller_name) == (
+            "Lote de 350 cartas", "Elche", "Alicante", "Vendedor")
+        assert listing.price_eur == 35.0 and len(listing.images) == 2 and listing.images[0].endswith("?rule=hw545")

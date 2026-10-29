@@ -40,8 +40,22 @@ def build_matcher(session: Session, settings: Settings, game: str) -> TextMatche
     return TextMatcher(refs, settings.games[game])
 
 
-def ingest(session: Session, settings: Settings, raw: RawListing, game: str) -> tuple[Listing, bool, bool]:
-    """Upsert a raw listing. Returns (listing, is_new, content_changed)."""
+def ingest(session: Session, settings: Settings, raw: RawListing, game: str, merge: bool = False) -> tuple[Listing, bool, bool]:
+    """Upsert a raw listing. Returns (listing, is_new, content_changed).
+
+    merge: the source has only some fields (an import): keep stored values for missing ones.
+    """
+    if merge and session.get(Listing, raw.key) is not None:
+        old = session.get(Listing, raw.key)
+        for f in ("description", "city", "region", "postal_code", "seller_id", "seller_name", "published_at"):
+            if not getattr(raw, f):
+                setattr(raw, f, getattr(old, f))
+        if raw.price_eur is None:
+            raw.price_eur = old.price_eur
+        if raw.lat is None and old.geo_precision == "exact":
+            raw.lat, raw.lon = old.lat, old.lon
+        if not raw.images:
+            raw.images = old.images
     row = session.get(Listing, raw.key)
     is_new = row is None
     if is_new:
@@ -198,7 +212,7 @@ class Scanner:
                 stats["fetched"] += 1
                 if stats["fetched"] % 50 == 0:  # long result sets: keep progress if the run is cut short
                     s.commit()
-                listing, is_new, changed = ingest(s, self.settings, raw, game)
+                listing, is_new, changed = ingest(s, self.settings, raw, game, merge=self.full_analysis)
                 newly_photo = photo and not listing.photo_scan
                 listing.photo_scan = listing.photo_scan or photo
                 photo_now = newly_photo and self.recognizer is not None  # never photo-checked before
@@ -252,8 +266,15 @@ class _StaticMarket:
         return None
 
 
-def import_listings(settings: Settings, db: Database, recognizer, listings, game: str, photo: bool = True) -> dict:
-    """Analyse listings scraped elsewhere exactly like a scan would (photo checks included)."""
+def import_listings(settings: Settings, db: Database, recognizer, listings, game: str, photo: bool = True,
+                    all_images: bool = False) -> dict:
+    """Analyse listings scraped elsewhere exactly like a scan would (photo checks included).
+
+    all_images: check every photo of each ad, not just the first vision.max_images_per_listing.
+    """
+    if all_images:
+        settings = settings.model_copy(deep=True)
+        settings.vision.max_images_per_listing = max((len(r.images) for r in listings), default=0) or 1
     scanner = Scanner(settings, db, recognizer)
     scanner.full_analysis = True  # the point of an import is checking these ads' photos
     stats = {"fetched": 0, "new": 0, "updated": 0, "matched": 0, "photo_checked": 0, "deals_opened": 0, "errors": 0}

@@ -306,6 +306,23 @@ def parse_export_item(item: dict) -> RawListing | None:
     )
 
 
+def parse_listing_item(item: dict) -> RawListing | None:
+    """One ad from a gallery export ({external_id, url, title, price_text, images}); no
+    description or location, so stored values for those are kept on import."""
+    ext = item.get("external_id") or (_ID_IN_URL.search(item.get("url") or "") or [None, None])[1]
+    if not ext:
+        return None
+    return RawListing(
+        marketplace="milanuncios",
+        external_id=str(ext),
+        url=item.get("url") or f"{BASE}/anuncios/r{ext}.htm",
+        title=item.get("title") or "",
+        price_eur=_num(item.get("price_text")),
+        images=[_image_url(u) for u in item.get("images") or [] if u],
+        raw=item,
+    )
+
+
 def in_categories(item: dict, slugs: list[str]) -> bool:
     if not slugs or not item.get("categories"):  # no category information: keep
         return True

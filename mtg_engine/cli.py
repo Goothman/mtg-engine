@@ -99,18 +99,30 @@ def rematch(max_minutes: Optional[float] = typer.Option(None, help="Stop after t
 
 @app.command("import-ads")
 def import_ads(path: str, game: str = "mtg", photo: bool = typer.Option(True, "--photo/--no-photo",
-               help="Check every ad's photos (as for a generic search)"), config: Optional[str] = ConfigOpt):
-    """Analyse ads scraped elsewhere (a JSON list: Apify milanuncios items or a page-scraper export)."""
-    from .marketplaces.milanuncios import parse_apify_item, parse_export_item
+               help="Check every ad's photos (as for a generic search)"),
+               all_images: bool = typer.Option(True, "--all-images/--max-images", help="Check every photo of each ad"),
+               config: Optional[str] = ConfigOpt):
+    """Analyse ads scraped elsewhere: Apify milanuncios items, a page-scraper export (ad_title...)
+    or a gallery export ({"listings": [{external_id, url, title, price_text, images}]})."""
+    from .marketplaces.milanuncios import parse_apify_item, parse_export_item, parse_listing_item
     from .pipeline import import_listings
 
     settings, db = _ctx(config)
     items = json.loads(open(path, encoding="utf-8").read())
-    raws = [r for it in items if isinstance(it, dict)
-            for r in [parse_export_item(it) if "ad_title" in it else parse_apify_item(it)] if r is not None]
-    typer.echo(f"{len(raws)}/{len(items)} ads parsed")
+    if isinstance(items, dict):
+        items = items.get("listings") or items.get("items") or []
+
+    def parse(it: dict):
+        if "ad_title" in it:
+            return parse_export_item(it)
+        if "external_id" in it:
+            return parse_listing_item(it)
+        return parse_apify_item(it)
+
+    raws = [r for it in items if isinstance(it, dict) for r in [parse(it)] if r is not None]
+    typer.echo(f"{len(raws)}/{len(items)} ads parsed, {sum(len(r.images) for r in raws)} photos")
     recognizer = _recognizer(settings) if photo else None
-    typer.echo(json.dumps(import_listings(settings, db, recognizer, raws, game, photo=photo)))
+    typer.echo(json.dumps(import_listings(settings, db, recognizer, raws, game, photo=photo, all_images=all_images)))
 
 
 @app.command("enrich-sellers")
