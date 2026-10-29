@@ -232,6 +232,7 @@ class Milanuncios(Marketplace):
     def __init__(self, settings, config):
         super().__init__(settings, config)
         self._client = None
+        self._results_used = 0  # results requested from the actor in this run
         self._browser = None
         self._pw = None
 
@@ -267,10 +268,18 @@ class Milanuncios(Marketplace):
         if self._client is None:
             self._client = make_client(self.settings, self.config.proxy)
         actor = (self.config.apify_actor or "zen-studio/milanuncios-scraper").replace("/", "~")
+        want = self.config.max_results
+        if self.config.max_results_per_run is not None:
+            want = min(want, self.config.max_results_per_run - self._results_used)
+        if want <= 0:
+            log.info("milanuncios (apify): per-run budget of %d results used up; skipping %r",
+                     self.config.max_results_per_run, query)
+            return
+        self._results_used += want
         resp = self._client.post(
             APIFY_RUN.format(actor=actor),
             headers={"Authorization": f"Bearer {token}"},
-            json={"text": query, "maxResults": self.config.max_results, "sort": "relevance", "isShippable": False},
+            json={"text": query, "maxResults": want, "sort": "relevance", "isShippable": False},
             timeout=330,  # the sync endpoint waits up to 300 s for the run
         )
         if resp.status_code in (401, 402, 403):

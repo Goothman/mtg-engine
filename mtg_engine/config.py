@@ -45,6 +45,7 @@ class MarketplaceConfig(BaseModel):
     # fetcher "apify": an Apify actor does the fetching (token in env APIFY_TOKEN, never in git)
     apify_actor: str | None = None
     max_results: int = 100  # per query, for actor-based fetchers
+    max_results_per_run: int | None = None  # total budget per scan run (billed per result)
 
 
 class TargetSet(BaseModel):

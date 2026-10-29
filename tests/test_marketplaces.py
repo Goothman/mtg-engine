@@ -123,3 +123,19 @@ def test_milanuncios_apify_needs_token(settings, monkeypatch):
     m = Milanuncios(settings, settings.marketplaces["milanuncios"].model_copy(update={"fetcher": "apify"}))
     with pytest.raises(BlockedError):
         list(m.search("magic"))
+
+
+@respx.mock
+def test_milanuncios_apify_run_budget(settings, monkeypatch):
+    from mtg_engine.marketplaces.milanuncios import Milanuncios
+
+    cfg = settings.marketplaces["milanuncios"].model_copy(
+        update={"fetcher": "apify", "max_results": 100, "max_results_per_run": 250})
+    route = respx.post("https://api.apify.com/v2/acts/zen-studio~milanuncios-scraper/run-sync-get-dataset-items").mock(
+        return_value=httpx.Response(200, json=[]))
+    monkeypatch.setenv("APIFY_TOKEN", "t")
+    m = Milanuncios(settings, cfg)
+    for q in ("a", "b", "c", "d"):
+        list(m.search(q))
+    m.close()
+    assert [json.loads(c.request.content)["maxResults"] for c in route.calls] == [100, 100, 50]

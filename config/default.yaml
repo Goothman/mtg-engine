@@ -46,6 +46,7 @@ marketplaces:
     fetcher: apify
     apify_actor: zen-studio/milanuncios-scraper
     max_results: 100        # per query
+    max_results_per_run: 500  # total per scan run, to bound the Apify bill
     use_search_points: false
 
 games:

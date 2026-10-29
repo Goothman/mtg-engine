@@ -13,6 +13,9 @@ on:
         type: choice
         options: [all, photo, text]
         default: all
+      marketplace:
+        description: "Only this marketplace (empty = all), e.g. milanuncios"
+        default: ""
       max_queries:
         description: "Only run the first N queries of each kind (empty = all)"
         default: ""
@@ -57,6 +60,7 @@ jobs:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}   # Milanuncios via Apify; skipped if unset
           MODE: ${{ inputs.mode || 'all' }}
           MAX_QUERIES: ${{ inputs.max_queries }}
+          MARKETPLACE: ${{ inputs.marketplace }}
         run: |
           args=()
           case "$MODE" in
@@ -64,6 +68,7 @@ jobs:
             text) args+=(--no-photo) ;;
           esac
           if [ -n "$MAX_QUERIES" ]; then args+=(--max-queries "$MAX_QUERIES"); fi
+          if [ -n "$MARKETPLACE" ]; then args+=(--marketplace "$MARKETPLACE"); fi
           mtg-engine scan "${args[@]}" | tee scan-stats.json
           [ -s scan-stats.json ] || echo '{"note": "scan stopped early"}' > scan-stats.json
       - name: Re-check all ads with the current rules (also verifies photos of text matches)
