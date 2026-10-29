@@ -354,8 +354,9 @@ class Milanuncios(Marketplace):
             if len(page) < APIFY_PAGE:
                 break
             offset += APIFY_PAGE
-        if not items and status != "SUCCEEDED":  # e.g. input rejected: surface it in the scan errors
-            raise RuntimeError(f"apify run {status}: {run.get('statusMessage') or 'no message'}")
+        if not items:  # surface it in the scan errors, with the run to look up in the Apify console
+            raise RuntimeError(f"apify run {run['id']} ({status}: {run.get('statusMessage') or 'no message'}) "
+                               f"returned no items for {query!r} (maxResults {want})")
         kept = [it for it in items if isinstance(it, dict) and in_categories(it, self.config.category_slugs)]
         log.info("milanuncios (apify) q=%r -> %d items, %d in categories %s", query, len(items), len(kept), self.config.category_slugs)
         for item in kept:
