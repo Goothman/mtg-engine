@@ -361,7 +361,8 @@ class Milanuncios(Marketplace):
         log.info("milanuncios (apify) q=%r -> %d items, %d in categories %s", query, len(items), len(kept), self.config.category_slugs)
         for item in kept:
             listing = parse_apify_item(item)
-            if listing is None:
+            if listing is None:  # not an ad: often the actor's own message (error, limit, no results)
+                log.warning("milanuncios (apify) non-ad item: %s", json.dumps(item, ensure_ascii=False)[:400])
                 continue
             if listing.seller_id and isinstance(item.get("author"), dict):
                 self._authors[listing.seller_id] = _author_profile(item["author"])
