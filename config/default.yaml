@@ -46,9 +46,9 @@ marketplaces:
     fetcher: apify
     apify_actor: zen-studio/milanuncios-scraper
     # Paid per result: spend it on the generic searches ("cartas magic"...), whose photos are all
-    # checked for Alpha/Beta cards the seller didn't recognise. 6 photo queries x 84 ~= 500 per run.
+    # checked for Alpha/Beta cards the seller didn't recognise. One query ("cartas magic") x 500.
     query_kinds: [photo]
-    max_results: 84         # per query
+    max_results: 500        # per query
     max_results_per_run: 500  # total per scan run, to bound the Apify bill
     # the actor's search also returns books, DVDs, pins...: keep the categories Magic ads use
     category_slugs: [cartas-de-coleccion, otros-coleccionables, cromos-de-coleccion,
@@ -73,11 +73,6 @@ games:
     # Alpha/Beta cards in lots and collections are found even when the text doesn't name them.
     photo_queries:
       - cartas magic
-      - lote cartas magic
-      - coleccion cartas magic
-      - cartas magic the gathering
-      - lote magic the gathering
-      - cartas mtg
     targets:
       - set_code: lea
         label: Alpha
