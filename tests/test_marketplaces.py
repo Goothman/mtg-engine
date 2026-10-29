@@ -204,3 +204,14 @@ def test_milanuncios_apify_failed_run_is_an_error(settings, monkeypatch):
     m = Milanuncios(settings, settings.marketplaces["milanuncios"].model_copy(update={"fetcher": "apify"}))
     with pytest.raises(RuntimeError, match="FAILED"):
         list(m.search("cartas magic"))
+
+
+@respx.mock
+def test_milanuncios_apify_plan_limit_is_reported(settings, monkeypatch):
+    from mtg_engine.marketplaces.milanuncios import BlockedError, Milanuncios
+
+    mock_apify([{"message": "Free plan limit reached. You have used all 10 free runs."}])
+    monkeypatch.setenv("APIFY_TOKEN", "t")
+    m = Milanuncios(settings, settings.marketplaces["milanuncios"].model_copy(update={"fetcher": "apify"}))
+    with pytest.raises(BlockedError, match="Free plan limit"):
+        list(m.search("cartas magic"))

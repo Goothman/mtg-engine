@@ -359,9 +359,12 @@ class Milanuncios(Marketplace):
                                f"returned no items for {query!r} (maxResults {want})")
         kept = [it for it in items if isinstance(it, dict) and in_categories(it, self.config.category_slugs)]
         log.info("milanuncios (apify) q=%r -> %d items, %d in categories %s", query, len(items), len(kept), self.config.category_slugs)
-        for item in kept:
-            listing = parse_apify_item(item)
-            if listing is None:  # not an ad: often the actor's own message (error, limit, no results)
+        ads = [(it, parse_apify_item(it)) for it in kept]
+        if not any(ad for _, ad in ads):  # only the actor's own messages, e.g. "Free plan limit reached"
+            msgs = "; ".join(str(it.get("message") or it.get("error") or it)[:200] for it, _ in ads)
+            raise BlockedError(f"apify actor returned no ads for {query!r}: {msgs}")
+        for item, listing in ads:
+            if listing is None:
                 log.warning("milanuncios (apify) non-ad item: %s", json.dumps(item, ensure_ascii=False)[:400])
                 continue
             if listing.seller_id and isinstance(item.get("author"), dict):
