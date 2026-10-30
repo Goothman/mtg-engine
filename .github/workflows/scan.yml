@@ -62,9 +62,12 @@ jobs:
           fi
 
       - run: mtg-engine sync-catalog
+      - name: Note the start time
+        run: echo "JOB_START=$(date +%s)" >> "$GITHUB_ENV"
       - name: Scan
-        # bounded so a slow run still saves its progress and publishes what it found
-        timeout-minutes: 200   # a one-off full Milanuncios crawl waits for Apify, then checks photos
+        # reads every search result (19,000+ ads); photos of new ads are read in the next step.
+        # The scan stops itself at its time limit, so nothing is killed mid-write.
+        timeout-minutes: 140
         continue-on-error: true
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}   # Milanuncios via Apify; skipped if unset
@@ -80,7 +83,7 @@ jobs:
           esac
           if [ -n "$MAX_QUERIES" ]; then args+=(--max-queries "$MAX_QUERIES"); fi
           if [ -n "$MARKETPLACE" ]; then args+=(--marketplace "$MARKETPLACE"); fi
-          mtg-engine scan "${args[@]}" 2> >(tee scan.log >&2) | tee scan-stats.json
+          mtg-engine scan --defer-photos --max-minutes 120 "${args[@]}" 2> >(tee scan.log >&2) | tee scan-stats.json
           [ -s scan-stats.json ] || echo '{"note": "scan stopped early"}' > scan-stats.json
       - name: Import scraped ads
         if: ${{ inputs.import_file != '' }}
@@ -91,24 +94,42 @@ jobs:
         if: always()
         run: |
           [ -f scan.log ] || exit 0
-          grep -E "milanuncios|apify|query |ERROR|Traceback|Error" scan.log | grep -v "HTTP Request" | tail -25 \
+          grep -E "milanuncios|apify|query |stopped|ERROR|Traceback|Error" scan.log | grep -v "HTTP Request" | tail -25 \
             | sed -e 's/%/%25/g' -e 's/^/::notice title=scan::/'
           echo "::notice title=stats::$(cat scan-stats.json)"
           [ -f import-stats.json ] && echo "::notice title=import::$(tr '\n' ' ' < import-stats.json)" || true
-      - name: Apply the current rules to all stored ads (stored photo results; reads photos never read)
+      - name: Read photos never read and apply the current rules to all stored ads
         if: ${{ !inputs.recheck }}
-        # bounded: a backlog of unread photos is worked off over several runs, priority ads first
-        run: mtg-engine rematch --keep-photos --max-minutes 120
-        timeout-minutes: 140
+        # gets the rest of the run (job limit 350 min, ~20 kept for saving and publishing);
+        # a backlog of unread photos is worked off over several runs, priority ads first
+        run: |
+          left=$(( 325 - ($(date +%s) - JOB_START) / 60 ))
+          mtg-engine rematch --keep-photos --max-minutes $(( left > 10 ? left : 10 )) 2> >(tee rematch.log >&2)
+        timeout-minutes: 330
         continue-on-error: true
       - name: Re-check all ads with the current rules (also verifies photos of text matches)
         if: ${{ inputs.recheck }}
         # a new model/detector re-reads every photo: bounded, continues on the next run
-        run: mtg-engine rematch --max-minutes 120
-        timeout-minutes: 140
+        run: |
+          left=$(( 325 - ($(date +%s) - JOB_START) / 60 ))
+          mtg-engine rematch --max-minutes $(( left > 10 ? left : 10 )) 2> >(tee rematch.log >&2)
+        timeout-minutes: 330
         continue-on-error: true
-      - run: mtg-engine enrich-sellers
-      - run: mtg-engine agents run
+      - name: Photo summary (as annotations)
+        if: always()
+        run: |
+          [ -f rematch.log ] || exit 0
+          grep -E "rematch|ERROR|Traceback|Error" rematch.log | grep -v "HTTP Request" | tail -8 \
+            | sed -e 's/%/%25/g' -e 's/^/::notice title=photos::/'
+      - run: mtg-engine enrich-sellers 2> >(tee -a after.log >&2)
+        continue-on-error: true   # never keep the dashboard from being published
+      - run: mtg-engine agents run 2> >(tee -a after.log >&2)
+        continue-on-error: true
+      - name: Errors after the scan (as annotations)
+        if: always()
+        run: |
+          [ -f after.log ] || exit 0
+          grep -E "Error|Traceback|locked" after.log | tail -8 | sed -e 's/%/%25/g' -e 's/^/::notice title=after::/'
       - run: mtg-engine export-static
 
       - name: Save database

@@ -144,6 +144,10 @@ class Scanner:
         self.image_client = None
         self._sellers: dict[str, dict] = {}
         self.full_analysis = False  # True: known ads get the photo check too (imports)
+        # True: new ads are stored and text-matched only; their photos are read afterwards by
+        # `rematch --keep-photos`, so a 19,000-ad search is read to the end in one run
+        self.defer_photos = False
+        self.deadline: float | None = None  # time.monotonic() value: stop cleanly, keep progress
 
     def run(self, games: list[str] | None = None, marketplaces: list[str] | None = None, max_queries: int | None = None,
             photo_queries: bool | None = None) -> dict:
@@ -178,6 +182,8 @@ class Scanner:
                     queries = [(q, p) for q, p in queries if ("photo" if p else "text") in mcfg.query_kinds]
                     for query, photo in queries:
                         for point in points:
+                            if self._out_of_time():
+                                break
                             try:
                                 self._scan_query(market, game, query, point, stats, photo)
                             except (httpx.ProxyError, httpx.ConnectError, BlockedError) as e:
@@ -206,6 +212,10 @@ class Scanner:
         with self.db.session() as s:
             matcher = build_matcher(s, self.settings, game)
             for raw in market.search(query, point):
+                if self._out_of_time():
+                    log.warning("scan stopped at the time limit after %d results of %r; the next run continues", len(seen), query)
+                    stats["stopped_early"] = True
+                    break
                 if raw.key in seen:
                     continue
                 seen.add(raw.key)
@@ -219,11 +229,15 @@ class Scanner:
                 if not (is_new or changed or photo_now or self.full_analysis):
                     continue
                 s.flush()
-                # Incremental: new ads (and ads never photo-checked) get the full analysis; known ads
-                # only get their text re-read and value recalculated, keeping earlier photo results.
-                analyse(s, self.settings, listing, matcher, self.recognizer, self.image_client,
-                        keep_vision=not (is_new or photo_now or self.full_analysis))
-                if (is_new or photo_now or self.full_analysis) and listing.photo_scan and self.recognizer is not None and listing.images:
+                full = is_new or photo_now or self.full_analysis
+                if full and self.defer_photos:  # text now, every photo later in the rematch step
+                    analyse(s, self.settings, listing, matcher)
+                    stats["photo_deferred"] = stats.get("photo_deferred", 0) + bool(listing.images)
+                else:
+                    # Incremental: new ads (and ads never photo-checked) get the full analysis; known ads
+                    # only get their text re-read and value recalculated, keeping earlier photo results.
+                    analyse(s, self.settings, listing, matcher, self.recognizer, self.image_client, keep_vision=not full)
+                if full and not self.defer_photos and listing.photo_scan and self.recognizer is not None and listing.images:
                     stats["photo_checked"] += 1
                     if stats["photo_checked"] % 100 == 0:
                         log.info("photo-checked %d ads so far (%d matched)", stats["photo_checked"], stats["matched"])
@@ -243,6 +257,11 @@ class Scanner:
                 else:
                     maybe_close_deal(s, listing)
                 s.flush()
+
+    def _out_of_time(self) -> bool:
+        import time
+
+        return self.deadline is not None and time.monotonic() > self.deadline
 
     def _expire_stale(self, s: Session) -> None:
         cutoff = utcnow() - STALE_AFTER
@@ -359,6 +378,8 @@ def rematch_all(settings: Settings, db: Database, recognizer=None, max_minutes: 
             with db.session() as s:  # one commit per batch keeps progress
                 matchers: dict[str, TextMatcher] = {}
                 for listing in s.scalars(select(Listing).where(Listing.id.in_(ids[start : start + batch]))):
+                    if deadline and time.monotonic() > deadline:  # a batch of unread photos can take minutes
+                        break
                     if listing.game not in settings.games:
                         continue
                     m = matchers.get(listing.game) or matchers.setdefault(listing.game, build_matcher(s, settings, listing.game))

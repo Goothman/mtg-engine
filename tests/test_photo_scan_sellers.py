@@ -412,3 +412,37 @@ def test_fast_rematch_reads_photos_never_read(settings, db):
     assert rec.calls == 1  # only the unread photo
     with db.session() as s:
         assert s.get(Listing, "fake:c7").match_count == 1
+
+
+@respx.mock
+def test_deferred_photos_are_read_by_rematch(settings, db):
+    """A huge search is read to the end first; every photo of the new ads is read afterwards."""
+    from mtg_engine.pipeline import rematch_all
+
+    for name in ("lotus", "weak", "unlimited"):
+        respx.get(f"https://img.test/{name}.jpg").mock(return_value=httpx.Response(200, content=name.encode()))
+    rec = FakeRecognizer({b"lotus": [Recognition("b-lotus", 0.86, probs("lea", 0.9), None)]})
+    REGISTRY["fake"] = PhotoMarket
+    settings.marketplaces = {"fake": MarketplaceConfig(use_search_points=False, delay_seconds=0)}
+    settings.games["pokemon"].enabled = False
+    settings.games["mtg"].photo_queries = ["cartas magic"]
+    scanner = Scanner(settings, db, rec)
+    scanner.defer_photos = True
+    stats = scanner.run(photo_queries=True)
+    assert rec.calls == 0 and stats["new"] == 3 and stats["photo_deferred"] == 3
+    with db.session() as s:
+        assert s.get(Listing, "fake:p1").photo_scan and s.get(Listing, "fake:p1").match_count == 0
+    rematch_all(settings, db, rec, keep_photos=True)
+    assert rec.calls == 3
+    with db.session() as s:
+        assert s.get(Listing, "fake:p1").match_count == 1
+
+
+def test_scan_stops_cleanly_at_its_time_limit(settings, db):
+    REGISTRY["fake"] = PhotoMarket
+    settings.marketplaces = {"fake": MarketplaceConfig(use_search_points=False, delay_seconds=0)}
+    settings.games["pokemon"].enabled = False
+    scanner = Scanner(settings, db, None)
+    scanner.deadline = 0.0  # already past
+    stats = scanner.run(photo_queries=False)
+    assert stats["fetched"] == 0 and stats["errors"] == 0

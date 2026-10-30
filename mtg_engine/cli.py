@@ -72,6 +72,9 @@ def scan(
     max_queries: Optional[int] = typer.Option(None, help="Only run the first N queries (smoke test)"),
     photo: Optional[bool] = typer.Option(None, "--photo/--no-photo",
                                          help="--photo: only photo queries (vision on every ad); --no-photo: only text queries"),
+    defer_photos: bool = typer.Option(False, "--defer-photos",
+                                      help="Store and text-match new ads now; read their photos later with rematch --keep-photos"),
+    max_minutes: Optional[float] = typer.Option(None, help="Stop cleanly after this long (results so far are kept)"),
     config: Optional[str] = ConfigOpt,
 ):
     """Run one scan across marketplaces and update matches/valuations."""
@@ -81,7 +84,13 @@ def scan(
     recognizer = _recognizer(settings)
     if photo and recognizer is None:
         raise typer.BadParameter("--photo needs the vision model (models/) and pip install '.[vision]'")
-    stats = Scanner(settings, db, recognizer).run(game or None, marketplace or None, max_queries, photo)
+    scanner = Scanner(settings, db, recognizer)
+    scanner.defer_photos = defer_photos
+    if max_minutes:
+        import time
+
+        scanner.deadline = time.monotonic() + max_minutes * 60
+    stats = scanner.run(game or None, marketplace or None, max_queries, photo)
     typer.echo(json.dumps(stats))
 
 
