@@ -45,7 +45,7 @@ To run continuously: `mtg-engine scheduler` (catalog sync every 24 h, scans ever
 | `games.<game>.filters` | Minimum card and ad value, maximum asking price, rarities, card types, basic lands |
 | `games.<game>.red_flags` | Words that halve match confidence (proxy, réplica, unlimited…) |
 | `marketplaces.*` | Enable/disable, pages, delay, `fetcher: playwright` for anti-bot pages |
-| `region` | Country, map centre, Wallapop search points + radius |
+| `region` | Country, map centre, Wallapop search points + radius (default: one point, 1000 km, all of Spain) |
 | `pricing` | Source order, USD→EUR rate |
 | `vision` | Turn on image recognition once a model is trained (see `ml/README.md`) |
 | `deals` | Thresholds for opening a deal automatically |

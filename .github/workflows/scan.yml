@@ -40,7 +40,7 @@ concurrency:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 300
+    timeout-minutes: 350   # GitHub-hosted maximum is 360; the steps below are bounded to fit
     steps:
       - uses: actions/checkout@v4
         with:

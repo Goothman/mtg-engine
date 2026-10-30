@@ -13,6 +13,9 @@ Rules that follow from that (the owner asked for each of these explicitly):
   sellers who sell proxies, foils, other languages, black-bordered reprints like FBB/IVBB/CE).
 - **English Alpha/Beta only.** Other languages, foil, Collectors'/International Edition and
   white-bordered cards (Unlimited, Revised, 4th, 5th...) are never Alpha/Beta.
+- **Read every result.** Wallapop: one search point covering all of Spain (1000 km radius) and
+  no page limit (`max_pages: null`): "cartas magic" returns 19,000+ ads, all Magic-related as
+  deep as sampled. Fixed page limits and per-city points saw under 10% of them.
 - **Generic search first.** Searches are "cartas magic" only (Wallapop and Milanuncios); a paid
   result budget (Apify) goes to that search.
 - **Incremental scans.** Known ads: update price/status, reuse stored photo readings, read only

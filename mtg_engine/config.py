@@ -35,7 +35,7 @@ class RegionConfig(BaseModel):
 
 class MarketplaceConfig(BaseModel):
     enabled: bool = True
-    max_pages: int = 3
+    max_pages: int | None = 3  # None = every page the marketplace returns
     delay_seconds: float = 2.0
     fetcher: str = "httpx"
     use_search_points: bool = False

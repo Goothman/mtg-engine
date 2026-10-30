@@ -227,3 +227,19 @@ def test_milanuncios_export_items():
     assert a.url.endswith("-611890139.htm") and a.images[0].endswith("?rule=detail_640x480")  # keeps its size rule
     assert a.seller_name == "Vendedor 0" and (b.city, b.region) == ("Valencia", "Valencia")
     assert (b.published_at.year, b.published_at.month, b.published_at.day, b.published_at.hour) == (2026, 9, 30, 18)
+
+
+@respx.mock
+def test_wallapop_unlimited_pages_until_the_end(settings, monkeypatch):
+    """max_pages: null reads every page Wallapop offers (the needle can be deep)."""
+    import mtg_engine.marketplaces.wallapop as wp
+
+    monkeypatch.setattr(wp.time, "sleep", lambda s: None)
+    pages = [{"data": {"section": {"payload": {"items": [{"id": f"p{p}i{i}", "title": "cartas magic", "web_slug": f"s{p}{i}"}
+                                                        for i in range(3)]}}},
+              "meta": {"next_page": f"tok{p + 1}" if p < 11 else None}} for p in range(12)]
+    calls = iter(pages)
+    respx.get(API_URL).mock(side_effect=lambda req: httpx.Response(200, json=next(calls)))
+    w = wp.Wallapop(settings, settings.marketplaces["wallapop"].model_copy(update={"max_pages": None, "delay_seconds": 0}))
+    assert len(list(w.search("cartas magic"))) == 36  # 12 pages, stops when there's no next page
+    w.close()

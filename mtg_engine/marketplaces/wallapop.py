@@ -8,6 +8,7 @@ Wallapop only returns results to EU/Spanish IPs — set http.proxy if needed.
 """
 from __future__ import annotations
 
+import itertools
 import logging
 import time
 from collections.abc import Iterator
@@ -124,7 +125,8 @@ class Wallapop(Marketplace):
                 longitude=point.lon,
                 distance_in_km=self.settings.region.search_radius_km,
             )
-        for page in range(self.config.max_pages):
+        pages = range(self.config.max_pages) if self.config.max_pages is not None else itertools.count()
+        for page in pages:
             resp = get_with_retry(self.client, API_URL, params=params)
             items, nxt = extract_items(resp.json())
             log.info("wallapop q=%r point=%s page=%d -> %d items", query, point and point.name, page, len(items))
