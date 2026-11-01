@@ -243,3 +243,19 @@ def test_wallapop_unlimited_pages_until_the_end(settings, monkeypatch):
     w = wp.Wallapop(settings, settings.marketplaces["wallapop"].model_copy(update={"max_pages": None, "delay_seconds": 0}))
     assert len(list(w.search("cartas magic"))) == 36  # 12 pages, stops when there's no next page
     w.close()
+
+
+def test_parse_full_listing_export():
+    """Listing export with the ad page read: description, price, place and seller come through."""
+    from mtg_engine.marketplaces.milanuncios import parse_listing_item
+
+    r = parse_listing_item({
+        "marketplace": "milanuncios", "external_id": "611890139",
+        "url": "https://www.milanuncios.com/cartas-de-coleccion/cartas-magic-611890139.htm",
+        "title": "cartas Magic", "description": "Lote de unas 350 cartas", "price_eur": 30, "city": "Elche",
+        "region": "Alicante", "postal_code": None, "lat": 38.2605, "lon": -0.6855, "seller_id": "9349832",
+        "seller_name": None, "published_at": "2026-08-27T11:42:35Z",
+        "images": ["https://images.milanuncios.com/api/v1/ma-ad-media-pro/images/49eb?rule=hw545"]})
+    assert (r.description, r.price_eur, r.city, r.region, r.lat, r.seller_id) == (
+        "Lote de unas 350 cartas", 30.0, "Elche", "Alicante", 38.2605, "9349832")
+    assert r.published_at.year == 2026 and r.images == ["https://images.milanuncios.com/api/v1/ma-ad-media-pro/images/49eb?rule=hw545"]

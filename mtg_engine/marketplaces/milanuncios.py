@@ -307,18 +307,37 @@ def parse_export_item(item: dict) -> RawListing | None:
 
 
 def parse_listing_item(item: dict) -> RawListing | None:
-    """One ad from a gallery export ({external_id, url, title, price_text, images}); no
-    description or location, so stored values for those are kept on import."""
+    """One ad from a listing export: {external_id, url, title, images} plus, when the scraper
+    read the ad page, price_eur (or price_text), description, city, region, postal_code, lat/lon,
+    seller_id/seller_name and published_at. Fields it lacks keep their stored values on import."""
     ext = item.get("external_id") or (_ID_IN_URL.search(item.get("url") or "") or [None, None])[1]
     if not ext:
         return None
+    from datetime import datetime
+
+    published = None
+    if item.get("published_at"):
+        try:
+            published = datetime.fromisoformat(str(item["published_at"]).replace("Z", "+00:00"))
+        except ValueError:
+            pass
+    price = item.get("price_eur")
     return RawListing(
         marketplace="milanuncios",
         external_id=str(ext),
         url=item.get("url") or f"{BASE}/anuncios/r{ext}.htm",
         title=item.get("title") or "",
-        price_eur=_num(item.get("price_text")),
+        description=item.get("description") or "",
+        price_eur=float(price) if isinstance(price, (int, float)) else _num(item.get("price_text")),
+        city=item.get("city"),
+        region=item.get("region"),
+        postal_code=item.get("postal_code"),
+        lat=item.get("lat"),
+        lon=item.get("lon"),
+        seller_id=str(item["seller_id"]) if item.get("seller_id") else None,
+        seller_name=item.get("seller_name"),
         images=[_image_url(u) for u in item.get("images") or [] if u],
+        published_at=published,
         raw=item,
     )
 
