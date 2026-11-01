@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import logging
 import time
+from pathlib import Path
 from typing import Optional
 
 import typer
@@ -105,6 +106,46 @@ def rematch(max_minutes: Optional[float] = typer.Option(None, help="Stop after t
     settings, db = _ctx(config)
     recognizer = _recognizer(settings)  # with --keep-photos it only reads stored photo results
     typer.echo(f"re-analysed {rematch_all(settings, db, recognizer, max_minutes, keep_photos=keep_photos)} listings")
+
+
+@app.command("text-check-replay")
+def text_check_replay(out: str = typer.Option("text-check-replay.json", help="Report file"),
+                      config: Optional[str] = ConfigOpt):
+    """Apply the photo text check to every ad on the dashboard and report what changes (before publishing)."""
+    from sqlalchemy import or_, select
+
+    from .http import make_client
+    from .models import Listing, TextCheck
+    from .pipeline import analyse, build_matcher
+
+    settings, db = _ctx(config)
+    settings.vision.text_check = True  # what the dashboard would look like with it on
+    recognizer = _recognizer(settings)
+    if recognizer is None:
+        raise typer.BadParameter("needs the vision model (models/) and pip install '.[vision]'")
+    report = []
+    with db.session() as s, make_client(settings) as client:
+        ads = s.scalars(select(Listing).where(Listing.status == "active", or_(Listing.match_count > 0, Listing.needs_review))).all()
+        matchers = {}
+        for listing in ads:
+            before = (listing.match_count, listing.est_total_value, sorted(m.card.name for m in listing.matches if m.confidence > 0))
+            m = matchers.get(listing.game) or matchers.setdefault(listing.game, build_matcher(s, settings, listing.game))
+            analyse(s, settings, listing, m, recognizer, client, keep_vision=True)
+            s.flush()
+            checks = s.scalars(select(TextCheck).where(TextCheck.url.in_(listing.images or []))).all()
+            report.append({
+                "id": listing.id, "title": listing.title, "url": listing.url, "price": listing.price_eur,
+                "before": {"shown": before[0] > 0, "value": before[1], "cards": before[2]},
+                "after": {"shown": listing.match_count > 0, "value": listing.est_total_value,
+                          "cards": sorted(m.card.name for m in listing.matches if m.confidence > 0),
+                          "flags": [f for f in listing.flags or [] if f.startswith(("vision:text", "text_"))]},
+                "checks": [{"photo": c.url, "card": c.card_name, **c.result} for c in checks],
+            })
+            typer.echo(f"{listing.id}: {'shown' if before[0] else '-'} -> {'shown' if listing.match_count else 'HIDDEN'} "
+                       f"{[(c.card_name, c.result.get('decision'), c.result.get('reason')) for c in checks]}", err=True)
+    Path(out).write_text(json.dumps(report, indent=1, ensure_ascii=False, default=str))
+    gone = sum(r["before"]["shown"] and not r["after"]["shown"] for r in report)
+    typer.echo(json.dumps({"ads": len(report), "hidden": gone, "checked": sum(len(r["checks"]) for r in report)}))
 
 
 @app.command("import-ads")

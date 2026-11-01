@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from ..config import Settings
 from ..http import make_client
-from ..models import CardPrinting, ImageScan, Listing, Match, utcnow
+from ..models import CardPrinting, ImageScan, Listing, Match, TextCheck, utcnow
 from .recognizer import Recognition
 
 log = logging.getLogger(__name__)
@@ -59,7 +59,7 @@ def recognize_url(session: Session, client: httpx.Client, recognizer, url: str, 
     """
     cached = session.get(ImageScan, url)
     if cached is not None and (reuse_cached or cached.model == recognizer.fingerprint):
-        return [Recognition(r["card_id"], r["similarity"], r["edition_probs"], None) for r in cached.results]
+        return [Recognition(r["card_id"], r["similarity"], r["edition_probs"], _box(r)) for r in cached.results]
     if not prefetched:
         content = _download(client, url)
     if content is None:
@@ -71,12 +71,41 @@ def recognize_url(session: Session, client: httpx.Client, recognizer, url: str, 
         log.debug("vision failed on %s: %s", url, e)
         return None
     results = [{"card_id": r.card_id, "similarity": round(r.similarity, 4),
-                "edition_probs": {k: round(v, 4) for k, v in r.edition_probs.items()}} for r in recs]
+                "edition_probs": {k: round(v, 4) for k, v in r.edition_probs.items()},
+                "box": [int(v) for v in r.box] if r.box else None} for r in recs]
     if cached is None:
         session.add(ImageScan(url=url, model=recognizer.fingerprint, results=results))
     else:
         cached.model, cached.results, cached.scanned_at = recognizer.fingerprint, results, utcnow()
-    return [Recognition(r["card_id"], r["similarity"], r["edition_probs"], None) for r in results]
+    return [Recognition(r["card_id"], r["similarity"], r["edition_probs"], _box(r)) for r in results]
+
+
+def _box(r: dict):
+    return tuple(r["box"]) if r.get("box") else None
+
+
+def text_verdict(session: Session, client: httpx.Client, recognizer, url: str, card: CardPrinting, box) -> dict | None:
+    """Read the text of `card` in this photo and judge it (vision/textcheck.py), once per photo and card."""
+    from . import textcheck
+
+    done = session.get(TextCheck, (url, card.name))
+    if done is not None and done.result.get("v") == textcheck.VERSION:
+        return done.result
+    content = _download(client, url)
+    if content is None:
+        _failures.pop(url, None)
+        return None
+    try:
+        ids = set(session.scalars(select(CardPrinting.id).where(CardPrinting.name == card.name)))
+        result = textcheck.check_photo(content, card.name, box, recognizer, ids).to_json()
+    except Exception as e:
+        log.debug("text check failed on %s: %s", url, e)
+        return None
+    if done is None:
+        session.add(TextCheck(url=url, card_name=card.name, result=result))
+    else:
+        done.result, done.checked_at = result, utcnow()
+    return result
 
 
 WHITE_BORDER = ("2ed", "3ed")  # edition classes the model knows with white borders (Unlimited, Revised)
@@ -136,6 +165,33 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
         white = sum(r.edition_probs.get(e, 0.0) for e in WHITE_BORDER)
         if white >= vc.white_border_veto:
             vetoed.setdefault(card.name, "white_border")
+    # 1b. text check on likely finds: later wording, another language or a copyright line
+    #     rules Alpha/Beta out; text that can't be read changes nothing
+    if vc.text_check and readings:
+        from . import textcheck
+
+        if textcheck.available():
+            seen: set[tuple[str, str]] = set()
+            check_client = client if not own_client else make_client(settings)
+            try:
+                for url, r in readings:
+                    card = session.get(CardPrinting, r.card_id)
+                    if card is None or card.name in vetoed or (url, card.name) in seen or r.similarity < vc.min_similarity:
+                        continue
+                    p_ab = sum(r.edition_probs.get(t, 0.0) for t in targets)
+                    if card.name not in by_name and (r.similarity < vc.photo_min_similarity or p_ab < vc.text_check_min_edition_prob):
+                        continue
+                    seen.add((url, card.name))
+                    v = text_verdict(session, check_client, recognizer, url, card, r.box)
+                    if v is None:
+                        continue
+                    if v["decision"] == "contradicts":
+                        vetoed.setdefault(card.name, "text_" + v["reason"].replace(":", "_"))
+                    elif v["decision"] == "confirms":
+                        flags.append("text_alpha_beta_wording")
+            finally:
+                if own_client:
+                    check_client.close()
     for name, why in vetoed.items():
         m = by_name.get(name)
         if m is not None and m.status == "auto":

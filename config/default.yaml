@@ -129,6 +129,10 @@ vision:
   # matches seen only in photos (no supporting text) must clear a higher bar
   photo_min_similarity: 0.7
   photo_min_edition_prob: 0.7
+  # Second check: read the text on likely finds (OCR) and compare it with each edition's wording:
+  # later wording (Revised/4th...), another language or a copyright line rules Alpha/Beta out.
+  # Off until its replay on the dashboard ads (text-check workflow) has been reviewed.
+  text_check: false
 
 deals:
   auto_open_min_value_eur: 25

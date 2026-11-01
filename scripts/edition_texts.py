@@ -40,9 +40,10 @@ def main() -> None:
             if code not in TARGETS and name not in cards:
                 continue
             entry = cards.setdefault(name, {"en": {}, "foreign": {}})
-            entry["en"].setdefault(code.lower(), {"type": c.get("originalType") or c.get("type") or "",
-                                                  "text": c.get("originalText") or c.get("text") or "",
-                                                  "flavor": c.get("flavorText") or ""})
+            # printed wording only: today's Oracle wording would look like a later edition
+            if c.get("originalText") or c.get("originalType"):
+                entry["en"].setdefault(code.lower(), {"type": c.get("originalType") or "", "text": c.get("originalText") or "",
+                                                      "flavor": c.get("flavorText") or ""})
             for f in c.get("foreignData") or []:
                 text = " ".join(x for x in (f.get("type"), f.get("text"), f.get("flavorText")) if x)
                 if text and text not in entry["foreign"].setdefault(f["language"], []):

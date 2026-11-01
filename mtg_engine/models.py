@@ -115,6 +115,17 @@ class ImageScan(Base):
     scanned_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
 
+class TextCheck(Base):
+    """Text read on one card in one ad photo and the verdict (vision/textcheck.py), so it's done once."""
+
+    __tablename__ = "text_checks"
+
+    url: Mapped[str] = mapped_column(Text, primary_key=True)
+    card_name: Mapped[str] = mapped_column(String(200), primary_key=True)
+    result: Mapped[dict[str, Any]] = mapped_column(JSON, default=dict)  # Verdict.to_json()
+    checked_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+
 class Deal(Base):
     """Downstream workflow state for a promising listing. Driven by agents."""
 

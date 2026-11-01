@@ -104,6 +104,10 @@ class VisionConfig(BaseModel):
     # If an ad's photos were checked and nothing in them resembles an old card, text matches
     # are demoted (e.g. "Myr alfa" is a modern card, not Alpha).
     photo_contradiction_similarity: float = 0.45
+    # Second check on likely finds: read the card's text and compare it with each edition's
+    # wording and language (vision/textcheck.py; needs tesseract). Unreadable text changes nothing.
+    text_check: bool = True
+    text_check_min_edition_prob: float = 0.5  # read cards the model gives at least this Alpha+Beta
 
 
 class DealsConfig(BaseModel):

@@ -1,0 +1,54 @@
+name: text-check
+# Measures the photo text check before it changes the dashboard (CLAUDE.md: check real results first):
+#   1. accuracy on real card scans (Beta / Unlimited / Revised / 4th / foreign) from Scryfall;
+#   2. replay on every ad now on the dashboard: what would be hidden and why.
+# Reports are pushed to the `engine-reports` branch; the database and dashboard are not changed.
+on:
+  workflow_dispatch:
+    inputs:
+      names:
+        description: "Card names to sample for the scan accuracy test"
+        default: "40"
+
+permissions:
+  contents: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: sudo apt-get install -y -q tesseract-ocr
+      - run: pip install -e '.[vision]'
+      - name: Restore database
+        run: |
+          mkdir -p data
+          git fetch --depth 1 origin engine-data
+          git show FETCH_HEAD:mtg_engine.db.gz | gunzip > data/mtg_engine.db
+      - name: Replay on the dashboard ads
+        continue-on-error: true
+        run: mtg-engine text-check-replay --out replay.json | tee replay-summary.json
+      - name: Accuracy on card scans
+        continue-on-error: true
+        timeout-minutes: 150
+        run: python ml/eval_textcheck.py --names "${{ inputs.names }}" --out scans.json | tail -20
+      - name: Push reports
+        if: always()
+        run: |
+          tmp=$(mktemp -d)
+          cp replay.json scans.json "$tmp"/ 2>/dev/null || true
+          cd "$tmp"
+          git init -q -b engine-reports
+          git config user.name "mtg-engine bot"
+          git config user.email "mtg-engine-bot@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Text check reports $(date -u +%FT%TZ)"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" engine-reports
+          echo "::notice title=replay::$(cat $GITHUB_WORKSPACE/replay-summary.json 2>/dev/null)"

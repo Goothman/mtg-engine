@@ -23,7 +23,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-vision = ["onnxruntime>=1.17", "opencv-python-headless>=4.9"]
+vision = ["onnxruntime>=1.17", "opencv-python-headless>=4.9", "pytesseract>=0.3.10"]  # + the tesseract-ocr binary
 browser = ["playwright>=1.44"]
 postgres = ["psycopg[binary]>=3.1"]
 train = [
