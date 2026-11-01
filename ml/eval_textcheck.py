@@ -112,6 +112,8 @@ def main() -> None:
                     jobs.append((name, kind, s, lang, size, content, box))
             for r in pool.map(check, jobs):
                 rows.append(r)
+                with args.out.with_suffix(".rows.jsonl").open("a") as fh:  # partial results survive a timeout
+                    fh.write(json.dumps(r) + "\n")
                 counts[f"{r['kind']}/{r['size']}"][r["decision"]] += 1
             print(name, [(r["set"], r["lang"], r["size"], r["decision"][:5]) for r in rows[-len(jobs):]], flush=True)
     summary = {k: dict(v) for k, v in sorted(counts.items())}

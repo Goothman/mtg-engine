@@ -16,6 +16,7 @@ import difflib
 import gzip
 import json
 import logging
+import os
 import re
 import shutil
 import unicodedata
@@ -26,6 +27,9 @@ from pathlib import Path
 import numpy as np
 
 log = logging.getLogger(__name__)
+# tesseract uses OpenMP threads; several readers at once (thread pools) then stall each other
+# (8 photos: >10 min instead of 3 s). One thread per reader; parallelism comes from the pool.
+os.environ.setdefault("OMP_THREAD_LIMIT", "1")
 
 DATA = Path(__file__).resolve().parents[1] / "data" / "edition_texts.json.gz"
 TARGETS = ("lea", "leb")
