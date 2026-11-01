@@ -45,7 +45,7 @@
         <label class="inline">Min ratio<input type="number" name="min_ratio" min="0" step="0.1" value=""></label>
         <select name="sort" aria-label="Sort">
           <option value="value">Rank: total value</option>
-          <option value="ratio">Rank: value / price</option>
+          <option value="ratio">Rank: N× asking (value ÷ price)</option>
           <option value="score">Rank: confidence-weighted</option>
           <option value="newest">Newest first</option>
         </select>
@@ -69,7 +69,8 @@
         <div class="panel map-panel">
           <div class="panel-head">
             <h2>Map</h2>
-            <span class="legend">
+            <button type="button" class="btn small" id="map-mode" aria-pressed="false">Show N× asking</button>
+            <span class="legend" id="map-legend">
               <span class="dot exact"></span>exact
               <span class="dot approx"></span>province (approx.)
               <span class="muted">· size & brightness = total value</span>

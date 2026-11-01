@@ -16,8 +16,9 @@
   };
   // Sequential blue ramp (dark surface): brighter = more valuable.
   const RAMP = ["#184f95", "#256abf", "#3987e5", "#6da7ec", "#9ec5f4", "#cde2fb"];
+  const RATIO_GREEN = "#0ca30c";
 
-  const state = { config: null, items: [], selected: null, markers: new Map(), map: null, layer: null };
+  const state = { config: null, items: [], selected: null, markers: new Map(), map: null, layer: null, mapMode: "value" };
 
   // Static snapshot mode (e.g. Vercel): data embedded as window.MTG_STATIC, read-only, filtered client-side.
   const STATIC = window.MTG_STATIC || null;
@@ -274,18 +275,21 @@
     if (!state.map) return;
     state.layer.clearLayers();
     state.markers.clear();
-    const pts = state.items.filter((l) => l.lat != null);
-    const max = Math.max(1, ...pts.map((l) => l.est_total_value || 0));
-    for (const l of pts.slice().sort((a, b) => a.est_total_value - b.est_total_value)) {
+    // "N× asking" mode: only ads with a price, green, sized by value ÷ price (log scale: ratios span 0.1× to 1000×)
+    const byRatio = state.mapMode === "ratio";
+    const pts = state.items.filter((l) => l.lat != null && (!byRatio || l.value_ratio != null));
+    const metric = (l) => (byRatio ? l.value_ratio : l.est_total_value) || 0;
+    const max = Math.max(1, ...pts.map(metric));
+    for (const l of pts.slice().sort((a, b) => metric(a) - metric(b))) {
       const exact = l.geo_precision === "exact";
-      const r = 6 + 14 * Math.sqrt((l.est_total_value || 0) / max);
-      const color = valueColor(l.est_total_value, max);
+      const r = byRatio ? 5 + 17 * Math.log1p(metric(l)) / Math.log1p(max) : 6 + 14 * Math.sqrt(metric(l) / max);
+      const color = byRatio ? RATIO_GREEN : valueColor(l.est_total_value, max);
       const m = L.circleMarker([l.lat, l.lon], {
         radius: r, color: exact ? "#1a1a19" : color, weight: 2, dashArray: exact ? null : "3 3",
         fillColor: color, fillOpacity: exact ? 0.85 : 0.45,
       });
       m.bindPopup(`<b>${esc(l.title)}</b><br>${esc(l.marketplace)} · ${esc(place(l))}${exact ? "" : " <span class='muted'>(approx.)</span>"}${sellerName(l) ? ` · 👤 ${esc(sellerName(l))}` : ""}<br>Value <b>${eur(l.est_total_value)}</b> · asking ${eur(l.price_eur)}${l.value_ratio ? ` · ${l.value_ratio.toFixed(2)}×` : ""}<br><a href="${esc(l.url)}" target="_blank" rel="noopener">Open ad ↗</a>`);
-      m.bindTooltip(`${eur(l.est_total_value)} · ${esc(l.title.slice(0, 40))}`, { direction: "top" });
+      m.bindTooltip(`${byRatio ? `${metric(l).toFixed(2)}× asking` : eur(l.est_total_value)} · ${esc(l.title.slice(0, 40))}`, { direction: "top" });
       m.on("click", () => expand(l.id));
       m.addTo(state.layer);
       state.markers.set(l.id, m);
@@ -338,6 +342,16 @@
     let deb;
     $("#filters").addEventListener("input", () => { clearTimeout(deb); deb = setTimeout(loadListings, 250); });
     $("#filters").addEventListener("submit", (e) => e.preventDefault());
+    $("#map-mode").addEventListener("click", (e) => {
+      const byRatio = state.mapMode !== "ratio";
+      state.mapMode = byRatio ? "ratio" : "value";
+      e.currentTarget.setAttribute("aria-pressed", String(byRatio));
+      e.currentTarget.textContent = byRatio ? "Show total value" : "Show N× asking";
+      $("#map-legend").innerHTML = byRatio
+        ? '<span class="dot ratio"></span>ads with a price <span class="muted">· size = N× asking (value ÷ price)</span>'
+        : '<span class="dot exact"></span>exact <span class="dot approx"></span>province (approx.) <span class="muted">· size & brightness = total value</span>';
+      renderMap();
+    });
 
     $("#listings").addEventListener("click", async (e) => {
       const btn = e.target.closest("button[data-act]");

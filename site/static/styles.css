@@ -82,6 +82,8 @@ main { padding: 16px 24px 32px; }
 .legend { font-size: 12px; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .legend .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; background: var(--accent); }
 .legend .dot.approx { background: transparent; border: 2px dashed var(--accent); }
+.legend .dot.ratio { background: var(--good); }
+#map-mode[aria-pressed="true"] { border-color: var(--good); color: var(--good); }
 
 .listings { max-height: calc(100vh - 260px); min-height: 420px; overflow-y: auto; }
 .row { border-bottom: 1px solid var(--border); padding: 12px 16px; cursor: pointer; display: grid; grid-template-columns: 34px 64px minmax(0, 1fr) auto; gap: 12px; align-items: center; }
