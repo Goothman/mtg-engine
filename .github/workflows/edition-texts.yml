@@ -1,0 +1,33 @@
+name: edition-texts
+# Refreshes mtg_engine/data/edition_texts.json.gz (each Alpha/Beta card's printed wording in every
+# old edition, from MTGJSON) used by the photo text check. Run by hand when needed.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python scripts/edition_texts.py
+      - name: Commit
+        run: |
+          git config user.name "mtg-engine bot"
+          git config user.email "mtg-engine-bot@users.noreply.github.com"
+          git add mtg_engine/data/edition_texts.json.gz
+          if git diff --cached --quiet; then echo "unchanged"; exit 0; fi
+          git commit -q -m "Edition wording from MTGJSON $(date -u +%F)"
+          for i in 1 2 3; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((i * 5))
+          done
+          exit 1
