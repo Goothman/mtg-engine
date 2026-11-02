@@ -107,7 +107,6 @@ class VisionConfig(BaseModel):
     # Second check on likely finds: read the card's text and compare it with each edition's
     # wording and language (vision/textcheck.py; needs tesseract). Unreadable text changes nothing.
     text_check: bool = True
-    text_check_min_edition_prob: float = 0.5  # read cards the model gives at least this Alpha+Beta
 
 
 class DealsConfig(BaseModel):

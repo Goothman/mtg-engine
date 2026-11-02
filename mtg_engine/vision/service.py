@@ -111,6 +111,15 @@ def text_verdict(session: Session, client: httpx.Client, recognizer, url: str, c
 WHITE_BORDER = ("2ed", "3ed")  # edition classes the model knows with white borders (Unlimited, Revised)
 
 
+def _text_check(session: Session, settings: Settings, recognizer, url: str, card, box) -> dict | None:
+    from . import textcheck
+
+    if not textcheck.available():
+        return None
+    with make_client(settings) as client:
+        return text_verdict(session, client, recognizer, url, card, box)
+
+
 def apply_vision(session: Session, settings: Settings, listing: Listing, recognizer, *,
                  text_evidence: bool = True, strong_text_claim: bool = False,
                  client: httpx.Client | None = None, reuse_cached: bool = False) -> list[str]:
@@ -123,7 +132,9 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
       * contradiction: photos were checked but nothing resembles an old card -> text matches demoted,
         unless the text claim is strong (edition in the title, or a graded card in a slab);
       * support: a photo seeing the text-matched card in a target edition raises its confidence;
-      * photo-only finds (no supporting text) need `photo_min_similarity` and a confident edition.
+      * photo-only finds (no supporting text) need `photo_min_similarity` and a confident edition;
+      * text check (`text_check`): each card that passed the image check has its text read; later
+        wording, another language or a copyright line removes it.
     Returns extra flags.
     """
     vc = settings.vision
@@ -165,33 +176,6 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
         white = sum(r.edition_probs.get(e, 0.0) for e in WHITE_BORDER)
         if white >= vc.white_border_veto:
             vetoed.setdefault(card.name, "white_border")
-    # 1b. text check on likely finds: later wording, another language or a copyright line
-    #     rules Alpha/Beta out; text that can't be read changes nothing
-    if vc.text_check and readings:
-        from . import textcheck
-
-        if textcheck.available():
-            seen: set[tuple[str, str]] = set()
-            check_client = client if not own_client else make_client(settings)
-            try:
-                for url, r in readings:
-                    card = session.get(CardPrinting, r.card_id)
-                    if card is None or card.name in vetoed or (url, card.name) in seen or r.similarity < vc.min_similarity:
-                        continue
-                    p_ab = sum(r.edition_probs.get(t, 0.0) for t in targets)
-                    if card.name not in by_name and (r.similarity < vc.photo_min_similarity or p_ab < vc.text_check_min_edition_prob):
-                        continue
-                    seen.add((url, card.name))
-                    v = text_verdict(session, check_client, recognizer, url, card, r.box)
-                    if v is None:
-                        continue
-                    if v["decision"] == "contradicts":
-                        vetoed.setdefault(card.name, "text_" + v["reason"].replace(":", "_"))
-                    elif v["decision"] == "confirms":
-                        flags.append("text_alpha_beta_wording")
-            finally:
-                if own_client:
-                    check_client.close()
     for name, why in vetoed.items():
         m = by_name.get(name)
         if m is not None and m.status == "auto":
@@ -216,6 +200,7 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
         card = session.get(CardPrinting, r.card_id)
         if card is not None and r.similarity >= vc.min_similarity:
             ab_by_name.setdefault(card.name, []).append(sum(r.edition_probs.get(t, 0.0) for t in targets))
+    text_checked: set[tuple[str, str]] = set()
     for url, r in readings:
         if r.similarity < vc.min_similarity:
             continue
@@ -251,6 +236,24 @@ def apply_vision(session: Session, settings: Settings, listing: Listing, recogni
             ) or card
         if chosen.set_code not in targets:
             continue
+        # Second check, only on cards that passed the image check: read the card's text. Later
+        # wording, another language or a copyright line rules Alpha/Beta out; unreadable text
+        # changes nothing.
+        if vc.text_check and (url, card.name) not in text_checked:
+            text_checked.add((url, card.name))
+            v = _text_check(session, settings, recognizer, url, card, r.box)
+            if v is not None and v["decision"] == "contradicts":
+                why = "text_" + v["reason"].replace(":", "_")
+                vetoed.setdefault(card.name, why)
+                m = by_name.get(card.name)
+                if m is not None and m.status == "auto":
+                    m.confidence = round(m.confidence * 0.1, 3)
+                    flags.append(f"vision:{why}")
+                elif m is None and text_evidence:
+                    flags.append(f"vision:{why}")
+                continue
+            if v is not None and v["decision"] == "confirms":
+                flags.append("text_alpha_beta_wording")
         # Confidence uses Alpha+Beta combined: the model often splits between the two (they differ
         # only in corner radius), which says nothing against the card being one of them.
         vconf = round(r.similarity * (sum(r.edition_probs.get(t, 0.0) for t in targets) if edition in targets else 0.5), 3)
