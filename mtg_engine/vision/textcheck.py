@@ -182,8 +182,41 @@ def _crop(img: np.ndarray, box) -> np.ndarray:
 
 
 def read_text(img_bgr: np.ndarray, box=None) -> str:
-    """OCR the card at `box` (whole image if None), trying the four orientations; returns the
-    reading with the most confident words."""
+    """OCR the card at `box` (whole image if None). Engine: tesseract (default) or PaddleOCR
+    (TEXTCHECK_OCR=paddle, pip install paddlepaddle paddleocr), being compared in
+    ml/eval_textcheck.py."""
+    if os.environ.get("TEXTCHECK_OCR", "tesseract") == "paddle":
+        return _read_paddle(_crop(img_bgr, box))
+    return _read_tesseract(img_bgr, box)
+
+
+@lru_cache(maxsize=1)
+def _paddle():
+    from paddleocr import PaddleOCR
+
+    return PaddleOCR(lang="en", use_doc_orientation_classify=True, use_doc_unwarping=False,
+                     use_textline_orientation=True)
+
+
+def _read_paddle(crop: np.ndarray) -> str:
+    """PaddleOCR 3.x: the page orientation model turns the card upright (0/90/180/270)."""
+    import cv2
+
+    long_side = max(crop.shape[:2])
+    if long_side < 1200:
+        f = 1200 / long_side
+        crop = cv2.resize(crop, None, fx=f, fy=f, interpolation=cv2.INTER_CUBIC)
+    words = []
+    for res in _paddle().predict(crop):
+        r = res.json.get("res", res.json) if hasattr(res, "json") else res
+        for text, score in zip(r.get("rec_texts", []), r.get("rec_scores", [])):
+            if score >= 0.5:
+                words.append(text)
+    return " ".join(words)
+
+
+def _read_tesseract(img_bgr: np.ndarray, box=None) -> str:
+    """Tries the four orientations; returns the reading with the most confident words."""
     import cv2
     import pytesseract
 

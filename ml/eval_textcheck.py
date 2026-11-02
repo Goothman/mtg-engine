@@ -67,7 +67,13 @@ def main() -> None:
     ap.add_argument("--names", type=int, default=60)
     ap.add_argument("--seed", type=int, default=3)
     ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument("--ocr", default="tesseract", choices=["tesseract", "paddle"])
     args = ap.parse_args()
+    import os
+
+    os.environ["TEXTCHECK_OCR"] = args.ocr
+    if args.ocr == "paddle":  # one reader at a time: let it use every core (set before paddle loads)
+        os.environ["OMP_THREAD_LIMIT"] = str(os.cpu_count() or 4)
     names = sorted(textcheck.wording())
     random.Random(args.seed).shuffle(names)
     counts: dict[str, Counter] = defaultdict(Counter)
@@ -76,12 +82,13 @@ def main() -> None:
 
     def check(job):
         name, kind, s, lang, size, content, box = job
+        t = time.time()
         v = textcheck.check_photo(content, name, box)
-        return {"name": name, "set": s, "lang": lang, "kind": kind, "size": size, "decision": v.decision,
+        return {"secs": round(time.time() - t, 2), "name": name, "set": s, "lang": lang, "kind": kind, "size": size, "decision": v.decision,
                 "reason": v.reason, "words": v.evidence.get("ocr_words")}
 
     with httpx.Client(headers={"User-Agent": "mtg-engine-eval", "Accept": "application/json"}) as client, \
-            ThreadPoolExecutor(4) as pool:  # tesseract runs as a subprocess: threads use every core
+            ThreadPoolExecutor(4 if args.ocr == "tesseract" else 1) as pool:  # tesseract runs as a subprocess: threads use every core
         for name in names[: args.names]:
             try:
                 prints = printings(client, name)
