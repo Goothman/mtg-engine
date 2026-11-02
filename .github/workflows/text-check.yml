@@ -51,7 +51,9 @@ jobs:
         run: |
           for e in $(echo "${{ inputs.ocr }}" | tr ',' ' '); do
             out=scans.json; [ "$e" = tesseract ] || out="scans-$e.json"
-            python ml/eval_textcheck.py --names "${{ inputs.names }}" --ocr "$e" --out "$out" | tail -20
+            python ml/eval_textcheck.py --names "${{ inputs.names }}" --ocr "$e" --out "$out" 2> "scans-$e.err" | tail -20 \
+              || true
+            grep -v Warning "scans-$e.err" | tail -6 | sed "s/^/::warning title=$e::/"
           done
       - name: Push reports
         if: always()
@@ -59,7 +61,7 @@ jobs:
           tmp=$(mktemp -d)
           # keep the reports this run didn't redo
           git fetch -q --depth 1 origin engine-reports && git --work-tree="$tmp" checkout FETCH_HEAD -- . || true
-          cp replay.json scans*.json scans*.rows.jsonl "$tmp"/ 2>/dev/null || true
+          cp replay.json scans*.json scans*.rows.jsonl scans*.err "$tmp"/ 2>/dev/null || true
           cd "$tmp"
           git init -q -b engine-reports
           git config user.name "mtg-engine bot"
