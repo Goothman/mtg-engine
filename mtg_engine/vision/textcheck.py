@@ -194,7 +194,8 @@ def read_text(img_bgr: np.ndarray, box=None) -> str:
 def _paddle():
     from paddleocr import PaddleOCR
 
-    return PaddleOCR(lang="en", use_doc_orientation_classify=True, use_doc_unwarping=False,
+    # enable_mkldnn=False: paddle 3.3 on CPU fails in oneDNN ("ConvertPirAttribute2RuntimeAttribute")
+    return PaddleOCR(lang="en", enable_mkldnn=False, use_doc_orientation_classify=True, use_doc_unwarping=False,
                      use_textline_orientation=True)
 
 
