@@ -1,0 +1,8667 @@
+[
+ {
+  "id": "wallapop:e65qny0ong6o",
+  "title": "Earthbind Magic The Gathering Alpha",
+  "url": "https://es.wallapop.com/item/earthbind-magic-the-gathering-alpha-1298858572",
+  "price": 95.0,
+  "before": {
+   "shown": true,
+   "value": 59.17,
+   "cards": [
+    "Earthbind"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 59.17,
+   "cards": [
+    "Earthbind"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/lh/b1/__/c10420p1298858572/i6714646291.jpg?pictureSize=W800",
+    "card": "Earthbind",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 11,
+     "language_words": {
+      "en": [
+       "does",
+       "target"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 4,
+     "box": [
+      104,
+      120,
+      626,
+      886
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:4z485vppevjy",
+  "title": "Mesa Pegasus Magic The Gathering Alpha",
+  "url": "https://es.wallapop.com/item/mesa-pegasus-magic-the-gathering-alpha-1298859386",
+  "price": 40.0,
+  "before": {
+   "shown": true,
+   "value": 24.34,
+   "cards": [
+    "Mesa Pegasus"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 24.34,
+   "cards": [
+    "Mesa Pegasus"
+   ],
+   "flags": [
+    "text_alpha_beta_wording"
+   ]
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/lh/b2/__/c10420p1298859386/i6714649413.jpg?pictureSize=W800",
+    "card": "Mesa Pegasus",
+    "decision": "confirms",
+    "reason": "wording:alpha/beta",
+    "evidence": {
+     "ocr_words": 38,
+     "language_words": {
+      "en": [
+       "and",
+       "any",
+       "land",
+       "must",
+       "summon",
+       "the"
+      ],
+      "es": [
+       "sus"
+      ]
+     },
+     "wording_hits": {
+      "4ed": [
+       1,
+       0
+      ],
+      "5ed": [
+       1,
+       0
+      ]
+     },
+     "shared_words_read": 2,
+     "box": [
+      229,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:pzpk057q04j3",
+  "title": "Magic Alpha Island 7.5 NM",
+  "url": "https://es.wallapop.com/item/magic-alpha-island-7-5-nm-1301386650",
+  "price": 70.0,
+  "before": {
+   "shown": true,
+   "value": 45.48,
+   "cards": [
+    "Island"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 45.48,
+   "cards": [
+    "Island"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8j3843y47yz9",
+  "title": "Mountain (Alpha, 1993) Magic The Gathering CGC 8.5",
+  "url": "https://es.wallapop.com/item/mountain-alpha-1993-magic-the-gathering-cgc-8-5-1194092882",
+  "price": 85.0,
+  "before": {
+   "shown": true,
+   "value": 16.41,
+   "cards": [
+    "Mountain"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 16.41,
+   "cards": [
+    "Mountain"
+   ],
+   "flags": [
+    "text_alpha_beta_wording"
+   ]
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/jq/xj/__/c10420p1194092882/i6035188727.jpg?pictureSize=W800",
+    "card": "Mountain",
+    "decision": "confirms",
+    "reason": "wording:alpha/beta",
+    "evidence": {
+     "ocr_words": 5,
+     "language_words": {
+      "en": [
+       "your"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       5,
+       0
+      ],
+      "3ed": [
+       1,
+       0
+      ],
+      "4ed": [
+       1,
+       0
+      ],
+      "5ed": [
+       1,
+       0
+      ],
+      "6ed": [
+       5,
+       0
+      ],
+      "7ed": [
+       5,
+       0
+      ],
+      "8ed": [
+       5,
+       0
+      ],
+      "9ed": [
+       5,
+       0
+      ],
+      "m10": [
+       5,
+       0
+      ],
+      "m11": [
+       5,
+       0
+      ]
+     },
+     "shared_words_read": 5,
+     "box": [
+      131,
+      253,
+      304,
+      392
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:wzyrr9nxgp65",
+  "title": "Tapete MTG Alpha Dual Land Textbox Tropical Island",
+  "url": "https://es.wallapop.com/item/tapete-mtg-alpha-dual-land-textbox-tropical-island-1198075720",
+  "price": 130.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Bayou",
+    "Plateau",
+    "Savannah",
+    "Scrubland",
+    "Tropical Island",
+    "Underground Sea",
+    "Volcanic Island"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Bayou",
+    "Plateau",
+    "Savannah",
+    "Scrubland",
+    "Tropical Island",
+    "Underground Sea",
+    "Volcanic Island"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:nzxeg0n2v762",
+  "title": "Lote 5 Tierras Magic Alpha 1993 PSA",
+  "url": "https://es.wallapop.com/item/lote-5-tierras-magic-alpha-1993-psa-1251691506",
+  "price": 1000.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:4z484w222ljy",
+  "title": "2 Primeras Revistas Especiales URZA MtG de 1995/6",
+  "url": "https://es.wallapop.com/item/2-primeras-revistas-especiales-urza-mtg-de-1995-6-1273543814",
+  "price": 160.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:wzvg7pwm5rzl",
+  "title": "2 Cartas Magic The Gathering Firmadas",
+  "url": "https://es.wallapop.com/item/2-cartas-magic-the-gathering-firmadas-1288270417",
+  "price": 20.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:9jdww0ldvd6k",
+  "title": "Revista Urza Especial n°1. Magic the Gathering",
+  "url": "https://es.wallapop.com/item/revista-urza-especial-n1-magic-the-gathering-1200310536",
+  "price": 150.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Copper Tablet",
+    "Cyclopean Tomb",
+    "Time Walk"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Copper Tablet",
+    "Cyclopean Tomb",
+    "Time Walk"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ju/mt/__/c10420p1200310536/i6088155706.jpg?pictureSize=W800",
+    "card": "Time Walk",
+    "decision": "unclear",
+    "reason": "no text",
+    "evidence": {
+     "ocr_words": 0,
+     "box": [
+      436,
+      394,
+      129,
+      181
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ju/mt/__/c10420p1200310536/i6088155768.jpg?pictureSize=W800",
+    "card": "Copper Tablet",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 4,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {},
+     "shared_words_read": 0,
+     "box": [
+      31,
+      296,
+      114,
+      161
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ju/mt/__/c10420p1200310536/i6088155768.jpg?pictureSize=W800",
+    "card": "Cyclopean Tomb",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 4,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "me4": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      146,
+      291,
+      100,
+      171
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:pj94qrr9706e",
+  "title": "Cartas Magic The Gathering Black Lotus MTG 3 PSA",
+  "url": "https://es.wallapop.com/item/cartas-magic-the-gathering-black-lotus-mtg-3-psa-1245636085",
+  "price": 26.99,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Black Lotus"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Black Lotus"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8z8893x558z3",
+  "title": "Cartas Magic The Gathering MTG Black Lotus Wizards",
+  "url": "https://es.wallapop.com/item/magic-the-gathering-mtg-black-lotus-wizards-cartas-1248090222",
+  "price": 18.99,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Black Lotus"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Black Lotus"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8z88n7v8krz3",
+  "title": "3 x Categoría Alfa MTG",
+  "url": "https://es.wallapop.com/item/magic-the-gathering-categoria-alfa-1280327170",
+  "price": 6.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:p614p455n265",
+  "title": "MTG Alpha: Evil Presence & Circle of Protection",
+  "url": "https://es.wallapop.com/item/mtg-alpha-evil-presence-circle-of-protection-1132452807",
+  "price": 667.0,
+  "before": {
+   "shown": true,
+   "value": 43.93,
+   "cards": [
+    "Circle of Protection: White",
+    "Evil Presence"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 43.93,
+   "cards": [
+    "Circle of Protection: White",
+    "Evil Presence"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/iq/8e/__/c10420p1132452807/i5648031030.jpg?pictureSize=W800",
+    "card": "Evil Presence",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 7,
+     "language_words": {
+      "en": [
+       "land",
+       "target"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       1,
+       0
+      ],
+      "5ed": [
+       2,
+       0
+      ]
+     },
+     "shared_words_read": 4,
+     "box": [
+      71,
+      185,
+      291,
+      406
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/iq/8e/__/c10420p1132452807/i5648031066.jpg?pictureSize=W800",
+    "card": "Evil Presence",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 9,
+     "language_words": {
+      "en": [
+       "and",
+       "land",
+       "target"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       1,
+       0
+      ],
+      "5ed": [
+       2,
+       0
+      ]
+     },
+     "shared_words_read": 4,
+     "box": [
+      131,
+      345,
+      514,
+      707
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:ejk84odo2yjx",
+  "title": "Wrath of Good ALPHA ALFA Magic The Gathering MTG",
+  "url": "https://es.wallapop.com/item/wrath-of-good-alpha-alfa-magic-the-gathering-mtg-977560723",
+  "price": 999.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:wzvgdrrxlrzl",
+  "title": "Mox Jet LEA Magic The Gathering",
+  "url": "https://es.wallapop.com/item/mox-jet-lea-magic-the-gathering-1250490889",
+  "price": 1100.0,
+  "before": {
+   "shown": true,
+   "value": 9426.19,
+   "cards": [
+    "Mox Jet"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 9426.19,
+   "cards": [
+    "Mox Jet"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:e65q2eokk26o",
+  "title": "TAPETE MTG – MAGICCON BARCELONA 2023 – 7 FIRMAS OR",
+  "url": "https://es.wallapop.com/item/tapete-magic-con-barcelona-2023-firmado-1246077324",
+  "price": 250.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:xzog001432j9",
+  "title": "Black Lotus LEB Magic The Gathering CGC 5",
+  "url": "https://es.wallapop.com/item/black-lotus-leb-magic-the-gathering-cgc-5-1238059781",
+  "price": 4300.0,
+  "before": {
+   "shown": true,
+   "value": 22454.09,
+   "cards": [
+    "Black Lotus"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 22454.09,
+   "cards": [
+    "Black Lotus"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/kh/3x/__/c10420p1238059781/i6343745968.jpg?pictureSize=W800",
+    "card": "Black Lotus",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 37,
+     "language_words": {
+      "en": [
+       "any",
+       "artifact",
+       "discarded",
+       "the",
+       "this",
+       "your"
+      ],
+      "es": []
+     },
+     "wording_hits": {},
+     "shared_words_read": 16,
+     "box": [
+      205,
+      0,
+      410,
+      573
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:nzxe8k774162",
+  "title": "Caja Pokémon Mega Latias EX box",
+  "url": "https://es.wallapop.com/item/caja-pokemon-mega-latias-ex-box-1272952078",
+  "price": 65.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:wzyr348d2p65",
+  "title": "Carta Magic Psychic Venom Alpha PSA 9",
+  "url": "https://es.wallapop.com/item/carta-magic-psychic-venom-alpha-psa-9-1315712944",
+  "price": 140.0,
+  "before": {
+   "shown": true,
+   "value": 26.25,
+   "cards": [
+    "Psychic Venom"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 26.25,
+   "cards": [
+    "Psychic Venom"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8j38qw3wylz9",
+  "title": "Lotes de cartas Magic The Gathering",
+  "url": "https://es.wallapop.com/item/lotes-de-cartas-magic-the-gathering-1303875710",
+  "price": 1.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:nz04lqxqdejo",
+  "title": "Magic the gathering earthbind NM",
+  "url": "https://es.wallapop.com/item/magic-the-gathering-earthbind-nm-1073804827",
+  "price": 360.0,
+  "before": {
+   "shown": true,
+   "value": 59.17,
+   "cards": [
+    "Earthbind"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 59.17,
+   "cards": [
+    "Earthbind"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/hr/bd/__/c10420p1073804827/i5263595458.jpg?pictureSize=W800",
+    "card": "Earthbind",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 10,
+     "language_words": {
+      "en": [
+       "creature",
+       "damage",
+       "does",
+       "target"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       1,
+       1
+      ]
+     },
+     "shared_words_read": 6,
+     "box": [
+      229,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:w67v0p9wq56x",
+  "title": "Bosques y Pantanos Alpha - MTG",
+  "url": "https://es.wallapop.com/item/bosques-y-pantanos-alpha-mtg-1303062328",
+  "price": 170.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:xzogqlv257j9",
+  "title": "2x Giant Growth MTG alpha y beta",
+  "url": "https://es.wallapop.com/item/2x-giant-growth-mtg-alpha-y-beta-1266433857",
+  "price": 80.0,
+  "before": {
+   "shown": true,
+   "value": 126.3,
+   "cards": [
+    "Giant Growth"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 126.3,
+   "cards": [
+    "Giant Growth"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ky/02/__/c10420p1266433857/i6522190017.jpg?pictureSize=W800",
+    "card": "Giant Growth",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 3,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       0,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ],
+      "7ed": [
+       0,
+       0
+      ],
+      "8ed": [
+       0,
+       0
+      ],
+      "9ed": [
+       0,
+       0
+      ],
+      "m10": [
+       0,
+       0
+      ],
+      "m11": [
+       0,
+       0
+      ],
+      "me4": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      427,
+      157,
+      304,
+      413
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:ejkmodol91zx",
+  "title": "Dark Ritual - Alpha",
+  "url": "https://es.wallapop.com/item/dark-ritual-alpha-1293523295",
+  "price": 540.0,
+  "before": {
+   "shown": true,
+   "value": 244.19,
+   "cards": [
+    "Dark Ritual"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 244.19,
+   "cards": [
+    "Dark Ritual"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:3zlm7r3nd8jx",
+  "title": "MTG Tierras Básicas Alpha y Beta",
+  "url": "https://es.wallapop.com/item/mtg-tierras-basicas-alpha-y-beta-1263325493",
+  "price": 900.0,
+  "before": {
+   "shown": true,
+   "value": 126.25,
+   "cards": [
+    "Circle of Protection: White",
+    "Island",
+    "Plains",
+    "Swamp"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 126.25,
+   "cards": [
+    "Circle of Protection: White",
+    "Island",
+    "Plains",
+    "Swamp"
+   ],
+   "flags": [
+    "text_alpha_beta_wording"
+   ]
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/kw/5g/__/c10420p1263325493/i6519146990.jpg?pictureSize=W800",
+    "card": "Swamp",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 2,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       0,
+       0
+      ],
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       0,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ],
+      "7ed": [
+       0,
+       0
+      ],
+      "8ed": [
+       0,
+       0
+      ],
+      "9ed": [
+       0,
+       0
+      ],
+      "m10": [
+       0,
+       0
+      ],
+      "m11": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      22,
+      719,
+      253,
+      352
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/kw/5g/__/c10420p1263325493/i6519147076.jpg?pictureSize=W800",
+    "card": "Island",
+    "decision": "confirms",
+    "reason": "wording:alpha/beta",
+    "evidence": {
+     "ocr_words": 6,
+     "language_words": {
+      "en": [
+       "your"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       5,
+       0
+      ],
+      "3ed": [
+       1,
+       0
+      ],
+      "4ed": [
+       1,
+       0
+      ],
+      "5ed": [
+       1,
+       0
+      ],
+      "6ed": [
+       5,
+       0
+      ],
+      "7ed": [
+       5,
+       0
+      ],
+      "8ed": [
+       5,
+       0
+      ],
+      "9ed": [
+       5,
+       0
+      ],
+      "m10": [
+       5,
+       0
+      ],
+      "m11": [
+       5,
+       0
+      ]
+     },
+     "shared_words_read": 5,
+     "box": [
+      541,
+      365,
+      250,
+      350
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/kw/5g/__/c10420p1263325493/i6519147100.jpg?pictureSize=W800",
+    "card": "Circle of Protection: White",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 32,
+     "language_words": {
+      "en": [
+       "all",
+       "damage",
+       "does",
+       "each",
+       "from",
+       "the",
+       "turn",
+       "you"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       3,
+       0
+      ],
+      "5ed": [
+       12,
+       0
+      ],
+      "6ed": [
+       11,
+       0
+      ],
+      "7ed": [
+       11,
+       0
+      ],
+      "8ed": [
+       11,
+       0
+      ]
+     },
+     "shared_words_read": 18,
+     "box": [
+      538,
+      6,
+      253,
+      349
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/kw/5g/__/c10420p1263325493/i6519147100.jpg?pictureSize=W800",
+    "card": "Plains",
+    "decision": "confirms",
+    "reason": "wording:alpha/beta",
+    "evidence": {
+     "ocr_words": 5,
+     "language_words": {
+      "en": [
+       "your"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       5,
+       0
+      ],
+      "3ed": [
+       1,
+       0
+      ],
+      "4ed": [
+       1,
+       0
+      ],
+      "5ed": [
+       1,
+       0
+      ],
+      "6ed": [
+       5,
+       0
+      ],
+      "7ed": [
+       5,
+       0
+      ],
+      "8ed": [
+       5,
+       0
+      ],
+      "9ed": [
+       5,
+       0
+      ],
+      "m10": [
+       5,
+       0
+      ],
+      "m11": [
+       5,
+       0
+      ]
+     },
+     "shared_words_read": 5,
+     "box": [
+      27,
+      356,
+      249,
+      349
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:8z88r1g34lz3",
+  "title": "4 Cartas Magic The Gathering",
+  "url": "https://es.wallapop.com/item/4-cartas-magic-the-gathering-1226959022",
+  "price": 2400.0,
+  "before": {
+   "shown": true,
+   "value": 619.93,
+   "cards": [
+    "Animate Dead",
+    "Bayou",
+    "Black Lotus",
+    "Disenchant",
+    "Psionic Blast",
+    "Serra Angel",
+    "Volcanic Island"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 619.93,
+   "cards": [
+    "Animate Dead",
+    "Bayou",
+    "Black Lotus",
+    "Disenchant",
+    "Psionic Blast",
+    "Serra Angel",
+    "Volcanic Island"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ka/hz/__/c10420p1226959022/i6268915834.jpg?pictureSize=W800",
+    "card": "Animate Dead",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 28,
+     "language_words": {
+      "en": [
+       "any",
+       "creature",
+       "end",
+       "graveyard",
+       "into",
+       "its",
+       "may",
+       "play",
+       "player",
+       "power",
+       "target",
+       "the"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       3,
+       0
+      ],
+      "4ed": [
+       11,
+       1
+      ],
+      "5ed": [
+       15,
+       3
+      ]
+     },
+     "shared_words_read": 23,
+     "box": [
+      427,
+      28,
+      345,
+      475
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ka/hz/__/c10420p1226959022/i6268915834.jpg?pictureSize=W800",
+    "card": "Serra Angel",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 10,
+     "language_words": {
+      "en": [
+       "and",
+       "when"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       1,
+       1
+      ],
+      "3ed": [
+       1,
+       0
+      ],
+      "4ed": [
+       1,
+       0
+      ],
+      "7ed": [
+       1,
+       0
+      ],
+      "8ed": [
+       1,
+       0
+      ],
+      "9ed": [
+       1,
+       0
+      ],
+      "m10": [
+       1,
+       0
+      ],
+      "m11": [
+       1,
+       0
+      ],
+      "me4": [
+       3,
+       0
+      ]
+     },
+     "shared_words_read": 3,
+     "box": [
+      39,
+      536,
+      362,
+      489
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:w674yl9pg96x",
+  "title": "Scrubland y psionic blast",
+  "url": "https://es.wallapop.com/item/scrubland-y-psionic-blast-992184852",
+  "price": 1100.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Psionic Blast",
+    "Scrubland"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Psionic Blast",
+    "Scrubland"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8j380g7x97z9",
+  "title": "Correa Team Magic 111067 (Alpha & X5)",
+  "url": "https://es.wallapop.com/item/correa-team-magic-111067-alpha-x5-1317788734",
+  "price": 8.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8j3m09koly69",
+  "title": "Benalish hero. Alpha. Neart mint.",
+  "url": "https://es.wallapop.com/item/benalish-hero-alpha-neart-mint-363481682",
+  "price": 80.0,
+  "before": {
+   "shown": true,
+   "value": 22.29,
+   "cards": [
+    "Benalish Hero"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 22.29,
+   "cards": [
+    "Benalish Hero"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/60/eo/__/c10420p363481682/i866752856.jpg?pictureSize=W800",
+    "card": "Benalish Hero",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 30,
+     "language_words": {
+      "en": [
+       "cannot",
+       "summon",
+       "the",
+       "with"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "4ed": [
+       1,
+       0
+      ],
+      "5ed": [
+       1,
+       0
+      ]
+     },
+     "shared_words_read": 1,
+     "box": [
+      54,
+      69,
+      664,
+      924
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:v6gpq1pod56e",
+  "title": "Weakness - Magic The Gathering Carta",
+  "url": "https://es.wallapop.com/item/weakness-magic-the-gathering-carta-1267140064",
+  "price": 60.0,
+  "before": {
+   "shown": true,
+   "value": 15.48,
+   "cards": [
+    "Weakness"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 15.48,
+   "cards": [
+    "Weakness"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8z880g82w8z3",
+  "title": "Stream of Life - Magic The Gathering",
+  "url": "https://es.wallapop.com/item/stream-of-life-magic-the-gathering-1267140870",
+  "price": 60.0,
+  "before": {
+   "shown": true,
+   "value": 18.71,
+   "cards": [
+    "Stream of Life"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 18.71,
+   "cards": [
+    "Stream of Life"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:4z484g88gwjy",
+  "title": "Pearled Unicorn Alpha Magic The Gathering",
+  "url": "https://es.wallapop.com/item/pearled-unicorn-alpha-magic-the-gathering-1267139038",
+  "price": 160.0,
+  "before": {
+   "shown": true,
+   "value": 14.98,
+   "cards": [
+    "Pearled Unicorn"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 14.98,
+   "cards": [
+    "Pearled Unicorn"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:mzn3qv8odyjn",
+  "title": "Magic The Gathering: Frozen Shade Alpha BGS 8.5",
+  "url": "https://es.wallapop.com/item/magic-the-gathering-frozen-shade-alpha-bgs-8-5-1267112901",
+  "price": 150.0,
+  "before": {
+   "shown": true,
+   "value": 15.43,
+   "cards": [
+    "Frozen Shade"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 15.43,
+   "cards": [
+    "Frozen Shade"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ky/em/__/c10420p1267112901/i6526365623.jpg?pictureSize=W800",
+    "card": "Frozen Shade",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 30,
+     "language_words": {
+      "en": [
+       "and",
+       "are",
+       "from"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      0,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:p618278elxz5",
+  "title": "Dwarven Demolition Team - Alpha MTG",
+  "url": "https://es.wallapop.com/item/dwarven-demolition-team-alpha-mtg-1267141607",
+  "price": 230.0,
+  "before": {
+   "shown": true,
+   "value": 31.41,
+   "cards": [
+    "Dwarven Demolition Team"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 31.41,
+   "cards": [
+    "Dwarven Demolition Team"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ky/f8/__/c10420p1267141607/i6526517164.jpg?pictureSize=W800",
+    "card": "Dwarven Demolition Team",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 29,
+     "language_words": {
+      "en": [
+       "the"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "8ed": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 1,
+     "box": [
+      229,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:36e549d2vk6d",
+  "title": "MTG Alpha Gafas de Urza",
+  "url": "https://es.wallapop.com/item/mtg-alpha-gafas-de-urza-1274046039",
+  "price": 250.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Glasses of Urza"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Glasses of Urza"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/l2/j8/__/c10420p1274046039/i6569964385.jpg?pictureSize=W800",
+    "card": "Glasses of Urza",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 4,
+     "language_words": {
+      "en": [
+       "hand",
+       "may",
+       "you"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       2,
+       0
+      ],
+      "5ed": [
+       2,
+       0
+      ],
+      "6ed": [
+       2,
+       0
+      ],
+      "me4": [
+       2,
+       0
+      ]
+     },
+     "shared_words_read": 3,
+     "box": [
+      229,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:e65qpex0w26o",
+  "title": "Nether Shadow Alpha Magic The Gathering",
+  "url": "https://es.wallapop.com/item/nether-shadow-alpha-magic-the-gathering-1214284548",
+  "price": 1250.0,
+  "before": {
+   "shown": true,
+   "value": 340.0,
+   "cards": [
+    "Nether Shadow"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 340.0,
+   "cards": [
+    "Nether Shadow"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/k2/yb/__/c10420p1214284548/i6186217923.jpg?pictureSize=W800",
+    "card": "Nether Shadow",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 33,
+     "language_words": {
+      "en": [
+       "any",
+       "cards",
+       "creatures",
+       "graveyard",
+       "its",
+       "play",
+       "turn",
+       "with"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       5,
+       0
+      ],
+      "4ed": [
+       14,
+       1
+      ],
+      "5ed": [
+       17,
+       0
+      ]
+     },
+     "shared_words_read": 26,
+     "box": [
+      22,
+      299,
+      477,
+      661
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:nzxewgm8xe62",
+  "title": "MTG Alpha Plains V2",
+  "url": "https://es.wallapop.com/item/mtg-alpha-plains-v2-1214779230",
+  "price": 300.0,
+  "before": {
+   "shown": true,
+   "value": 22.3,
+   "cards": [
+    "Plains"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 22.3,
+   "cards": [
+    "Plains"
+   ],
+   "flags": [
+    "text_alpha_beta_wording"
+   ]
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/k3/8x/__/c10420p1214779230/i6191788231.jpg?pictureSize=W800",
+    "card": "Plains",
+    "decision": "confirms",
+    "reason": "wording:alpha/beta",
+    "evidence": {
+     "ocr_words": 7,
+     "language_words": {
+      "en": [
+       "your"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       5,
+       0
+      ],
+      "3ed": [
+       1,
+       0
+      ],
+      "4ed": [
+       1,
+       0
+      ],
+      "5ed": [
+       1,
+       0
+      ],
+      "6ed": [
+       5,
+       0
+      ],
+      "7ed": [
+       5,
+       0
+      ],
+      "8ed": [
+       5,
+       0
+      ],
+      "9ed": [
+       5,
+       0
+      ],
+      "m10": [
+       5,
+       0
+      ],
+      "m11": [
+       5,
+       0
+      ]
+     },
+     "shared_words_read": 5,
+     "box": [
+      229,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:nz08w12ed36o",
+  "title": "MTG Alpha Swamp V2",
+  "url": "https://es.wallapop.com/item/mtg-alpha-swamp-v2-1214781399",
+  "price": 300.0,
+  "before": {
+   "shown": true,
+   "value": 36.32,
+   "cards": [
+    "Swamp"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 36.32,
+   "cards": [
+    "Swamp"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:ejkmn7gyn9zx",
+  "title": "MTG: MIRRODIN SET COMPLETO",
+  "url": "https://es.wallapop.com/item/mtg-mirrodin-set-completo-1255755771",
+  "price": 540.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:36e5e454486d",
+  "title": "Magic The Gathering Alpha 1993 BGS 8",
+  "url": "https://es.wallapop.com/item/magic-the-gathering-alpha-1993-bgs-8-1223682439",
+  "price": 125.0,
+  "before": {
+   "shown": true,
+   "value": 13.42,
+   "cards": [
+    "Circle of Protection: Green"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 13.42,
+   "cards": [
+    "Circle of Protection: Green"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/k8/jr/__/c10420p1223682439/i6244942728.jpg?pictureSize=W800",
+    "card": "Circle of Protection: Green",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 31,
+     "language_words": {
+      "en": [
+       "all",
+       "damage",
+       "does",
+       "each",
+       "enchantment",
+       "from",
+       "must",
+       "the",
+       "turn",
+       "you"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       4,
+       0
+      ],
+      "5ed": [
+       14,
+       0
+      ],
+      "6ed": [
+       13,
+       0
+      ],
+      "7ed": [
+       13,
+       0
+      ],
+      "8ed": [
+       13,
+       0
+      ]
+     },
+     "shared_words_read": 21,
+     "box": [
+      193,
+      367,
+      423,
+      598
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:w67vwwm7456x",
+  "title": "Chaqueta Alpha Industries con parches",
+  "url": "https://es.wallapop.com/item/chaqueta-alpha-industries-con-parches-1312814728",
+  "price": 60.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:nz082q22036o",
+  "title": "Black Vise Beta Magic The Gathering ( mtg )",
+  "url": "https://es.wallapop.com/item/black-vise-beta-magic-the-gathering-mtg-1233023727",
+  "price": 179.95,
+  "before": {
+   "shown": true,
+   "value": 174.83,
+   "cards": [
+    "Black Vise"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 174.83,
+   "cards": [
+    "Black Vise"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ke/3z/__/c10420p1233023727/i6308972269.jpg?pictureSize=W800",
+    "card": "Black Vise",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 23,
+     "language_words": {
+      "en": [
+       "card",
+       "cards",
+       "damage",
+       "does",
+       "each",
+       "hand",
+       "opponent"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       6,
+       0
+      ]
+     },
+     "shared_words_read": 15,
+     "box": [
+      0,
+      56,
+      800,
+      742
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:nzxexgr48762",
+  "title": "Carta Magic Craw Wurm Beta Limited Edition",
+  "url": "https://es.wallapop.com/item/carta-magic-craw-wurm-beta-1286395578",
+  "price": 12.0,
+  "before": {
+   "shown": true,
+   "value": 7.11,
+   "cards": [
+    "Craw Wurm"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 7.11,
+   "cards": [
+    "Craw Wurm"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:4z48x255qmjy",
+  "title": "Shatter Magic Beta Limited Edition",
+  "url": "https://es.wallapop.com/item/shatter-magic-the-gathering-carta-limited-edition-1286569386",
+  "price": 33.0,
+  "before": {
+   "shown": true,
+   "value": 15.9,
+   "cards": [
+    "Shatter"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 15.9,
+   "cards": [
+    "Shatter"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:x6qqnq5ve56y",
+  "title": "Ice Storm Beta Magic The Gathering Carta",
+  "url": "https://es.wallapop.com/item/ice-storm-beta-magic-the-gathering-carta-1228543366",
+  "price": 119.95,
+  "before": {
+   "shown": true,
+   "value": 112.19,
+   "cards": [
+    "Ice Storm"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 112.19,
+   "cards": [
+    "Ice Storm"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/kb/fy/__/c10420p1228543366/i6279147538.jpg?pictureSize=W800",
+    "card": "Ice Storm",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 7,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {},
+     "shared_words_read": 0,
+     "box": [
+      229,
+      0,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/kb/fy/__/c10420p1228543366/i6279147550.jpg?pictureSize=W800",
+    "card": "Ice Storm",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 11,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {},
+     "shared_words_read": 0,
+     "box": null
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:x6qqg1vvq56y",
+  "title": "Plague Rats Beta Limited Edition Magic",
+  "url": "https://es.wallapop.com/item/plague-rats-beta-magic-the-gathering-1286396518",
+  "price": 19.0,
+  "before": {
+   "shown": true,
+   "value": 8.23,
+   "cards": [
+    "Plague Rats"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 8.23,
+   "cards": [
+    "Plague Rats"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:ejkmled5rqzx",
+  "title": "Regrowth Beta MTG",
+  "url": "https://es.wallapop.com/item/regrowth-beta-mtg-carta-magica-1308668247",
+  "price": 300.0,
+  "before": {
+   "shown": true,
+   "value": 79.89,
+   "cards": [
+    "Regrowth"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 79.89,
+   "cards": [
+    "Regrowth"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ln/5a/__/c10420p1308668247/i6770794665.jpg?pictureSize=W800",
+    "card": "Regrowth",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 1,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "me4": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": null
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ln/5a/__/c10420p1308668247/i6770794681.jpg?pictureSize=W800",
+    "card": "Regrowth",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 2,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "me4": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      75,
+      207,
+      598,
+      806
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:36e57rm9p86d",
+  "title": "Wall of Swords Beta Limited Edition MTG",
+  "url": "https://es.wallapop.com/item/wall-of-swords-beta-limited-edition-mtg-1286807239",
+  "price": 28.0,
+  "before": {
+   "shown": true,
+   "value": 17.82,
+   "cards": [
+    "Wall of Swords"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 17.82,
+   "cards": [
+    "Wall of Swords"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8j38wlo1q1z9",
+  "title": "Stream of Life Beta Limited Edition",
+  "url": "https://es.wallapop.com/item/stream-of-life-beta-limited-edition-1286804058",
+  "price": 18.0,
+  "before": {
+   "shown": true,
+   "value": 7.2,
+   "cards": [
+    "Stream of Life"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 7.2,
+   "cards": [
+    "Stream of Life"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8z882p00wdz3",
+  "title": "Timetwister Beta MTG Carta Mágica",
+  "url": "https://es.wallapop.com/item/timetwister-beta-mtg-carta-magica-1222810770",
+  "price": 14995.0,
+  "before": {
+   "shown": true,
+   "value": 6379.36,
+   "cards": [
+    "Timetwister"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 6379.36,
+   "cards": [
+    "Timetwister"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/k8/12/__/c10420p1222810770/i6240397073.jpg?pictureSize=W800",
+    "card": "Timetwister",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 14,
+     "language_words": {
+      "en": [
+       "are",
+       "cards",
+       "the"
+      ],
+      "es": []
+     },
+     "wording_hits": {},
+     "shared_words_read": 7,
+     "box": [
+      130,
+      35,
+      520,
+      718
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:0j28l4golmjy",
+  "title": "Carta Magic Beta Healing Salve CGC 7.5",
+  "url": "https://es.wallapop.com/item/carta-magic-beta-healing-salve-cgc-7-5-1259899559",
+  "price": 35.0,
+  "before": {
+   "shown": true,
+   "value": 20.0,
+   "cards": [
+    "Healing Salve",
+    "Weakness"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 20.0,
+   "cards": [
+    "Healing Salve",
+    "Weakness"
+   ],
+   "flags": [
+    "text_alpha_beta_wording"
+   ]
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ku/40/__/c10420p1259899559/i6482233796.jpg?pictureSize=W800",
+    "card": "Weakness",
+    "decision": "confirms",
+    "reason": "wording:alpha/beta",
+    "evidence": {
+     "ocr_words": 12,
+     "language_words": {
+      "en": [
+       "creature",
+       "loses",
+       "target",
+       "the",
+       "this"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       4,
+       0
+      ],
+      "4ed": [
+       5,
+       0
+      ],
+      "5ed": [
+       6,
+       0
+      ],
+      "m10": [
+       6,
+       0
+      ],
+      "me4": [
+       6,
+       0
+      ]
+     },
+     "shared_words_read": 7,
+     "box": [
+      273,
+      405,
+      378,
+      488
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ku/40/__/c10420p1259899559/i6482233862.jpg?pictureSize=W800",
+    "card": "Weakness",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 12,
+     "language_words": {
+      "en": [
+       "creature",
+       "target",
+       "this"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       3,
+       0
+      ],
+      "4ed": [
+       3,
+       0
+      ],
+      "5ed": [
+       4,
+       1
+      ],
+      "m10": [
+       4,
+       2
+      ],
+      "me4": [
+       4,
+       2
+      ]
+     },
+     "shared_words_read": 5,
+     "box": [
+      286,
+      463,
+      354,
+      492
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:nz08l42ke36o",
+  "title": "Carta Magic Beta Guerreros Enanos CGC 8",
+  "url": "https://es.wallapop.com/item/carta-magic-beta-guerreros-enanos-cgc-8-1259902551",
+  "price": 35.0,
+  "before": {
+   "shown": true,
+   "value": 4.7,
+   "cards": [
+    "Dwarven Warriors"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 4.7,
+   "cards": [
+    "Dwarven Warriors"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:xzog12d19lj9",
+  "title": "Magic The Gathering Carta Beta Death Ward 7.5",
+  "url": "https://es.wallapop.com/item/magic-the-gathering-carta-beta-death-ward-7-5-1259900209",
+  "price": 35.0,
+  "before": {
+   "shown": true,
+   "value": 4.58,
+   "cards": [
+    "Death Ward"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 4.58,
+   "cards": [
+    "Death Ward"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8z8843pe0dz3",
+  "title": "Isla Beta MTG Carta Magic The Gathering versión 3",
+  "url": "https://es.wallapop.com/item/isla-beta-mtg-carta-magic-the-gathering-version-3-1184294970",
+  "price": 62.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Island"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Island"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/jl/3j/__/c10420p1184294970/i5983501097.jpg?pictureSize=W800",
+    "card": "Island",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 2,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       0,
+       0
+      ],
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       0,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ],
+      "7ed": [
+       0,
+       0
+      ],
+      "8ed": [
+       0,
+       0
+      ],
+      "9ed": [
+       0,
+       0
+      ],
+      "m10": [
+       0,
+       0
+      ],
+      "m11": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      0,
+      0,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:wzvg543rgqzl",
+  "title": "Carta Magic Beta Merfolk Pearl Trident CGC 8",
+  "url": "https://es.wallapop.com/item/carta-magic-beta-merfolk-pearl-trident-cgc-8-1259906265",
+  "price": 35.0,
+  "before": {
+   "shown": true,
+   "value": 6.0,
+   "cards": [
+    "Merfolk of the Pearl Trident"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 6.0,
+   "cards": [
+    "Merfolk of the Pearl Trident"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ku/45/__/c10420p1259906265/i6482263427.jpg?pictureSize=W800",
+    "card": "Merfolk of the Pearl Trident",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 20,
+     "language_words": {
+      "en": [
+       "are"
+      ],
+      "it": [
+       "che"
+      ]
+     },
+     "wording_hits": {},
+     "shared_words_read": 0,
+     "box": [
+      286,
+      400,
+      286,
+      400
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ku/45/__/c10420p1259906265/i6482263460.jpg?pictureSize=W800",
+    "card": "Merfolk of the Pearl Trident",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 29,
+     "language_words": {
+      "en": [
+       "are",
+       "from",
+       "the"
+      ],
+      "es": []
+     },
+     "wording_hits": {},
+     "shared_words_read": 0,
+     "box": [
+      229,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:9jdw2014426k",
+  "title": "Isla Beta MTG Carta Magic The Gathering versión 1",
+  "url": "https://es.wallapop.com/item/isla-beta-mtg-carta-magic-the-gathering-version-1-1184295460",
+  "price": 63.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:p618l4ep7xz5",
+  "title": "Carta Magic Beta Gray Ogre CGC 8",
+  "url": "https://es.wallapop.com/item/carta-magic-beta-gray-ogre-cgc-8-1259904479",
+  "price": 35.0,
+  "before": {
+   "shown": true,
+   "value": 3.67,
+   "cards": [
+    "Gray Ogre"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 3.67,
+   "cards": [
+    "Gray Ogre"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qjwrn41mek6o",
+  "title": "Carta Magic Jump Beta CGC 8 NM/Mint",
+  "url": "https://es.wallapop.com/item/carta-magic-jump-beta-cgc-8-nm-mint-1259905005",
+  "price": 35.0,
+  "before": {
+   "shown": true,
+   "value": 3.21,
+   "cards": [
+    "Jump"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 3.21,
+   "cards": [
+    "Jump"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:p618l4do8xz5",
+  "title": "Carta Magic Beta Scathe Zombies CGC 8",
+  "url": "https://es.wallapop.com/item/carta-magic-beta-scathe-zombies-cgc-8-1259906855",
+  "price": 40.0,
+  "before": {
+   "shown": true,
+   "value": 5.58,
+   "cards": [
+    "Scathe Zombies"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 5.58,
+   "cards": [
+    "Scathe Zombies"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qzmmkexv2xzv",
+  "title": "MONTAÑA Magic BETA Alterada y Firmada",
+  "url": "https://es.wallapop.com/item/montana-magic-beta-alterada-y-firmada-1291831480",
+  "price": 120.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:4z48lerpwvjy",
+  "title": "Carta Magic War Mammoth Beta CGC 7.5",
+  "url": "https://es.wallapop.com/item/carta-magic-war-mammoth-beta-cgc-7-5-1259903762",
+  "price": 28.0,
+  "before": {
+   "shown": true,
+   "value": 4.14,
+   "cards": [
+    "War Mammoth"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 4.14,
+   "cards": [
+    "War Mammoth"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ku/43/__/c10420p1259903762/i6482250533.jpg?pictureSize=W800",
+    "card": "War Mammoth",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 14,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {},
+     "shared_words_read": 0,
+     "box": [
+      286,
+      400,
+      286,
+      400
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ku/43/__/c10420p1259903762/i6482250793.jpg?pictureSize=W800",
+    "card": "War Mammoth",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 12,
+     "language_words": {
+      "en": [
+       "the"
+      ],
+      "es": []
+     },
+     "wording_hits": {},
+     "shared_words_read": 0,
+     "box": [
+      286,
+      400,
+      286,
+      400
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:8j38l4gv8yz9",
+  "title": "Carta Magic Beta Phantasmal Terrain CGC 7.5",
+  "url": "https://es.wallapop.com/item/carta-magic-beta-phantasmal-terrain-cgc-7-5-1259905682",
+  "price": 30.0,
+  "before": {
+   "shown": true,
+   "value": 5.01,
+   "cards": [
+    "Phantasmal Terrain"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 5.01,
+   "cards": [
+    "Phantasmal Terrain"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:nzxe9v0exp62",
+  "title": "MTG Collectors' Edition CE  Mtg Beta 1993 Old",
+  "url": "https://es.wallapop.com/item/mtg-collectors-edition-ce-lote-sinkhole-1238247206",
+  "price": 25.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:x6qqw2vm9o6y",
+  "title": "Mox Sapphire LEB Magic The Gathering",
+  "url": "https://es.wallapop.com/item/mox-sapphire-magic-the-gathering-1238287766",
+  "price": 6000.0,
+  "before": {
+   "shown": true,
+   "value": 7393.86,
+   "cards": [
+    "Mox Sapphire"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 7393.86,
+   "cards": [
+    "Mox Sapphire"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/kh/8s/__/c10420p1238287766/i6617271224.jpg?pictureSize=W800",
+    "card": "Mox Sapphire",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 6,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {},
+     "shared_words_read": 1,
+     "box": null
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:9jdwynpwx26k",
+  "title": "Thicket Basilisk BETA Magic The Gathering",
+  "url": "https://es.wallapop.com/item/thicket-basilisk-beta-magic-the-gathering-1300814236",
+  "price": 40.0,
+  "before": {
+   "shown": true,
+   "value": 17.73,
+   "cards": [
+    "Thicket Basilisk"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 17.73,
+   "cards": [
+    "Thicket Basilisk"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qjwr1lxmpq6o",
+  "title": "Lote 4 Cartas Magic The Gathering beta",
+  "url": "https://es.wallapop.com/item/4-cartas-magic-the-gathering-1226561577",
+  "price": 1000.0,
+  "before": {
+   "shown": true,
+   "value": 898.8,
+   "cards": [
+    "Animate Dead",
+    "Disenchant",
+    "Psionic Blast",
+    "Serra Angel"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 898.8,
+   "cards": [
+    "Animate Dead",
+    "Disenchant",
+    "Psionic Blast",
+    "Serra Angel"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ka/9g/__/c10420p1226561577/i6265258621.jpg?pictureSize=W800",
+    "card": "Animate Dead",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 29,
+     "language_words": {
+      "en": [
+       "any",
+       "creature",
+       "enchantment",
+       "end",
+       "graveyard",
+       "into",
+       "its",
+       "may",
+       "play",
+       "power",
+       "target",
+       "this"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       3,
+       0
+      ],
+      "4ed": [
+       12,
+       0
+      ],
+      "5ed": [
+       17,
+       3
+      ]
+     },
+     "shared_words_read": 25,
+     "box": [
+      429,
+      25,
+      343,
+      477
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ka/9g/__/c10420p1226561577/i6265258621.jpg?pictureSize=W800",
+    "card": "Serra Angel",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 19,
+     "language_words": {
+      "en": [
+       "and",
+       "does",
+       "summon",
+       "when",
+       "with"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       3,
+       3
+      ],
+      "3ed": [
+       1,
+       0
+      ],
+      "4ed": [
+       1,
+       0
+      ],
+      "7ed": [
+       3,
+       1
+      ],
+      "8ed": [
+       3,
+       2
+      ],
+      "9ed": [
+       3,
+       2
+      ],
+      "m10": [
+       3,
+       1
+      ],
+      "m11": [
+       3,
+       1
+      ],
+      "me4": [
+       5,
+       0
+      ]
+     },
+     "shared_words_read": 6,
+     "box": [
+      39,
+      534,
+      362,
+      488
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:wzvgp1ydk4zl",
+  "title": "Scryb Sprites & Argothian Pixies MTG Beta",
+  "url": "https://es.wallapop.com/item/scryb-sprites-argothian-pixies-mtg-beta-1296947765",
+  "price": 22.0,
+  "before": {
+   "shown": true,
+   "value": 16.19,
+   "cards": [
+    "Scryb Sprites"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 16.19,
+   "cards": [
+    "Scryb Sprites"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:mzn37yw387jn",
+  "title": "Caja de inicio Beta de Magic: The Gathering de 1993",
+  "url": "https://es.wallapop.com/item/vintage-1993-magic-the-gathering-beta-starter-box-1257199597",
+  "price": 100.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:x6qq8gqwdq6y",
+  "title": "MTG Frozen Shade de BETA",
+  "url": "https://es.wallapop.com/item/mtg-frozen-shade-de-beta-1271786790",
+  "price": 25.0,
+  "before": {
+   "shown": true,
+   "value": 6.25,
+   "cards": [
+    "Frozen Shade"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 6.25,
+   "cards": [
+    "Frozen Shade"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/l1/6s/__/c10420p1271786790/i6556969312.jpg?pictureSize=W800",
+    "card": "Frozen Shade",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 34,
+     "language_words": {
+      "en": [
+       "and",
+       "are",
+       "from"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      0,
+      2,
+      800,
+      1064
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:qjwro2q2ge6o",
+  "title": "Demonic Hordes Beta MTG",
+  "url": "https://es.wallapop.com/item/demonic-hordes-beta-mtg-1308321529",
+  "price": 250.0,
+  "before": {
+   "shown": true,
+   "value": 237.9,
+   "cards": [
+    "Demonic Hordes"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 237.9,
+   "cards": [
+    "Demonic Hordes"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:wzyrx9m2k565",
+  "title": "Magic The Gathering: Goblin King Beta",
+  "url": "https://es.wallapop.com/item/magic-the-gathering-goblin-king-beta-1214284492",
+  "price": 750.0,
+  "before": {
+   "shown": true,
+   "value": 292.14,
+   "cards": [
+    "Goblin King"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 292.14,
+   "cards": [
+    "Goblin King"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qjwro2g23q6o",
+  "title": "MTG 4x Living Wall Beta",
+  "url": "https://es.wallapop.com/item/mtg-4x-living-wall-beta-1308376977",
+  "price": 60.0,
+  "before": {
+   "shown": true,
+   "value": 76.28,
+   "cards": [
+    "Living Wall"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 76.28,
+   "cards": [
+    "Living Wall"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:v6gp7vdlxm6e",
+  "title": "Demonic Tutor Beta Magic The Gathering",
+  "url": "https://es.wallapop.com/item/demonic-tutor-beta-magic-the-gathering-1214284440",
+  "price": 800.0,
+  "before": {
+   "shown": true,
+   "value": 626.08,
+   "cards": [
+    "Demonic Tutor"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 626.08,
+   "cards": [
+    "Demonic Tutor"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/k2/yb/__/c10420p1214284440/i6428871353.jpg?pictureSize=W800",
+    "card": "Demonic Tutor",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 16,
+     "language_words": {
+      "en": [
+       "and",
+       "card",
+       "hand",
+       "into",
+       "library",
+       "may",
+       "your"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       1,
+       0
+      ],
+      "me4": [
+       5,
+       1
+      ]
+     },
+     "shared_words_read": 13,
+     "box": [
+      143,
+      186,
+      495,
+      682
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/k2/yb/__/c10420p1214284440/i6428871376.jpg?pictureSize=W800",
+    "card": "Demonic Tutor",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 14,
+     "language_words": {
+      "en": [
+       "card",
+       "into",
+       "may",
+       "you",
+       "your"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       2,
+       0
+      ],
+      "me4": [
+       6,
+       1
+      ]
+     },
+     "shared_words_read": 11,
+     "box": [
+      229,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/k2/yb/__/c10420p1214284440/i6428871387.jpg?pictureSize=W800",
+    "card": "Demonic Tutor",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 17,
+     "language_words": {
+      "en": [
+       "and",
+       "card",
+       "hand",
+       "into",
+       "library",
+       "may",
+       "you",
+       "your"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       2,
+       0
+      ],
+      "me4": [
+       6,
+       1
+      ]
+     },
+     "shared_words_read": 14,
+     "box": [
+      286,
+      400,
+      286,
+      400
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:0j287kkgkmjy",
+  "title": "Tapete Juzam Djinn MTG Old School no Beta Arabian",
+  "url": "https://es.wallapop.com/item/tapete-playmat-juzam-djinn-mtg-old-school-1286135735",
+  "price": 45.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:x6qq3lk0lq6y",
+  "title": "Basalt Monolith MTG Beta",
+  "url": "https://es.wallapop.com/item/basalt-monolith-mtg-beta-1274045190",
+  "price": 350.0,
+  "before": {
+   "shown": true,
+   "value": 159.04,
+   "cards": [
+    "Basalt Monolith"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 159.04,
+   "cards": [
+    "Basalt Monolith"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:wzvge9r1r4zl",
+  "title": "Red Elemental Blast MTG Beta",
+  "url": "https://es.wallapop.com/item/red-elemental-blast-mtg-beta-1274045789",
+  "price": 200.0,
+  "before": {
+   "shown": true,
+   "value": 76.59,
+   "cards": [
+    "Red Elemental Blast"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 76.59,
+   "cards": [
+    "Red Elemental Blast"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:36e549dlok6d",
+  "title": "MTG Beta Library of Leng",
+  "url": "https://es.wallapop.com/item/mtg-beta-library-of-leng-1274045439",
+  "price": 150.0,
+  "before": {
+   "shown": true,
+   "value": 49.95,
+   "cards": [
+    "Library of Leng"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 49.95,
+   "cards": [
+    "Library of Leng"
+   ],
+   "flags": [
+    "text_alpha_beta_wording"
+   ]
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/l2/j7/__/c10420p1274045439/i6569959494.jpg?pictureSize=W800",
+    "card": "Library of Leng",
+    "decision": "confirms",
+    "reason": "wording:alpha/beta",
+    "evidence": {
+     "ocr_words": 20,
+     "language_words": {
+      "en": [
+       "card",
+       "discard",
+       "hand",
+       "library",
+       "may",
+       "you",
+       "your"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       4,
+       0
+      ],
+      "4ed": [
+       5,
+       0
+      ],
+      "5ed": [
+       8,
+       0
+      ],
+      "me4": [
+       7,
+       0
+      ]
+     },
+     "shared_words_read": 15,
+     "box": [
+      229,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:8z88nvqm5dz3",
+  "title": "MTG Beta Sinkhole",
+  "url": "https://es.wallapop.com/item/mtg-beta-sinkhole-1274045946",
+  "price": 200.0,
+  "before": {
+   "shown": true,
+   "value": 63.3,
+   "cards": [
+    "Sinkhole"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 63.3,
+   "cards": [
+    "Sinkhole"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/l2/j8/__/c10420p1274045946/i6569963746.jpg?pictureSize=W800",
+    "card": "Sinkhole",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 4,
+     "language_words": {
+      "en": [
+       "any",
+       "land"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "me4": [
+       3,
+       1
+      ]
+     },
+     "shared_words_read": 4,
+     "box": [
+      229,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:wzyrpel2k565",
+  "title": "Kormus Bell MTG Beta",
+  "url": "https://es.wallapop.com/item/kormus-bell-mtg-beta-1274045644",
+  "price": 250.0,
+  "before": {
+   "shown": true,
+   "value": 95.01,
+   "cards": [
+    "Kormus Bell"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 95.01,
+   "cards": [
+    "Kormus Bell"
+   ],
+   "flags": [
+    "text_alpha_beta_wording"
+   ]
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/l2/j7/__/c10420p1274045644/i6569961319.jpg?pictureSize=W800",
+    "card": "Kormus Bell",
+    "decision": "confirms",
+    "reason": "wording:alpha/beta",
+    "evidence": {
+     "ocr_words": 27,
+     "language_words": {
+      "en": [
+       "all",
+       "and",
+       "are",
+       "creatures",
+       "play"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       6,
+       0
+      ],
+      "4ed": [
+       14,
+       0
+      ],
+      "me4": [
+       18,
+       0
+      ]
+     },
+     "shared_words_read": 22,
+     "box": [
+      229,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:4z48439x4wjy",
+  "title": "Camiseta Magic 2013 Formador Wizards Play Network",
+  "url": "https://es.wallapop.com/item/camiseta-formador-magic-2013-wizards-play-network-1270269886",
+  "price": 15.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:wzv4er1py4zl",
+  "title": "Tapete Liliana, the Last Hope MTG Playmat",
+  "url": "https://es.wallapop.com/item/mtg-tapete-liliana-the-last-hope-playmat-1083549365",
+  "price": 29.7,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:pj947qpv306e",
+  "title": "Camisa judge / árbitro Magic MTG - OFICIAL",
+  "url": "https://es.wallapop.com/item/camisa-oficial-de-arbitro-magic-mtg-judge-shirt-1270265437",
+  "price": 38.5,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qjw47l8l4ezo",
+  "title": "Mtg ALPHA COPPER TABLET",
+  "url": "https://es.wallapop.com/item/mtg-alpha-copper-tablet-1019423353",
+  "price": 180.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:wzv40w4xgqzl",
+  "title": "MTG ALPHA PSIONIC BLAST",
+  "url": "https://es.wallapop.com/item/mtg-alpha-psionic-blast-1026597465",
+  "price": 790.0,
+  "before": {
+   "shown": true,
+   "value": 271.5,
+   "cards": [
+    "Psionic Blast"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 271.5,
+   "cards": [
+    "Psionic Blast"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:36exn1v7kkzd",
+  "title": "crecimiento gigante Alpha",
+  "url": "https://es.wallapop.com/item/crecimiento-gigante-alfha-790120887",
+  "price": 100.0,
+  "before": {
+   "shown": true,
+   "value": 63.15,
+   "cards": [
+    "Giant Growth"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 63.15,
+   "cards": [
+    "Giant Growth"
+   ],
+   "flags": [
+    "text_alpha_beta_wording"
+   ]
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/d2/f1/__/c10420p790120887/i2669685112.jpg?pictureSize=W800",
+    "card": "Giant Growth",
+    "decision": "confirms",
+    "reason": "wording:alpha/beta",
+    "evidence": {
+     "ocr_words": 6,
+     "language_words": {
+      "en": [
+       "creature",
+       "end",
+       "gains",
+       "turn",
+       "until"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       1,
+       0
+      ],
+      "4ed": [
+       1,
+       0
+      ],
+      "5ed": [
+       1,
+       0
+      ],
+      "6ed": [
+       1,
+       0
+      ],
+      "7ed": [
+       1,
+       0
+      ],
+      "8ed": [
+       1,
+       0
+      ],
+      "9ed": [
+       1,
+       0
+      ],
+      "m10": [
+       1,
+       0
+      ],
+      "m11": [
+       1,
+       0
+      ],
+      "me4": [
+       1,
+       0
+      ]
+     },
+     "shared_words_read": 5,
+     "box": null
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:9jd29d9k9d6k",
+  "title": "Crecimiento gigante MTG Alpha 1993",
+  "url": "https://es.wallapop.com/item/crecimiento-gigante-mtg-alpha-1993-892038336",
+  "price": 200.0,
+  "before": {
+   "shown": true,
+   "value": 63.15,
+   "cards": [
+    "Giant Growth"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 63.15,
+   "cards": [
+    "Giant Growth"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/er/3h/__/c10420p892038336/i3234965044.jpg?pictureSize=W800",
+    "card": "Giant Growth",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 10,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       0,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ],
+      "7ed": [
+       0,
+       0
+      ],
+      "8ed": [
+       0,
+       0
+      ],
+      "9ed": [
+       0,
+       0
+      ],
+      "m10": [
+       0,
+       0
+      ],
+      "m11": [
+       0,
+       0
+      ],
+      "me4": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": null
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/er/3h/__/c10420p892038336/i3234965070.jpg?pictureSize=W800",
+    "card": "Giant Growth",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 5,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       0,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ],
+      "7ed": [
+       0,
+       0
+      ],
+      "8ed": [
+       0,
+       0
+      ],
+      "9ed": [
+       0,
+       0
+      ],
+      "m10": [
+       0,
+       0
+      ],
+      "m11": [
+       0,
+       0
+      ],
+      "me4": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      229,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:mzn33k5057jn",
+  "title": "Revista Urza. Guía del jugador.",
+  "url": "https://es.wallapop.com/item/revista-urza-guia-del-jugador-1200315949",
+  "price": 60.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:xzol4py8p4z9",
+  "title": "Magic Mtg Glyph of Doom mint 9",
+  "url": "https://es.wallapop.com/item/magic-mtg-glyph-of-doom-mint-9-333077081",
+  "price": 60.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:mzn2m0lx0kzn",
+  "title": "MTG. Cartas de la edición ALPHA.",
+  "url": "https://es.wallapop.com/item/mtg-cartas-de-la-edicion-alpha-1054088297",
+  "price": 220.0,
+  "before": {
+   "shown": true,
+   "value": 131.73,
+   "cards": [
+    "Black Ward",
+    "False Orders",
+    "Guardian Angel",
+    "Psychic Venom",
+    "Throne of Bone"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 131.73,
+   "cards": [
+    "Black Ward",
+    "False Orders",
+    "Guardian Angel",
+    "Psychic Venom",
+    "Throne of Bone"
+   ],
+   "flags": [
+    "text_alpha_beta_wording"
+   ]
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/hf/kr/__/c10420p1054088297/i6178271925.jpg?pictureSize=W800",
+    "card": "Psychic Venom",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 13,
+     "language_words": {
+      "en": [
+       "does",
+       "land",
+       "target"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       1,
+       0
+      ],
+      "5ed": [
+       2,
+       0
+      ],
+      "6ed": [
+       2,
+       0
+      ]
+     },
+     "shared_words_read": 6,
+     "box": [
+      157,
+      302,
+      432,
+      559
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/hf/kr/__/c10420p1054088297/i6178271985.jpg?pictureSize=W800",
+    "card": "Throne of Bone",
+    "decision": "confirms",
+    "reason": "wording:alpha/beta",
+    "evidence": {
+     "ocr_words": 10,
+     "language_words": {
+      "en": [
+       "any",
+       "player",
+       "spell",
+       "you"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       1,
+       0
+      ],
+      "4ed": [
+       4,
+       0
+      ],
+      "5ed": [
+       4,
+       0
+      ],
+      "6ed": [
+       3,
+       0
+      ],
+      "7ed": [
+       3,
+       0
+      ],
+      "8ed": [
+       3,
+       0
+      ]
+     },
+     "shared_words_read": 8,
+     "box": [
+      149,
+      295,
+      428,
+      582
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/hf/kr/__/c10420p1054088297/i6178272053.jpg?pictureSize=W800",
+    "card": "Black Ward",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 13,
+     "language_words": {
+      "en": [
+       "creature",
+       "from",
+       "gains"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "4ed": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 4,
+     "box": [
+      149,
+      328,
+      413,
+      552
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/hf/kr/__/c10420p1054088297/i6178272118.jpg?pictureSize=W800",
+    "card": "False Orders",
+    "decision": "unclear",
+    "reason": "no text",
+    "evidence": {
+     "ocr_words": 0,
+     "box": [
+      168,
+      270,
+      444,
+      602
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/hf/kr/__/c10420p1054088297/i6178272175.jpg?pictureSize=W800",
+    "card": "Guardian Angel",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 20,
+     "language_words": {
+      "en": [
+       "any",
+       "damage",
+       "from",
+       "target",
+       "the",
+       "this",
+       "turn"
+      ],
+      "es": []
+     },
+     "wording_hits": {},
+     "shared_words_read": 14,
+     "box": [
+      165,
+      267,
+      452,
+      598
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:mzn8dg53p7zn",
+  "title": "fear, mtg, alpha",
+  "url": "https://es.wallapop.com/item/fear-mtg-alpha-908351125",
+  "price": 20.0,
+  "before": {
+   "shown": true,
+   "value": 15.43,
+   "cards": [
+    "Fear"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 15.43,
+   "cards": [
+    "Fear"
+   ],
+   "flags": [
+    "text_alpha_beta_wording"
+   ]
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/f0/t4/__/c10420p908351125/i3327006760.jpg?pictureSize=W800",
+    "card": "Fear",
+    "decision": "confirms",
+    "reason": "wording:alpha/beta",
+    "evidence": {
+     "ocr_words": 13,
+     "language_words": {
+      "en": [
+       "and",
+       "any",
+       "artifact",
+       "cannot",
+       "creature",
+       "creatures",
+       "target"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       4,
+       0
+      ],
+      "3ed": [
+       2,
+       0
+      ],
+      "4ed": [
+       3,
+       0
+      ],
+      "5ed": [
+       4,
+       0
+      ],
+      "6ed": [
+       5,
+       0
+      ],
+      "7ed": [
+       5,
+       0
+      ],
+      "8ed": [
+       5,
+       0
+      ],
+      "9ed": [
+       4,
+       0
+      ]
+     },
+     "shared_words_read": 11,
+     "box": [
+      111,
+      240,
+      477,
+      792
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:9jdkvx5v9d6k",
+  "title": "MTG Alpha Uthden Troll BGS 9",
+  "url": "https://es.wallapop.com/item/mtg-alpha-uthden-troll-bgs-9-1043483712",
+  "price": 300.0,
+  "before": {
+   "shown": true,
+   "value": 59.72,
+   "cards": [
+    "Uthden Troll"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 59.72,
+   "cards": [
+    "Uthden Troll"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/h9/9h/__/c10420p1043483712/i5096152965.jpg?pictureSize=W800",
+    "card": "Uthden Troll",
+    "decision": "unclear",
+    "reason": "no text",
+    "evidence": {
+     "ocr_words": 0,
+     "box": [
+      229,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:v6gg52od076e",
+  "title": "MTG BETA GIANT GROWTH",
+  "url": "https://es.wallapop.com/item/mtg-beta-giant-growth-1084353440",
+  "price": 45.0,
+  "before": {
+   "shown": true,
+   "value": 25.54,
+   "cards": [
+    "Giant Growth"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 25.54,
+   "cards": [
+    "Giant Growth"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/hx/lg/__/c10420p1084353440/i5325403258.jpg?pictureSize=W800",
+    "card": "Giant Growth",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 8,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       0,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ],
+      "7ed": [
+       0,
+       0
+      ],
+      "8ed": [
+       0,
+       0
+      ],
+      "9ed": [
+       0,
+       0
+      ],
+      "m10": [
+       0,
+       0
+      ],
+      "m11": [
+       0,
+       0
+      ],
+      "me4": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      229,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:pj94lv4v3m6e",
+  "title": "Playset Completo Beta Wave 1 Sorcery TCG",
+  "url": "https://es.wallapop.com/item/playset-completo-beta-wave-1-sorcery-tcg-1261169237",
+  "price": 1000.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:wzyr9v5op265",
+  "title": "MTG Collectors' Edition CE Lote Lands Beta Island",
+  "url": "https://es.wallapop.com/item/mtg-collectors-edition-ce-lote-lands-island-1238249492",
+  "price": 30.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:v6gpn385r26e",
+  "title": "MTG Underground Sea (BETA Edition)",
+  "url": "https://es.wallapop.com/item/mtg-underground-sea-beta-edition-1246809940",
+  "price": 5600.0,
+  "before": {
+   "shown": true,
+   "value": 6400.0,
+   "cards": [
+    "Underground Sea"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 6400.0,
+   "cards": [
+    "Underground Sea"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/km/bg/__/c10420p1246809940/i6407433438.jpg?pictureSize=W800",
+    "card": "Underground Sea",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 7,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "me4": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 1,
+     "box": null
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:3zl8wy0qn86x",
+  "title": "MTG - Jump - Beta",
+  "url": "https://es.wallapop.com/item/mtg-jump-beta-1089329693",
+  "price": 15.0,
+  "before": {
+   "shown": true,
+   "value": 3.21,
+   "cards": [
+    "Jump"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 3.21,
+   "cards": [
+    "Jump"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/i0/k4/__/c10420p1089329693/i5351378744.jpg?pictureSize=W800",
+    "card": "Jump",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 9,
+     "language_words": {
+      "en": [
+       "creature",
+       "end",
+       "target",
+       "turn",
+       "until"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "4ed": [
+       0,
+       0
+      ],
+      "m10": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 6,
+     "box": [
+      130,
+      221,
+      566,
+      573
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/i0/k4/__/c10420p1089329693/i5351378814.jpg?pictureSize=W800",
+    "card": "Jump",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 7,
+     "language_words": {
+      "en": [
+       "creature",
+       "target"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "4ed": [
+       0,
+       0
+      ],
+      "m10": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 3,
+     "box": [
+      134,
+      254,
+      577,
+      598
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:8j389odkg1z9",
+  "title": "Camiseta Magic 2011 MTG Prerelease presentación",
+  "url": "https://es.wallapop.com/item/camiseta-presentacion-magic-2011-mtg-prerelease-1270267482",
+  "price": 15.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qjwd8m8724zo",
+  "title": "CUADRO CHARIZARD VENUSAUR BLASTOISE ESP",
+  "url": "https://es.wallapop.com/item/cuadro-charizard-venusaur-blastoise-esp-700591277",
+  "price": 9000.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:0j28p1v3rejy",
+  "title": "Game Boy Advance Edición Limitada Platinum",
+  "url": "https://es.wallapop.com/item/game-boy-advance-edicion-limitada-platinum-1316752211",
+  "price": 149.9,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qzmml453oxzv",
+  "title": "Marvel limited edition omnibus tierra x. alfa",
+  "url": "https://es.wallapop.com/item/marvel-limited-edition-omnibus-tierra-x-alfa-1306798480",
+  "price": 80.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:w67vw241x56x",
+  "title": "Medal of Honor Warfighter Limited Edition PC",
+  "url": "https://es.wallapop.com/item/medal-of-honor-warfighter-limited-edition-pc-1311923704",
+  "price": 15.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:nz08lr3d0d6o",
+  "title": "ALFA ROMEO TONALE MAJORETTE LIMITED EDITION 11",
+  "url": "https://es.wallapop.com/item/alfa-romeo-tonale-majorette-limited-edition-11-1260630827",
+  "price": 5.95,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:p618ll1re7z5",
+  "title": "GIFTPACK 5 LIMITED EDITION SERIES 11 MAJORETTE",
+  "url": "https://es.wallapop.com/item/giftpack-5-limited-edition-series-11-majorette-1262917107",
+  "price": 24.95,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8j38q2m3p7z9",
+  "title": "Medal of Honor Warfighter Limited Edition PC",
+  "url": "https://es.wallapop.com/item/medal-of-honor-warfighter-limited-edition-pc-1301252734",
+  "price": 18.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:e658nngkom6o",
+  "title": "Magic antiguas",
+  "url": "https://es.wallapop.com/item/magic-antiguas-1113173424",
+  "price": 75.0,
+  "before": {
+   "shown": true,
+   "value": 8.17,
+   "cards": [
+    "Circle of Protection: Black"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 8.17,
+   "cards": [
+    "Circle of Protection: Black"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ie/r6/__/c10420p1113173424/i6704356858.jpg?pictureSize=W800",
+    "card": "Circle of Protection: Black",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 2,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       0,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ],
+      "7ed": [
+       0,
+       0
+      ],
+      "8ed": [
+       0,
+       0
+      ],
+      "9ed": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      293,
+      564,
+      166,
+      134
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:nz00n4ovn7zo",
+  "title": "Cartas Magic the Gathering",
+  "url": "https://es.wallapop.com/item/cartas-magic-the-gathering-941471975",
+  "price": 10.0,
+  "before": {
+   "shown": true,
+   "value": 680.57,
+   "cards": [
+    "Gauntlet of Might"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 680.57,
+   "cards": [
+    "Gauntlet of Might"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/fk/j0/__/c10420p941471975/i3515350104.jpg?pictureSize=W800",
+    "card": "Gauntlet of Might",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 9,
+     "language_words": {
+      "en": [
+       "all",
+       "when"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "me4": [
+       3,
+       1
+      ]
+     },
+     "shared_words_read": 5,
+     "box": [
+      124,
+      704,
+      159,
+      234
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:nzx42k12x7j2",
+  "title": "Revista Urza Especial Guia del jugador",
+  "url": "https://es.wallapop.com/item/revista-urza-especial-guia-del-jugador-1113755754",
+  "price": 40.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:0j282mgqkejy",
+  "title": "Black Lotus LEB HP Magic The Gathering",
+  "url": "https://es.wallapop.com/item/black-lotus-leb-hp-magic-the-gathering-1281794411",
+  "price": 2600.0,
+  "before": {
+   "shown": true,
+   "value": 22454.09,
+   "cards": [
+    "Black Lotus"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 22454.09,
+   "cards": [
+    "Black Lotus"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8j38y5xdl7z9",
+  "title": "Black Lotus Alpha PSA 10 (30 años en mi camarote)",
+  "url": "https://es.wallapop.com/item/black-lotus-alpha-psa-10-30-anos-en-mi-camarote-1165248358",
+  "price": 50000.0,
+  "before": {
+   "shown": true,
+   "value": 28980.67,
+   "cards": [
+    "Black Lotus"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 28980.67,
+   "cards": [
+    "Black Lotus"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:0j28v3nl0njy",
+  "title": "Lote Cartas Magic MTG - Campeona Élfica",
+  "url": "https://es.wallapop.com/item/lote-cartas-magic-mtg-campeona-elfica-1299340183",
+  "price": 15.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:3zlml52nx2jx",
+  "title": "Cartas Magic: Escenas de El Hobbit",
+  "url": "https://es.wallapop.com/item/cartas-magic-escenas-de-el-hobbit-1309760369",
+  "price": 23.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:nz08qmk9de6o",
+  "title": "Carta MTG Alfa de la manada FOIL (The Hobbit)",
+  "url": "https://es.wallapop.com/item/carta-mtg-alfa-de-la-manada-foil-the-hobbit-1306783003",
+  "price": 5.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:mzn3dnn8myjn",
+  "title": "Carta Magic Kelsinko Ranger",
+  "url": "https://es.wallapop.com/item/carta-magic-kelsinko-ranger-1296514101",
+  "price": 1.0,
+  "before": {
+   "shown": true,
+   "value": 44.72,
+   "cards": [
+    "Disenchant"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/lf/ws/__/c10420p1296514101/i6703240079.jpg?pictureSize=W800",
+    "card": "Disenchant",
+    "decision": "contradicts",
+    "reason": "language:es",
+    "evidence": {
+     "ocr_words": 4,
+     "language_words": {
+      "en": [],
+      "es": [
+       "artefacto",
+       "destruye",
+       "objetivo"
+      ]
+     },
+     "box": null
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:x6qqen0rde6y",
+  "title": "Cartas Magic 4ª Edición",
+  "url": "https://es.wallapop.com/item/cartas-magic-4-edicion-1293552690",
+  "price": 500.0,
+  "before": {
+   "shown": true,
+   "value": 538.36,
+   "cards": [
+    "Swords to Plowshares"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 538.36,
+   "cards": [
+    "Swords to Plowshares"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/le/5b/__/c10420p1293552690/i6689908867.jpg?pictureSize=W800",
+    "card": "Swords to Plowshares",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 16,
+     "language_words": {
+      "en": [
+       "the"
+      ],
+      "es": [
+       "fuerza",
+       "gana"
+      ]
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       1
+      ],
+      "me4": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      108,
+      112,
+      492,
+      728
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:ejkmnd7yvrzx",
+  "title": "Cartas Magic The Gathering (MTG) Varias",
+  "url": "https://es.wallapop.com/item/cartas-magic-the-gathering-mtg-varias-1253682371",
+  "price": 1.0,
+  "before": {
+   "shown": true,
+   "value": 422.67,
+   "cards": [
+    "Stasis"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 422.67,
+   "cards": [
+    "Stasis"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/kq/er/__/c10420p1253682371/i6442661633.jpg?pictureSize=W800",
+    "card": "Stasis",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 11,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       2,
+       0
+      ],
+      "me4": [
+       2,
+       0
+      ]
+     },
+     "shared_words_read": 6,
+     "box": [
+      286,
+      600,
+      286,
+      400
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:qzmmk55eyxzv",
+  "title": "Magic The Gathering: Vínculo Vital",
+  "url": "https://es.wallapop.com/item/magic-the-gathering-vinculo-vital-1296514480",
+  "price": 1.0,
+  "before": {
+   "shown": true,
+   "value": 5.22,
+   "cards": [
+    "Circle of Protection: Green"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 5.22,
+   "cards": [
+    "Circle of Protection: Green"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/lf/ws/__/c10420p1296514480/i6703241692.jpg?pictureSize=W800",
+    "card": "Circle of Protection: Green",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 28,
+     "language_words": {
+      "en": [],
+      "es": [
+       "por"
+      ]
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       0,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ],
+      "7ed": [
+       0,
+       0
+      ],
+      "8ed": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": null
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:w67vrlw9p56x",
+  "title": "Colección Cartas Magic The Gathering",
+  "url": "https://es.wallapop.com/item/coleccion-cartas-magic-the-gathering-1231172728",
+  "price": 1.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:wzyrp5rpqe65",
+  "title": "2x Control Magic MTG Black Border",
+  "url": "https://es.wallapop.com/item/2x-control-magic-mtg-black-border-1275439320",
+  "price": 20.0,
+  "before": {
+   "shown": true,
+   "value": 142.24,
+   "cards": [
+    "Control Magic"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 142.24,
+   "cards": [
+    "Control Magic"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/l3/d3/__/c10420p1275439320/i6577599337.jpg?pictureSize=W800",
+    "card": "Control Magic",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 1,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "me4": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      0,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/l3/d3/__/c10420p1275439320/i6577599362.jpg?pictureSize=W800",
+    "card": "Control Magic",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 3,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "me4": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      0,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:v6ggdxwgm26e",
+  "title": "Carta Magic: Nethroi, Alfa de la Muerte",
+  "url": "https://es.wallapop.com/item/carta-magic-nethroi-alfa-de-la-muerte-1136584516",
+  "price": 5.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:4z4815o08ljy",
+  "title": "Carta Magic Muro de huesos (ES) de 1995",
+  "url": "https://es.wallapop.com/item/carta-magic-muro-de-huesos-es-1184776286",
+  "price": 15.0,
+  "before": {
+   "shown": true,
+   "value": 13.26,
+   "cards": [
+    "Wall of Bone"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/jl/dv/__/c10420p1184776286/i5985171655.jpg?pictureSize=W800",
+    "card": "Wall of Bone",
+    "decision": "contradicts",
+    "reason": "copyright",
+    "evidence": {
+     "ocr_words": 40,
+     "box": null
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:9jdkg737m26k",
+  "title": "Llavero Carta Magic: Time Walk",
+  "url": "https://es.wallapop.com/item/llavero-carta-magic-time-walk-1139610484",
+  "price": 5.0,
+  "before": {
+   "shown": true,
+   "value": 3979.49,
+   "cards": [
+    "Time Walk"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 3979.49,
+   "cards": [
+    "Time Walk"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/iu/ht/__/c10420p1139610484/i5703728775.jpg?pictureSize=W800",
+    "card": "Time Walk",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 8,
+     "language_words": {
+      "en": [
+       "this",
+       "turn"
+      ],
+      "es": []
+     },
+     "wording_hits": {},
+     "shared_words_read": 6,
+     "box": [
+      0,
+      200,
+      286,
+      400
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:x6qm1y902ejy",
+  "title": "Poltergeist animista cartas magic",
+  "url": "https://es.wallapop.com/item/poltergeist-animista-cartas-magic-1059745842",
+  "price": 15.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:nz041mvpqdjo",
+  "title": "Constriccion arcano cartas magic",
+  "url": "https://es.wallapop.com/item/constriccion-arcano-cartas-magic-1059744299",
+  "price": 12.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:pzp2prl5l4j3",
+  "title": "LOTE Cartas rol Magic the Gathering",
+  "url": "https://es.wallapop.com/item/cartas-rol-magic-the-gathering-1116404898",
+  "price": 90.0,
+  "before": {
+   "shown": true,
+   "value": 6.0,
+   "cards": [
+    "Merfolk of the Pearl Trident"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 6.0,
+   "cards": [
+    "Merfolk of the Pearl Trident"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ig/of/__/c10420p1116404898/i5516779334.jpg?pictureSize=W800",
+    "card": "Merfolk of the Pearl Trident",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 32,
+     "language_words": {
+      "en": [],
+      "es": [
+       "los"
+      ]
+     },
+     "wording_hits": {},
+     "shared_words_read": 0,
+     "box": [
+      280,
+      386,
+      249,
+      337
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:wzyr34nee565",
+  "title": "Tapete Sorcery Contested Realm Beta",
+  "url": "https://es.wallapop.com/item/tapete-sorcery-contested-realm-beta-1315519492",
+  "price": 100.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:mzn3l4k3l0jn",
+  "title": "MTG Armadura Sagrada - Carta",
+  "url": "https://es.wallapop.com/item/mtg-armadura-sagrada-carta-1162781625",
+  "price": 1.0,
+  "before": {
+   "shown": true,
+   "value": 3.73,
+   "cards": [
+    "Holy Armor"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/j8/ag/__/c10420p1162781625/i5862788235.jpg?pictureSize=W800",
+    "card": "Holy Armor",
+    "decision": "contradicts",
+    "reason": "copyright",
+    "evidence": {
+     "ocr_words": 19,
+     "box": [
+      165,
+      205,
+      484,
+      662
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:nzxyyd9mlej2",
+  "title": "carta magic centro disruptor",
+  "url": "https://es.wallapop.com/item/carta-magic-centro-disruptor-597354654",
+  "price": 6.0,
+  "before": {
+   "shown": true,
+   "value": 187.74,
+   "cards": [
+    "Disrupting Scepter"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/9v/nd/__/c10420p597354654/i1851206497.jpg?pictureSize=W800",
+    "card": "Disrupting Scepter",
+    "decision": "contradicts",
+    "reason": "language:es",
+    "evidence": {
+     "ocr_words": 18,
+     "language_words": {
+      "en": [],
+      "es": [
+       "artefacto",
+       "jugador",
+       "objetivo"
+      ]
+     },
+     "box": null
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:mzn3e0xg42jn",
+  "title": "3x Cartas MTG 4ª Edición Borde Negro old School",
+  "url": "https://es.wallapop.com/item/3x-cartas-mtg-4-edicion-borde-negro-1229424197",
+  "price": 20.0,
+  "before": {
+   "shown": true,
+   "value": 44.72,
+   "cards": [
+    "Disenchant"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/kb/yt/__/c10420p1229424197/i6285036034.jpg?pictureSize=W800",
+    "card": "Disenchant",
+    "decision": "contradicts",
+    "reason": "copyright",
+    "evidence": {
+     "ocr_words": 7,
+     "box": [
+      35,
+      79,
+      340,
+      480
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:mznv744vdg6n",
+  "title": "Cartas verdes Magic The gathering",
+  "url": "https://es.wallapop.com/item/3x-aves-del-paraiso-magic-676825201",
+  "price": 1.0,
+  "before": {
+   "shown": true,
+   "value": 1109.77,
+   "cards": [
+    "Birds of Paradise",
+    "Verduran Enchantress"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 1109.77,
+   "cards": [
+    "Birds of Paradise",
+    "Verduran Enchantress"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/b6/yp/__/c10420p676825201/i5663566715.jpg?pictureSize=W800",
+    "card": "Birds of Paradise",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 23,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       0,
+       0
+      ],
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       0,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ],
+      "7ed": [
+       0,
+       0
+      ],
+      "8ed": [
+       0,
+       0
+      ],
+      "m10": [
+       0,
+       0
+      ],
+      "m11": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 2,
+     "box": [
+      302,
+      388,
+      233,
+      324
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:3zl8o3odn26x",
+  "title": "Archivador MTG - 180 Ultra Raras",
+  "url": "https://es.wallapop.com/item/archivador-mtg-180-ultra-raras-1144951145",
+  "price": 1500.0,
+  "before": {
+   "shown": true,
+   "value": 3.79,
+   "cards": [
+    "Circle of Protection: White"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 3.79,
+   "cards": [
+    "Circle of Protection: White"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ix/o9/__/c10420p1144951145/i5741765771.jpg?pictureSize=W800",
+    "card": "Circle of Protection: White",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 4,
+     "language_words": {
+      "en": [
+       "the"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       1,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ],
+      "7ed": [
+       0,
+       0
+      ],
+      "8ed": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 1,
+     "box": [
+      545,
+      230,
+      205,
+      228
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:9jd52y75y46k",
+  "title": "Magic Planar Gate Legends EX",
+  "url": "https://es.wallapop.com/item/magic-planar-gate-legends-ex-611493012",
+  "price": 49.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:e65385x3l0zo",
+  "title": "Magic Feint Legends Psa 8",
+  "url": "https://es.wallapop.com/item/magic-feint-legends-psa-8-618404900",
+  "price": 69.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:xzov2oddo7j9",
+  "title": "Magic Rakalite Antiquities Psa 9",
+  "url": "https://es.wallapop.com/item/magic-rakalite-antiquities-psa-9-617247657",
+  "price": 75.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:36en1gvnnk6d",
+  "title": "Magic Deadfall Legends Psa 9",
+  "url": "https://es.wallapop.com/item/magic-deadfall-legends-psa-9-617257239",
+  "price": 75.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:wzvl4v3gg76l",
+  "title": "Magic Quagmire  Legends Psa 9",
+  "url": "https://es.wallapop.com/item/magic-quagmire-legends-psa-9-617259041",
+  "price": 69.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:wzvl4qy04q6l",
+  "title": "Magic Festival The Dark Psa 9",
+  "url": "https://es.wallapop.com/item/magic-festival-the-dark-psa-9-616140417",
+  "price": 59.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:nzxy02lxe5j2",
+  "title": "Magic Relic Barrier Legends NM",
+  "url": "https://es.wallapop.com/item/magic-relic-barrier-legends-nm-611486930",
+  "price": 20.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:nzxy071wgpj2",
+  "title": "Magic Mountain Stronghold Legends NM",
+  "url": "https://es.wallapop.com/item/magic-mountain-stronghold-legends-nm-611440454",
+  "price": 15.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Mountain"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Mountain"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:w67g4x1oq86x",
+  "title": "Magic Pyrotechnics Legends Psa 9",
+  "url": "https://es.wallapop.com/item/magic-pyrotechnics-legends-psa-9-615745128",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:36en1k38pq6d",
+  "title": "Magic Energy Tap Legends Psa 8",
+  "url": "https://es.wallapop.com/item/magic-energy-tap-legends-psa-8-618407063",
+  "price": 65.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:nz0v4358wdjo",
+  "title": "Magic Force Spike Legends Psa 9",
+  "url": "https://es.wallapop.com/item/magic-force-spike-legends-psa-9-618392651",
+  "price": 60.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:w67g4p1vx96x",
+  "title": "Magic Pit Scirpion Legends Psa 8",
+  "url": "https://es.wallapop.com/item/magic-pit-scirpion-legends-psa-8-618392628",
+  "price": 59.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8j3x490wmyj9",
+  "title": "Magic Tundra Wolves Legends Psab8",
+  "url": "https://es.wallapop.com/item/magic-tundra-wolves-legends-psab8-618398810",
+  "price": 75.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Tundra"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Tundra"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:v6g1gnvp926e",
+  "title": "Magic Tawno's Weaponry Antiquities Psa 9",
+  "url": "https://es.wallapop.com/item/magic-tawno-s-weaponry-antiquities-psa-9-617259388",
+  "price": 75.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:36en1gv4qq6d",
+  "title": "Magic Fire Sprites Legends Psa 9",
+  "url": "https://es.wallapop.com/item/magic-fire-sprites-legends-psa-9-617265215",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:e65382e3epzo",
+  "title": "Magic Hell Swarm Legends Psa 9",
+  "url": "https://es.wallapop.com/item/magic-hell-swarm-legends-psa-9-617257424",
+  "price": 60.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:vjr9qvxmvwjk",
+  "title": "Magic Clay Statue Antiquities Psa 9",
+  "url": "https://es.wallapop.com/item/magic-clay-statue-antiquities-psa-9-617263219",
+  "price": 69.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8z8gk9ex4863",
+  "title": "Magic Orcish Mechanics Antiquities Psa 9",
+  "url": "https://es.wallapop.com/item/magic-orcish-mechanics-antiquities-psa-9-617267046",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:pzp12371dkz3",
+  "title": "Magic Primal Clay Antiquities Psa 9",
+  "url": "https://es.wallapop.com/item/magic-primal-clay-antiquities-psa-9-617257326",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:e65382e4d2zo",
+  "title": "Magic Enchanted Beind Legends Psa 9",
+  "url": "https://es.wallapop.com/item/magic-enchanted-beind-legends-psa-9-617268996",
+  "price": 75.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:ejk98wd5vp6x",
+  "title": "Magic Scarwood Goblins The Dark Psa 9",
+  "url": "https://es.wallapop.com/item/magic-scarwood-goblins-the-dark-psa-9-617247295",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:pzp1237kg9z3",
+  "title": "Magic Marsh Gibkins The Dark Psa 9",
+  "url": "https://es.wallapop.com/item/magic-marsh-gibkins-the-dark-psa-9-617259074",
+  "price": 75.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:0j2r4keqdd6y",
+  "title": "Magic Shelkin Brownie Legends Psa 9",
+  "url": "https://es.wallapop.com/item/magic-shelkin-brownie-legends-psa-9-617260983",
+  "price": 59.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qzm3e1n1qx6v",
+  "title": "Magic Grapeshot Catapult Antiquities Psa 9",
+  "url": "https://es.wallapop.com/item/magic-grapeshot-catapult-antiquities-psa-9-617262880",
+  "price": 65.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:wzy74q7dqez5",
+  "title": "Magic Segovian Leviathan Legends Psa 8",
+  "url": "https://es.wallapop.com/item/magic-segovian-leviathan-legends-psa-8-616162968",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:4z4geqg1v8zy",
+  "title": "Magic Leviathan The Dark Psa 8.5",
+  "url": "https://es.wallapop.com/item/magic-leviathan-the-dark-psa-8-5-616151862",
+  "price": 59.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:36en18392n6d",
+  "title": "Magic Camel Arabian Nights Psa 8",
+  "url": "https://es.wallapop.com/item/magic-camel-arabian-nights-psa-8-615749115",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:nzxy44y3p1j2",
+  "title": "Magic Marhault Elsdragon Legends Bgs 9",
+  "url": "https://es.wallapop.com/item/magic-marhault-elsdragon-legends-bgs-9-614836006",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:nz0v44vy5djo",
+  "title": "Magic Lady Orca Legends Bgs 9",
+  "url": "https://es.wallapop.com/item/magiclady-orca-legends-bgs-9-614828099",
+  "price": 89.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:36en11x4vv6d",
+  "title": "Magic Jasmine Boreal Legends Bgs 9",
+  "url": "https://es.wallapop.com/item/magic-jasmine-boreal-legends-bgs-9-614845715",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:vjr9qqqk84jk",
+  "title": "Magic Kei Takahashi Legends Bgs 8",
+  "url": "https://es.wallapop.com/item/magic-kei-takahashi-legends-bgs-8-614850991",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:3zl9889n38zx",
+  "title": "Magic Sir Shandlar Legends Bgs 9",
+  "url": "https://es.wallapop.com/item/magic-sir-shandlar-legends-bgs-9-614828021",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:3zl98rqq1nzx",
+  "title": "Magic Vaevictis Asmadi Legends BGS 8.5",
+  "url": "https://es.wallapop.com/item/magic-vaevictis-asmadi-legends-bgs-8-5-618401193",
+  "price": 129.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:x6q9m85qrezy",
+  "title": "Magic Giant Tortoise Arabian Nights Psa 8",
+  "url": "https://es.wallapop.com/item/magic-giant-tortoise-arabian-nights-psa-8-618406842",
+  "price": 75.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:x6q9m8pgmozy",
+  "title": "Magic Wall Of Vapor Legends Psa 9",
+  "url": "https://es.wallapop.com/item/magic-wall-of-vapor-legends-psa-9-618398918",
+  "price": 65.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qzm3e8ro5g6v",
+  "title": "Magic Magnetic Mountain Arabian Nights Psa 6",
+  "url": "https://es.wallapop.com/item/magic-magnetic-mountain-arabian-nights-psa-6-618394056",
+  "price": 59.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Mountain"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Mountain"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:9jd5kq379n6k",
+  "title": "Magic Flying Carpet Arabian Nights Psa 5",
+  "url": "https://es.wallapop.com/item/magic-flying-carpet-arabian-nights-psa-5-618390536",
+  "price": 59.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qzm3e1vvoy6v",
+  "title": "Magic Amulet of Kroog Antiquities psa 9",
+  "url": "https://es.wallapop.com/item/magic-amulet-of-kroog-antiquities-psa-9-617247556",
+  "price": 75.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:0j2r4kggyr6y",
+  "title": "Magic Clergy of the Holy Legends Psa 9",
+  "url": "https://es.wallapop.com/item/magic-clergy-of-the-holy-legends-psa-9-617247411",
+  "price": 65.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:x6q9m2n3p5zy",
+  "title": "Magic Book Of Rass The Dark Psa 9",
+  "url": "https://es.wallapop.com/item/magic-book-of-rass-the-dark-psa-9-617251342",
+  "price": 75.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8z8gk9r84d63",
+  "title": "Magic Keepers of the Faith Legends Psa 9",
+  "url": "https://es.wallapop.com/item/magic-keepers-of-the-faith-legends-psa-9-617245170",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:w67g4x13k86x",
+  "title": "Magic Cuombajj Witchess Arabian Nights Psa 6",
+  "url": "https://es.wallapop.com/item/magic-cuombajj-witchess-arabian-nights-psa-6-615735576",
+  "price": 55.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:3zl980q55nzx",
+  "title": "Magic Hasran Ohress Arabian Nights Psa 7",
+  "url": "https://es.wallapop.com/item/magic-hasran-ohress-arabian-nights-psa-7-615741393",
+  "price": 75.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:x6q9mvpkqozy",
+  "title": "Magic Erg Raiders Arabian Nights Psa 8",
+  "url": "https://es.wallapop.com/item/magic-erg-raiders-arabian-nights-psa-8-615735518",
+  "price": 65.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:xzov2x5x97j9",
+  "title": "Magic Fishliver Oil Arabian Nights Psa 7",
+  "url": "https://es.wallapop.com/item/magic-fishliver-oil-arabian-nights-psa-7-615739257",
+  "price": 69.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qzm3e7qgxx6v",
+  "title": "Magic Flying Men Arabian Nights Psa 7",
+  "url": "https://es.wallapop.com/item/magic-flying-men-arabian-nights-psa-7-615749008",
+  "price": 69.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qzm3e7rn416v",
+  "title": "Magic Ghazban Ogre Arabian Nights Psa 7",
+  "url": "https://es.wallapop.com/item/magic-ghazban-ogre-arabian-nights-psa-7-615741180",
+  "price": 59.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8z8gk5ovl163",
+  "title": "Magic Moorish Cavalry Arabian Nights psa 7",
+  "url": "https://es.wallapop.com/item/magic-moorish-cavalry-arabian-nights-psa-7-615748946",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:9jd5k8l1rd6k",
+  "title": "Magic Desert Nomads Arabian Nights Psa 8",
+  "url": "https://es.wallapop.com/item/magic-desert-nomads-arabian-nights-psa-8-615728784",
+  "price": 75.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qjwd42kokkzo",
+  "title": "Magic Bird Maiden Arabian Nights Psa 8",
+  "url": "https://es.wallapop.com/item/magic-bird-maiden-arabian-nights-psa-8-615746829",
+  "price": 75.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:wzy74y2oeez5",
+  "title": "Magic Kird Ape Arabian Nights Psa 8",
+  "url": "https://es.wallapop.com/item/magic-kird-ape-arabian-nights-psa-8-615726720",
+  "price": 70.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qzm3e7rdpx6v",
+  "title": "Magic Unstable Mutation Arabian Nights Psa 7",
+  "url": "https://es.wallapop.com/item/magic-unstable-mutation-arabian-nights-psa-7-615744808",
+  "price": 59.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:nzxy444l35j2",
+  "title": "Magic Lady of the Mountain Legends Bgs 9",
+  "url": "https://es.wallapop.com/item/magic-lady-of-the-mountain-legends-bgs-9-614851178",
+  "price": 99.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Mountain"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Mountain"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:pzp1221p9kz3",
+  "title": "Magic Riven Turnbull Legends Bgs 8.5",
+  "url": "https://es.wallapop.com/item/magic-riven-turnbull-legends-bgs-8-5-614833974",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8z8gkkgn9d63",
+  "title": "Magic Ramirez Depietro Legends Bgs 8.5",
+  "url": "https://es.wallapop.com/item/magic-ramirez-depietro-legends-bgs-8-5-614831922",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8z8gkkkqe863",
+  "title": "Magic Keepers Of Faith Legends Bgs9",
+  "url": "https://es.wallapop.com/item/magc-keepers-of-faith-legends-bgs9-614850894",
+  "price": 69.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qjwd48ko0qzo",
+  "title": "Magic Chromium Legends Japanese Bgs 9 Mint!",
+  "url": "https://es.wallapop.com/item/magic-chromium-legends-bgs-9-mint-618400953",
+  "price": 249.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:vjr9r25k08jk",
+  "title": "Magic PSA 5x Unlimited Protection Circles Nmint",
+  "url": "https://es.wallapop.com/item/magic-psa-5x-unlimited-protection-circles-nmint-610703943",
+  "price": 149.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:3zl9wv89qnzx",
+  "title": "100 Fundas para cartas borde Negro",
+  "url": "https://es.wallapop.com/item/100-fundas-para-cartas-borde-negro-708081345",
+  "price": 4.0,
+  "before": {
+   "shown": true,
+   "value": 587.07,
+   "cards": [
+    "Sol Ring"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/bp/kn/__/c10420p708081345/i2273544694.jpg?pictureSize=W800",
+    "card": "Sol Ring",
+    "decision": "contradicts",
+    "reason": "wording:3ed",
+    "evidence": {
+     "ocr_words": 10,
+     "language_words": {
+      "en": [
+       "this",
+       "your"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       1
+      ],
+      "me4": [
+       4,
+       0
+      ]
+     },
+     "shared_words_read": 8,
+     "box": [
+      131,
+      222,
+      489,
+      685
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:p61741d7v765",
+  "title": "Magic Dark Hearth Of The Wood The Dark Psa 8",
+  "url": "https://es.wallapop.com/item/magic-dark-hearth-of-the-wood-the-dark-psa-8-617257179",
+  "price": 60.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:v6g1go9rkm6e",
+  "title": "Magic Eye Fon An Eye Arabian Nights  Psa 7",
+  "url": "https://es.wallapop.com/item/magic-eye-fon-an-eye-arabian-nights-psa-7-615743088",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:mzn8qxpnr0zn",
+  "title": "Lightning bolt edición Beta",
+  "url": "https://es.wallapop.com/item/lightning-bolt-edicion-beta-888659673",
+  "price": 240.0,
+  "before": {
+   "shown": true,
+   "value": 252.34,
+   "cards": [
+    "Lightning Bolt"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 252.34,
+   "cards": [
+    "Lightning Bolt"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8z8qdwnn8rz3",
+  "title": "Magic Urza's Power Plant Mint 9",
+  "url": "https://es.wallapop.com/item/magic-urza-s-power-plant-mint-9-337314970",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qjwe0755lgjo",
+  "title": "Magic Blazing Effigy Legends Mint 9",
+  "url": "https://es.wallapop.com/item/magic-blazing-effigy-legends-mint-9-337314829",
+  "price": 60.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8z8qdwln9lz3",
+  "title": "Magic Urborg Legends 8.5 Mint",
+  "url": "https://es.wallapop.com/item/magic-urborg-legends-8-5-mint-337287470",
+  "price": 109.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:3zl42yvnkpjx",
+  "title": "Magic Creature Bond Beta Mint 9",
+  "url": "https://es.wallapop.com/item/magic-creature-bond-beta-mint-9-333080845",
+  "price": 75.0,
+  "before": {
+   "shown": true,
+   "value": 4.03,
+   "cards": [
+    "Creature Bond"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 4.03,
+   "cards": [
+    "Creature Bond"
+   ],
+   "flags": [
+    "text_alpha_beta_wording"
+   ]
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/5i/b2/__/c10420p333080845/i767713366.jpg?pictureSize=W800",
+    "card": "Creature Bond",
+    "decision": "confirms",
+    "reason": "wording:alpha/beta",
+    "evidence": {
+     "ocr_words": 13,
+     "language_words": {
+      "en": [
+       "creature",
+       "destroyed",
+       "does",
+       "target"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       1,
+       0
+      ],
+      "4ed": [
+       2,
+       0
+      ]
+     },
+     "shared_words_read": 5,
+     "box": [
+      210,
+      382,
+      256,
+      354
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:qjwe0755dwjo",
+  "title": "Magic Wall of Earth Legends Mint 10!",
+  "url": "https://es.wallapop.com/item/magic-wall-of-earth-legends-mint-10-337314905",
+  "price": 129.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8z8qdwl2poz3",
+  "title": "Magic 4x Catedral of Serra Legends NM+",
+  "url": "https://es.wallapop.com/item/magic-4x-catedral-of-serra-legends-nm-337283470",
+  "price": 40.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qzmmd7xxrozv",
+  "title": "MTG Atadura de pureza",
+  "url": "https://es.wallapop.com/item/mtg-atadura-de-pureza-1284535808",
+  "price": 5.0,
+  "before": {
+   "shown": true,
+   "value": 63.36,
+   "cards": [
+    "Purelace"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/l8/s2/__/c10420p1284535808/i6633684437.jpg?pictureSize=W800",
+    "card": "Purelace",
+    "decision": "contradicts",
+    "reason": "language:es",
+    "evidence": {
+     "ocr_words": 30,
+     "language_words": {
+      "en": [],
+      "es": [
+       "las",
+       "los",
+       "objetivo",
+       "pierde"
+      ]
+     },
+     "box": [
+      99,
+      130,
+      580,
+      806
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:wzyr3lneo265",
+  "title": "Cartas Magic años 90",
+  "url": "https://es.wallapop.com/item/cartas-magic-anos-90-1314192644",
+  "price": 1.0,
+  "before": {
+   "shown": true,
+   "value": 4.93,
+   "cards": [
+    "Pearled Unicorn"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 4.93,
+   "cards": [
+    "Pearled Unicorn"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/lq/fp/__/c10420p1314192644/i6803661076.jpg?pictureSize=W800",
+    "card": "Pearled Unicorn",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 1,
+     "language_words": {
+      "en": [],
+      "it": [
+       "che"
+      ]
+     },
+     "wording_hits": {},
+     "shared_words_read": 0,
+     "box": [
+      8,
+      215,
+      134,
+      176
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:436e0xo75nzd",
+  "title": "Bandida de la cima Geier/Alfa",
+  "url": "https://es.wallapop.com/item/bandida-de-la-cima-geier-alfa-144802515",
+  "price": 1.5,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qjwrv3957w6o",
+  "title": "Merfolk of the Pearl Trident firmada",
+  "url": "https://es.wallapop.com/item/merfolk-of-the-pearl-trident-firmada-1248634577",
+  "price": 59.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Merfolk of the Pearl Trident"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Merfolk of the Pearl Trident"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:qjwd035xlwzo",
+  "title": "4x mina aullante mtg",
+  "url": "https://es.wallapop.com/item/4x-mina-aullante-mtg-723173777",
+  "price": 24.0,
+  "before": {
+   "shown": true,
+   "value": 435.26,
+   "cards": [
+    "Howling Mine"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/by/k4/__/c10420p723173777/i2346815556.jpg?pictureSize=W800",
+    "card": "Howling Mine",
+    "decision": "contradicts",
+    "reason": "language:es",
+    "evidence": {
+     "ocr_words": 23,
+     "language_words": {
+      "en": [],
+      "es": [
+       "artefacto",
+       "jugador",
+       "robar"
+      ]
+     },
+     "box": [
+      397,
+      775,
+      352,
+      491
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:p61744732765",
+  "title": "1x Hunding Gjornersen Legends 8.5",
+  "url": "https://es.wallapop.com/item/1x-hunding-gjornersen-legends-8-5-614831979",
+  "price": 79.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:8z88gg327dz3",
+  "title": "MTG Bayou Tierra doble",
+  "url": "https://es.wallapop.com/item/mtg-bayou-tierra-doble-1171741722",
+  "price": 179.0,
+  "before": {
+   "shown": true,
+   "value": 2260.53,
+   "cards": [
+    "Bayou"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 2260.53,
+   "cards": [
+    "Bayou"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/jd/mh/__/c10420p1171741722/i5914012468.jpg?pictureSize=W800",
+    "card": "Bayou",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 17,
+     "language_words": {
+      "en": [
+       "and",
+       "your"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       1,
+       2
+      ],
+      "me4": [
+       1,
+       2
+      ]
+     },
+     "shared_words_read": 15,
+     "box": [
+      157,
+      209,
+      488,
+      668
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:nz082205mv6o",
+  "title": "3x Autoridad del Alfa MTG (Español)",
+  "url": "https://es.wallapop.com/item/2x-autoridad-del-alfa-mtg-espanol-1229629299",
+  "price": 8.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:0j24o23p8dzy",
+  "title": "Alpha to Omega by Stephen Tucker",
+  "url": "https://es.wallapop.com/item/alpha-to-omega-by-stephen-tucker-1064404959",
+  "price": 15.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:nzxe2e3v0562",
+  "title": "Magic The Gathering Tierras 1995",
+  "url": "https://es.wallapop.com/item/magic-the-gathering-tierras-1995-1300223330",
+  "price": 60.0,
+  "before": {
+   "shown": true,
+   "value": 16.05,
+   "cards": [
+    "Plains"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 16.05,
+   "cards": [
+    "Plains"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/li/4a/__/c10420p1300223330/i6721593932.jpg?pictureSize=W800",
+    "card": "Plains",
+    "decision": "unclear",
+    "reason": "no text",
+    "evidence": {
+     "ocr_words": 0,
+     "box": [
+      190,
+      507,
+      151,
+      185
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:0j28ddog7mjy",
+  "title": "Cartas Magic The Gathering - MTG",
+  "url": "https://es.wallapop.com/item/cartas-magic-the-gathering-mtg-1271219759",
+  "price": 3.0,
+  "before": {
+   "shown": true,
+   "value": 588.5,
+   "cards": [
+    "Armageddon"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 588.5,
+   "cards": [
+    "Armageddon"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/l0/un/__/c10420p1271219759/i6553410985.jpg?pictureSize=W800",
+    "card": "Armageddon",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 7,
+     "language_words": {
+      "en": [
+       "all",
+       "are",
+       "destroyed",
+       "lands",
+       "play"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "4ed": [
+       3,
+       1
+      ],
+      "5ed": [
+       3,
+       1
+      ],
+      "6ed": [
+       3,
+       1
+      ],
+      "me4": [
+       3,
+       1
+      ]
+     },
+     "shared_words_read": 5,
+     "box": [
+      37,
+      369,
+      268,
+      352
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:mzn319r10gjn",
+  "title": "Revistas Magic",
+  "url": "https://es.wallapop.com/item/revistas-magic-1281964249",
+  "price": 20.0,
+  "before": {
+   "shown": true,
+   "value": 7435.71,
+   "cards": [
+    "Mox Pearl",
+    "Sol Ring",
+    "Wrath of God"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 7435.71,
+   "cards": [
+    "Mox Pearl",
+    "Sol Ring",
+    "Wrath of God"
+   ],
+   "flags": [
+    "text_alpha_beta_wording"
+   ]
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/l7/8x/__/c10420p1281964249/i6618359308.jpg?pictureSize=W800",
+    "card": "Mox Pearl",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 2,
+     "language_words": {
+      "en": [
+       "artifact"
+      ],
+      "es": []
+     },
+     "wording_hits": {},
+     "shared_words_read": 2,
+     "box": [
+      183,
+      344,
+      151,
+      223
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/l7/8x/__/c10420p1281964249/i6618359416.jpg?pictureSize=W800",
+    "card": "Sol Ring",
+    "decision": "unclear",
+    "reason": "no text",
+    "evidence": {
+     "ocr_words": 0,
+     "box": [
+      377,
+      815,
+      166,
+      243
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/l7/8x/__/c10420p1281964249/i6618359416.jpg?pictureSize=W800",
+    "card": "Wrath of God",
+    "decision": "confirms",
+    "reason": "wording:alpha/beta",
+    "evidence": {
+     "ocr_words": 6,
+     "language_words": {
+      "en": [
+       "all",
+       "are",
+       "cannot",
+       "creature"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       2,
+       0
+      ],
+      "3ed": [
+       1,
+       0
+      ],
+      "4ed": [
+       2,
+       0
+      ],
+      "5ed": [
+       2,
+       0
+      ],
+      "6ed": [
+       2,
+       0
+      ],
+      "7ed": [
+       2,
+       0
+      ],
+      "8ed": [
+       2,
+       0
+      ],
+      "9ed": [
+       2,
+       0
+      ]
+     },
+     "shared_words_read": 4,
+     "box": [
+      373,
+      313,
+      163,
+      231
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:x6qqgd85q56y",
+  "title": "Magic The Gathering Vintage 1994-1999",
+  "url": "https://es.wallapop.com/item/coleccion-magic-the-gathering-vintage-1994-1999-1283529766",
+  "price": 2600.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Disintegrate"
+   ]
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [
+    "Disintegrate"
+   ],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:nzxem1rkpp62",
+  "title": "Lote mtg Cartas Magic 4th Edición Blanco",
+  "url": "https://es.wallapop.com/item/lote-mtg-cartas-magic-4th-edicion-blanco-1233651806",
+  "price": 20.0,
+  "before": {
+   "shown": true,
+   "value": 35.9,
+   "cards": [
+    "Circle of Protection: Black",
+    "Circle of Protection: Blue",
+    "Circle of Protection: White",
+    "Healing Salve",
+    "Holy Armor",
+    "White Ward"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 32.17,
+   "cards": [
+    "Circle of Protection: Black",
+    "Circle of Protection: Blue",
+    "Circle of Protection: White",
+    "Healing Salve",
+    "White Ward"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ke/hf/__/c10420p1233651806/i6313481979.jpg?pictureSize=W800",
+    "card": "Circle of Protection: White",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 11,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       0,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ],
+      "7ed": [
+       0,
+       0
+      ],
+      "8ed": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      526,
+      2,
+      242,
+      346
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ke/hf/__/c10420p1233651806/i6313481979.jpg?pictureSize=W800",
+    "card": "Healing Salve",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 11,
+     "language_words": {
+      "en": [],
+      "es": [
+       "jugador"
+      ]
+     },
+     "wording_hits": {
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       0,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ],
+      "7ed": [
+       0,
+       0
+      ],
+      "8ed": [
+       0,
+       0
+      ],
+      "me4": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 1,
+     "box": [
+      517,
+      713,
+      245,
+      330
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ke/hf/__/c10420p1233651806/i6313481979.jpg?pictureSize=W800",
+    "card": "White Ward",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 9,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "4ed": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 1,
+     "box": [
+      517,
+      357,
+      247,
+      344
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ke/hf/__/c10420p1233651806/i6313482037.jpg?pictureSize=W800",
+    "card": "Circle of Protection: Black",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 25,
+     "language_words": {
+      "en": [],
+      "es": [
+       "por"
+      ]
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       0,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ],
+      "7ed": [
+       0,
+       0
+      ],
+      "8ed": [
+       0,
+       0
+      ],
+      "9ed": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      33,
+      381,
+      246,
+      340
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ke/hf/__/c10420p1233651806/i6313482037.jpg?pictureSize=W800",
+    "card": "Circle of Protection: Blue",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 12,
+     "language_words": {
+      "en": [],
+      "es": [
+       "por"
+      ]
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       0,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ],
+      "7ed": [
+       0,
+       0
+      ],
+      "8ed": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      531,
+      28,
+      235,
+      332
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ke/hf/__/c10420p1233651806/i6313482037.jpg?pictureSize=W800",
+    "card": "Holy Armor",
+    "decision": "contradicts",
+    "reason": "language:es",
+    "evidence": {
+     "ocr_words": 20,
+     "language_words": {
+      "en": [],
+      "es": [
+       "con",
+       "gana",
+       "hasta",
+       "objetivo"
+      ]
+     },
+     "box": [
+      143,
+      733,
+      242,
+      328
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:9jdwmo89ml6k",
+  "title": "Cartas Magic Azul 4th Ed. Old School mtg",
+  "url": "https://es.wallapop.com/item/lote-cartas-magic-the-gathering-azul-4th-ed-1233649412",
+  "price": 50.0,
+  "before": {
+   "shown": true,
+   "value": 6.2,
+   "cards": [
+    "Spell Blast"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 6.2,
+   "cards": [
+    "Spell Blast"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ke/hd/__/c10420p1233649412/i6313469087.jpg?pictureSize=W800",
+    "card": "Spell Blast",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 11,
+     "language_words": {
+      "en": [],
+      "es": [
+       "objetivo"
+      ]
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "5ed": [
+       0,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      279,
+      370,
+      243,
+      336
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:w674ndg2p76x",
+  "title": "Constricción arcana cartas magic",
+  "url": "https://es.wallapop.com/item/constriccion-arcana-cartas-magic-1059744752",
+  "price": 9.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:0j28g7ykqvjy",
+  "title": "Mana vault Magic The Gathering 4 Ed. Mtg",
+  "url": "https://es.wallapop.com/item/lote-magic-the-gathering-4th-ed-black-border-1231919083",
+  "price": 240.0,
+  "before": {
+   "shown": true,
+   "value": 224.78,
+   "cards": [
+    "Black Vise",
+    "Library of Leng",
+    "Mana Vault"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 49.95,
+   "cards": [
+    "Library of Leng",
+    "Mana Vault"
+   ],
+   "flags": [
+    "vision:text_language_es"
+   ]
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/kd/ga/__/c10420p1231919083/i6301100141.jpg?pictureSize=W800",
+    "card": "Black Vise",
+    "decision": "contradicts",
+    "reason": "language:es",
+    "evidence": {
+     "ocr_words": 17,
+     "language_words": {
+      "en": [],
+      "es": [
+       "jugador",
+       "las",
+       "por"
+      ]
+     },
+     "box": [
+      27,
+      29,
+      231,
+      321
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/kd/ga/__/c10420p1231919083/i6301100141.jpg?pictureSize=W800",
+    "card": "Library of Leng",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 25,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       1
+      ],
+      "5ed": [
+       0,
+       1
+      ],
+      "me4": [
+       0,
+       1
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      277,
+      27,
+      234,
+      317
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:8z840x23do63",
+  "title": "24 CALENDARIOS DE CARTAS MAGIC 2009 (VER 2 FOTOS)",
+  "url": "https://es.wallapop.com/item/24-calendarios-de-cartas-magic-890621446",
+  "price": 5.0,
+  "before": {
+   "shown": true,
+   "value": 7049.43,
+   "cards": [
+    "Mox Ruby"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 7049.43,
+   "cards": [
+    "Mox Ruby"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/eq/93/__/c10420p890621446/i3227948352.jpg?pictureSize=W800",
+    "card": "Mox Ruby",
+    "decision": "unclear",
+    "reason": "no text",
+    "evidence": {
+     "ocr_words": 0,
+     "box": [
+      16,
+      533,
+      124,
+      175
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:8z84x710o163",
+  "title": "Magic 1x alcalde de avabruck / alfa jauria mtg",
+  "url": "https://es.wallapop.com/item/magic-alcalde-de-avabruck-foil-alfa-jauria-mtg-930004946",
+  "price": 1.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:p614yelrxd65",
+  "title": "Arena",
+  "url": "https://es.wallapop.com/item/arena-990888755",
+  "price": 5.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:w67vrmxon96x",
+  "title": "Lote MTG 4ª Edición Artefactos",
+  "url": "https://es.wallapop.com/item/lote-mtg-4-edicion-artefactos-1233650052",
+  "price": 25.0,
+  "before": {
+   "shown": true,
+   "value": 31.36,
+   "cards": [
+    "Celestial Prism",
+    "Soul Net",
+    "Throne of Bone"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 31.36,
+   "cards": [
+    "Celestial Prism",
+    "Soul Net",
+    "Throne of Bone"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ke/he/__/c10420p1233650052/i6313472645.jpg?pictureSize=W800",
+    "card": "Soul Net",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 28,
+     "language_words": {
+      "en": [],
+      "es": [
+       "cementerio",
+       "por"
+      ]
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       1
+      ],
+      "5ed": [
+       0,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ],
+      "7ed": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      286,
+      375,
+      240,
+      337
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ke/he/__/c10420p1233650052/i6313472645.jpg?pictureSize=W800",
+    "card": "Throne of Bone",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 27,
+     "language_words": {
+      "en": [],
+      "es": [
+       "con",
+       "por"
+      ]
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       1
+      ],
+      "5ed": [
+       0,
+       0
+      ],
+      "6ed": [
+       0,
+       0
+      ],
+      "7ed": [
+       0,
+       0
+      ],
+      "8ed": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": [
+      37,
+      376,
+      243,
+      337
+     ]
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/ke/he/__/c10420p1233650052/i6313472695.jpg?pictureSize=W800",
+    "card": "Celestial Prism",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 17,
+     "language_words": {
+      "en": [],
+      "es": []
+     },
+     "wording_hits": {
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 2,
+     "box": [
+      24,
+      444,
+      258,
+      355
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:36e5k7r7n86d",
+  "title": "Magic The Gathering: Time Vault",
+  "url": "https://es.wallapop.com/item/magic-the-gathering-time-vault-1271900815",
+  "price": 2580.0,
+  "before": {
+   "shown": true,
+   "value": 1925.0,
+   "cards": [
+    "Time Vault"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 1925.0,
+   "cards": [
+    "Time Vault"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/l1/98/__/c10420p1271900815/i6557646948.jpg?pictureSize=W800",
+    "card": "Time Vault",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 89,
+     "language_words": {
+      "en": [
+       "any",
+       "the"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "me4": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 1,
+     "box": [
+      0,
+      0,
+      800,
+      1188
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "milanuncios:527913143",
+  "title": "Cartas Magic",
+  "url": "https://www.milanuncios.com/cartas-de-coleccion/cartas-magic-527913143.htm",
+  "price": 200.0,
+  "before": {
+   "shown": true,
+   "value": 7930.28,
+   "cards": [
+    "Mox Emerald",
+    "Time Walk"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 7930.28,
+   "cards": [
+    "Mox Emerald",
+    "Time Walk"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://images.milanuncios.com/api/v1/ma-ad-media-pro/images/70ae5795-b481-4ecf-b0e9-722ff393097e?rule=hw545",
+    "card": "Mox Emerald",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 18,
+     "language_words": {
+      "en": [
+       "artifact",
+       "this",
+       "your"
+      ],
+      "es": []
+     },
+     "wording_hits": {},
+     "shared_words_read": 10,
+     "box": null
+    },
+    "v": "1"
+   },
+   {
+    "photo": "https://images.milanuncios.com/api/v1/ma-ad-media-pro/images/c4b90128-5745-4782-92df-dafce603e41a?rule=hw545",
+    "card": "Time Walk",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 7,
+     "language_words": {
+      "en": [
+       "this",
+       "turn"
+      ],
+      "es": []
+     },
+     "wording_hits": {},
+     "shared_words_read": 6,
+     "box": null
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:pzpknod8p9j3",
+  "title": "Carta Magic: Acechabrujas alfa",
+  "url": "https://es.wallapop.com/item/carta-magic-acechabrujas-alfa-1319238626",
+  "price": 1.0,
+  "before": {
+   "shown": false,
+   "value": 0.0,
+   "cards": []
+  },
+  "after": {
+   "shown": false,
+   "value": 0.0,
+   "cards": [],
+   "flags": []
+  },
+  "checks": []
+ },
+ {
+  "id": "wallapop:p618n3v19gz5",
+  "title": "MTG Plains (Llanura) Beta NM",
+  "url": "https://es.wallapop.com/item/mtg-plains-llanura-beta-nm-1319162131",
+  "price": 30.0,
+  "before": {
+   "shown": true,
+   "value": 16.05,
+   "cards": [
+    "Plains"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 16.05,
+   "cards": [
+    "Plains"
+   ],
+   "flags": [
+    "text_alpha_beta_wording"
+   ]
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/lt/e8/__/c10420p1319162131/i6832421187.jpg?pictureSize=W800",
+    "card": "Plains",
+    "decision": "confirms",
+    "reason": "wording:alpha/beta",
+    "evidence": {
+     "ocr_words": 7,
+     "language_words": {
+      "en": [
+       "your"
+      ],
+      "es": []
+     },
+     "wording_hits": {
+      "10e": [
+       5,
+       0
+      ],
+      "3ed": [
+       1,
+       0
+      ],
+      "4ed": [
+       1,
+       0
+      ],
+      "5ed": [
+       1,
+       0
+      ],
+      "6ed": [
+       5,
+       0
+      ],
+      "7ed": [
+       5,
+       0
+      ],
+      "8ed": [
+       5,
+       0
+      ],
+      "9ed": [
+       5,
+       0
+      ],
+      "m10": [
+       5,
+       0
+      ],
+      "m11": [
+       5,
+       0
+      ]
+     },
+     "shared_words_read": 5,
+     "box": [
+      0,
+      320,
+      458,
+      640
+     ]
+    },
+    "v": "1"
+   }
+  ]
+ },
+ {
+  "id": "wallapop:p61ywn1krx65",
+  "title": "Asesino real - Black Bordered - carta magic MTG",
+  "url": "https://es.wallapop.com/item/asesino-real-black-bordered-royal-assassin-914877431",
+  "price": 150.0,
+  "before": {
+   "shown": true,
+   "value": 607.96,
+   "cards": [
+    "Royal Assassin"
+   ]
+  },
+  "after": {
+   "shown": true,
+   "value": 607.96,
+   "cards": [
+    "Royal Assassin"
+   ],
+   "flags": []
+  },
+  "checks": [
+   {
+    "photo": "https://cdn.wallapop.com/images/10420/f4/oz/__/c10420p914877431/i3358059438.jpg?pictureSize=W800",
+    "card": "Royal Assassin",
+    "decision": "unclear",
+    "reason": "not enough text read",
+    "evidence": {
+     "ocr_words": 13,
+     "language_words": {
+      "en": [],
+      "es": [
+       "invocar"
+      ]
+     },
+     "wording_hits": {
+      "10e": [
+       0,
+       0
+      ],
+      "3ed": [
+       0,
+       0
+      ],
+      "4ed": [
+       0,
+       0
+      ],
+      "8ed": [
+       0,
+       0
+      ],
+      "9ed": [
+       0,
+       0
+      ],
+      "m10": [
+       0,
+       0
+      ],
+      "m11": [
+       0,
+       0
+      ]
+     },
+     "shared_words_read": 0,
+     "box": null
+    },
+    "v": "1"
+   }
+  ]
+ }
+]
