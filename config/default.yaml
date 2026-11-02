@@ -129,10 +129,11 @@ vision:
   # matches seen only in photos (no supporting text) must clear a higher bar
   photo_min_similarity: 0.7
   photo_min_edition_prob: 0.7
-  # Second check: read the text on likely finds (OCR) and compare it with each edition's wording:
-  # later wording (Revised/4th...), another language or a copyright line rules Alpha/Beta out.
-  # Off until its replay on the dashboard ads (text-check workflow) has been reviewed.
-  text_check: false
+  # Second check, on cards that passed the image check: read the card's text (OCR) and compare it
+  # with each edition's wording: later wording (Revised/4th...), another language or a copyright
+  # line rules Alpha/Beta out; unreadable text changes nothing. Replay 2026-11-02: hides 8 of 100
+  # dashboard ads (Spanish cards, 4th Edition, sleeves), no real card; scans: no Beta/Unlimited ruled out.
+  text_check: true
 
 deals:
   auto_open_min_value_eur: 25
