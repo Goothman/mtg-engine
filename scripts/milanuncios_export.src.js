@@ -1,0 +1,124 @@
+/* Milanuncios search export: run in the browser console on a Milanuncios search results page
+   (e.g. https://www.milanuncios.com/anuncios/?s=cartas+magic). Reads every results page and every
+   ad page at a person's pace and downloads a JSON file that `mtg-engine import-ads` reads.
+   Edit this file, then rebuild the one-line version: python scripts/build_milanuncios_export.py
+   Every statement ends with ";" and comments use this block form: the build joins the lines. */
+(async () => {
+  const PAGE_PAUSE = 2000, AD_PAUSE = 1200, DETAILS = true, MAX_PAGES = 100;
+  const ORIGIN = "https://www.milanuncios.com";
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms + Math.random() * ms * 0.5));
+  const say = (...a) => console.log("%c[export]", "color:#0a0;font-weight:bold", ...a);
+  const props = (html) => {
+    const key = 'window.__INITIAL_PROPS__ = JSON.parse("';
+    const i = html.indexOf(key);
+    if (i < 0) return null;
+    let j = i + key.length, e = j;
+    while (e < html.length && html[e] !== '"') e += html[e] === "\\" ? 2 : 1;
+    try { return JSON.parse(JSON.parse('"' + html.slice(j, e) + '"')); } catch (err) { return null; }
+  };
+  const img = (s) => {
+    const m = String(s).match(/ma-ad-media-pro\/images\/[0-9a-f-]{36}/i);
+    return m ? "https://images.milanuncios.com/api/v1/" + m[0] + "?rule=hw545" : null;
+  };
+  const imgsIn = (o, out = []) => {
+    if (typeof o === "string") { const u = img(o); if (u && !out.includes(u)) out.push(u); }
+    else if (Array.isArray(o)) o.forEach((x) => imgsIn(x, out));
+    else if (o && typeof o === "object") Object.values(o).forEach((x) => imgsIn(x, out));
+    return out;
+  };
+  const findAd = (o, id, best = null) => {
+    if (Array.isArray(o)) { for (const x of o) best = findAd(x, id, best); return best; }
+    if (!o || typeof o !== "object") return best;
+    if ((String(o.id) === id || String(o.adId) === id) && (o.title || o.images || o.description)) {
+      if (!best || imgsIn(o).length > imgsIn(best).length) best = o;
+    }
+    for (const v of Object.values(o)) if (v && typeof v === "object") best = findAd(v, id, best);
+    return best;
+  };
+  const num = (o, keys) => {
+    if (!o || typeof o !== "object") return null;
+    for (const [k, v] of Object.entries(o)) {
+      if (keys.includes(k) && typeof v === "number") return v;
+      if (v && typeof v === "object" && !Array.isArray(v)) { const r = num(v, keys); if (r !== null) return r; }
+    }
+    return null;
+  };
+  const sellerName = (o) => {
+    for (const k of ["user", "seller", "author", "advertiser", "owner"]) if (o && o[k] && typeof o[k].name === "string") return o[k].name;
+    return null;
+  };
+  const get = async (url) => {
+    for (let t = 0; t < 3; t++) {
+      try {
+        const r = await fetch(url, { credentials: "include" });
+        const html = await r.text();
+        const p = r.ok ? props(html) : null;
+        if (p) return p;
+        say("no page data from", url, "(status " + r.status + "); waiting 30 s. If the page asks you to prove you're human, do it in another tab.");
+      } catch (err) { say("error", url, String(err)); }
+      await sleep(30000);
+    }
+    return null;
+  };
+  const here = new URL(location.href);
+  const first = window.__INITIAL_PROPS__ && window.__INITIAL_PROPS__.adListPagination ? window.__INITIAL_PROPS__ : await get(here.href);
+  if (!first || !first.adListPagination) { alert("Run this on a Milanuncios search results page."); return; }
+  const query = (first.trackingData && first.trackingData.search_terms) || here.searchParams.get("s") || "";
+  const pag = first.adListPagination.pagination || {};
+  const pages = Math.min(pag.totalPages || 1, MAX_PAGES);
+  say(query + ": " + pag.totalAds + " ads on " + pages + " pages. Keep this tab open.");
+  const ads = new Map(), evidence = [];
+  for (let n = 1; n <= pages; n++) {
+    const u = new URL(here.href);
+    u.searchParams.set("pagina", n);
+    const p = n === (pag.page || 1) && first === window.__INITIAL_PROPS__ ? first : await get(u.href);
+    if (!p) { say("stopped at page " + n + ": no data. Saving what was read."); break; }
+    const list = (p.adListPagination && p.adListPagination.adList && p.adListPagination.adList.ads) || [];
+    let fresh = 0;
+    for (const a of list) {
+      const id = String(a.id);
+      if (ads.has(id)) continue;
+      fresh++;
+      const loc = a.location || {};
+      ads.set(id, {
+        marketplace: "milanuncios", external_id: id, url: ORIGIN + a.url, title: a.title || "",
+        description: a.description || "", price_eur: a.price && a.price.cashPrice ? a.price.cashPrice.value : null,
+        city: (loc.city || a.city || {}).name || null, region: (loc.province || a.province || {}).name || null,
+        postal_code: null, lat: null, lon: null, seller_id: a.userId ? String(a.userId) : null, seller_name: null,
+        seller_type: a.sellerType || null, reserved: a.isReserved || null, published_at: a.publishDate || null,
+        updated_at: a.updateDate || null, images: imgsIn(a.images || []),
+      });
+    }
+    evidence.push({ page: n, url: u.href, ads_in_page: list.length, new_ads: fresh, total_ads: (p.adListPagination.pagination || {}).totalAds });
+    say("page " + n + "/" + pages + ": " + list.length + " ads (" + fresh + " new), " + ads.size + " so far");
+    if (!list.length) break;
+    if (n < pages) await sleep(PAGE_PAUSE);
+  }
+  let k = 0;
+  if (DETAILS) for (const ad of ads.values()) {
+    k++;
+    await sleep(AD_PAUSE);
+    const p = await get(ad.url);
+    const o = p && findAd(p, ad.external_id);
+    if (!o) { ad.details_warning = "ad page not read"; say("ad " + k + "/" + ads.size + ": not read", ad.url); continue; }
+    const more = imgsIn(o.images || o.photos || o);
+    for (const u of more) if (!ad.images.includes(u)) ad.images.push(u);
+    if (typeof o.description === "string" && o.description.length > ad.description.length) ad.description = o.description;
+    ad.lat = num(o, ["latitude", "lat"]);
+    ad.lon = num(o, ["longitude", "lon", "lng", "long"]);
+    ad.seller_name = sellerName(o);
+    if (k % 10 === 0 || k === ads.size) say("ad pages " + k + "/" + ads.size);
+  }
+  const out = {
+    query, reported_total: pag.totalAds, total_pages: pag.totalPages, exported_at: new Date().toISOString(),
+    pagination_evidence: evidence, listings: [...ads.values()],
+  };
+  const photos = out.listings.reduce((s, a) => s + a.images.length, 0);
+  const blob = new Blob([JSON.stringify(out, null, 1)], { type: "application/json" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "milanuncios_" + query.replace(/\W+/g, "_") + "_" + out.exported_at.slice(0, 10) + ".json";
+  document.body.appendChild(link);
+  link.click();
+  say("done: " + ads.size + " of " + pag.totalAds + " ads, " + photos + " photos. File downloaded: " + link.download);
+})();
