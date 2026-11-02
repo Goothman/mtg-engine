@@ -35,7 +35,7 @@ jobs:
       - run: sudo apt-get install -y -q tesseract-ocr
       - run: pip install -e '.[vision]'
       - if: contains(inputs.ocr, 'paddle')
-        run: pip install paddlepaddle==3.0.0 paddleocr==3.0.0
+        run: pip install paddlepaddle==3.3.1 paddleocr==3.7.0
       - name: Restore database
         run: |
           mkdir -p data
