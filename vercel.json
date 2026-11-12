@@ -4,5 +4,11 @@
   "installCommand": "",
   "framework": null,
   "outputDirectory": "site",
-  "cleanUrls": true
+  "cleanUrls": true,
+  "git": {
+    "deploymentEnabled": {
+      "engine-data": false,
+      "engine-reports": false
+    }
+  }
 }

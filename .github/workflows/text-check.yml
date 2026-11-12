@@ -63,6 +63,7 @@ jobs:
           git fetch -q --depth 1 origin engine-reports && git --work-tree="$tmp" checkout FETCH_HEAD -- . || true
           cp replay.json scans*.json scans*.rows.jsonl scans*.err "$tmp"/ 2>/dev/null || true
           cd "$tmp"
+          echo '{"git": {"deploymentEnabled": false}}' > vercel.json  # reports branch: no Vercel deploy
           git init -q -b engine-reports
           git config user.name "mtg-engine bot"
           git config user.email "mtg-engine-bot@users.noreply.github.com"
